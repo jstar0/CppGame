@@ -5,6 +5,7 @@
             "label": "C/C++: g++.exe build active file",
             "command": "C:\\Users\\jstar0\\mingw64\\bin\\g++.exe",
             "args": [
+                "-fexec-charset=GBK",
                 "-fdiagnostics-color=always",
                 "-g",
                 "${workspaceFolder}\\*.cpp",

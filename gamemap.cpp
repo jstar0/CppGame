@@ -1,7 +1,7 @@
 #include <iostream>
 #include "gamemap.h"
 #include "console.h"
-extern int roomPrintX, roomPrintY;
+/* extern  */int roomPrintX, roomPrintY;
 void print(Object object)
 {
     setcolor(object.forecolor, object.backcolor);

@@ -19,33 +19,40 @@ mutex screenOutputLock;
 condition_variable screenOutputCV;
 bool screenOutputReady = true;
 
-// when the main thread is OK to continue
+// when the startScene is running
 mutex startSceneLock;
-condition_variable startSceneCV;
-bool startSceneOver = false;
 
 // targeting what thread to run
 short targetThread = 0;
 short UITarget = 0; // 0 means void since UserInput has no UI
 // 0 = UserInput
 // 1 = StartScene
+
+// when getUserInput is needed
 bool willGetUserInput = true;
 
 // NOTE: thread start and thread destroy MUST be IN PAIR in the main function
 
 int main()
 {
+    // disable cursor
+    setcursor(false);
+
     thread getUserInputThread(&getUserInput);
 
     // Start the game: run the startScene
     UITarget = 1;
+    targetThread = 1;
+    // We MUST to set it everytime you start a new scene
     thread startSceneThread(&startSceneMainLoop);
     this_thread::sleep_for(chrono::milliseconds(500));
     {
         unique_lock<std::mutex> mainLock(startSceneLock);
-        startSceneCV.wait(mainLock, [] { return startSceneOver; });
         startSceneThread.join();
     }
+
+
+
 
     getUserInputThread.join();
 
