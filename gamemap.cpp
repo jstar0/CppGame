@@ -1,6 +1,9 @@
 #include<iostream>
 #include"gamemap.h"
 #include"console.h"
+#include"card.h"
+#include"Player.h"
+#include"run.h"
 extern int roomPrintX,roomPrintY;
 void print(Object object)
 {
@@ -13,4 +16,20 @@ void print(Room room)
     {
         print(room.object[i]);
     }
+}
+void Object::run()
+{
+    return ;
+}
+void EnemyObject::run()
+{
+    extern int have_s,hand_s,used_s;
+    extern std::vector<Card> have,hand,used;
+    extern Enemy *currentenemy;
+    have_s=Player::card.size();
+    hand_s=0;
+    used_s=0;
+    have=Player::card;
+    currentenemy=&enemy;
+    while(attack(enemy));
 }
