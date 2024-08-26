@@ -12,7 +12,7 @@
 #include"UI.h"
 
 int playerCurrentX=0,playerCurrentY=0,playerCurrentRoom=0,playerSpeedX=2,playerSpeedY=1,
-    roomPrintX=5,roomPrintY=4,roomX=47,roomY=22,
+    roomPrintX=5,roomPrintY=4,roomX=50,roomY=23,
     handPrintX=1,handPrintY=31,
     cardPrintX=0,cardPrintY=20;
 Room room[10];

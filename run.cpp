@@ -13,7 +13,7 @@ extern int playerCurrentX,playerCurrentY,playerCurrentRoom,playerSpeedX,playerSp
 extern Room room[];
 bool playermove()
 {
-    clear(roomPrintX,roomPrintY,roomPrintX+roomX,roomPrintY+roomY);
+    clear(roomPrintX,roomPrintY,roomPrintX+roomX-1,roomPrintY+roomY-1);
     print(room[playerCurrentRoom]);
     setcolor("white","blue");
     print("我",roomPrintX+playerCurrentX,roomPrintY+playerCurrentY);
@@ -33,7 +33,7 @@ bool playermove()
     }
     if (r=='S' || r=='s') 
     {
-        if (playerCurrentY<roomY) playerCurrentY+=playerSpeedY;
+        if (playerCurrentY<roomY-1) playerCurrentY+=playerSpeedY;
         else 
         {
             if (room[playerCurrentRoom].DOWN_ID>=0) 
@@ -57,7 +57,7 @@ bool playermove()
     }
     if (r=='D' || r=='d') 
     {
-        if (playerCurrentX<roomX) playerCurrentX+=playerSpeedX;
+        if (playerCurrentX<roomX-2) playerCurrentX+=playerSpeedX;
         else 
         {
             if (room[playerCurrentRoom].RIGHT_ID>=0) 
