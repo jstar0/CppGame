@@ -27,7 +27,7 @@ bool playermove()
             if (room[playerCurrentRoom].UP_ID>=0) 
             {
                 setcolor("red","black");
-                print("进入房间"+std::to_string(room[playerCurrentRoom].UP_ID),0,17);
+                print("进入房间"+std::to_string(room[playerCurrentRoom].UP_ID),1,2);
             }
         }
     }
@@ -39,7 +39,7 @@ bool playermove()
             if (room[playerCurrentRoom].DOWN_ID>=0) 
             {
                 setcolor("red","black");
-                print("进入房间"+std::to_string(room[playerCurrentRoom].DOWN_ID),0,17);
+                print("进入房间"+std::to_string(room[playerCurrentRoom].DOWN_ID),1,2);
             }
         }
     }
@@ -51,7 +51,7 @@ bool playermove()
             if (room[playerCurrentRoom].LEFT_ID>=0) 
             {
                 setcolor("red","black");
-                print("进入房间"+std::to_string(room[playerCurrentRoom].LEFT_ID),0,17);
+                print("进入房间"+std::to_string(room[playerCurrentRoom].LEFT_ID),1,2);
             }
         }
     }
@@ -63,7 +63,7 @@ bool playermove()
             if (room[playerCurrentRoom].RIGHT_ID>=0) 
             {
                 setcolor("red","black");
-                print("进入房间"+std::to_string(room[playerCurrentRoom].RIGHT_ID),0,17);
+                print("进入房间"+std::to_string(room[playerCurrentRoom].RIGHT_ID),1,2);
             }
         }
     }
