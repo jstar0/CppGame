@@ -4,10 +4,14 @@
 #include"console.h"
 #include"gamemap.h"
 #include"run.h"
+#include"card.h"
+#include"enemy.h"
+#include"player.h"
 using namespace std;
 
 int playerCurrentX=0,playerCurrentY=0,playerCurrentRoom=0,playerSpeedX=2,playerSpeedY=1,
-    roomPrintX=0,roomPrintY=0;
+    roomPrintX=0,roomPrintY=0,
+    cardPrintX=0,cardPrintY=20;
 Room room[10];
 
 int main()

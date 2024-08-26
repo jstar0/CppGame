@@ -15,7 +15,7 @@ void setcolor(int fore/* =7 */,int back/* =0 */)
 {
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),(back<<4)+fore);
 }
-void setcolor(string fore_s,string back_s)
+void setcolor(string fore_s,string back_s/* ="black" */)
 {
     int fore=-1,back=-1;
     if (back_s=="black") back=0;
