@@ -80,7 +80,13 @@ bool playermove()
     Sleep(100);
     return true;
 }
+
+
 bool attack()
+{
+
+}
+/* bool attack()
 {
     string select[3]={"攻击","防御","逃跑"};
     static int currentSelect=0;
@@ -106,4 +112,4 @@ bool attack()
     
     Sleep(100);
     return true;
-}
+} */
