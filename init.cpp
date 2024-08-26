@@ -31,6 +31,9 @@ short UITarget = 0; // 0 means void since UserInput has no UI
 // when getUserInput is needed
 bool willGetUserInput = true;
 
+// when exit is triggered
+bool willExit = false;
+
 // NOTE: thread start and thread destroy MUST be IN PAIR in the main function
 
 int main()
@@ -40,7 +43,7 @@ int main()
 
     thread getUserInputThread(&getUserInput);
 
-    // Start the game: run the startScene
+    // ==== Start the game: run the startScene ====
     UITarget = 1;
     targetThread = 1;
     // We MUST to set it everytime you start a new scene
@@ -50,11 +53,18 @@ int main()
         unique_lock<std::mutex> mainLock(startSceneLock);
         startSceneThread.join();
     }
+    if(willExit)
+    {
+        getUserInputThread.join();
+        return 0;
+    }
+    // ==== startScene ends here ====
 
-
-
+    // 
 
     getUserInputThread.join();
+
+
 
     return 0;
 }

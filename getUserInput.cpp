@@ -29,29 +29,19 @@ void getUserInput()
             if(playerInput == 'w' || playerInput == 'W')
             {
                 if(startSceneChoice == 0)
-                {
                     startSceneChoice = 3;
-                }
                 else
-                {
                     startSceneChoice--;
-                }
             }
             else if(playerInput == 's' || playerInput == 'S')
             {
                 if(startSceneChoice == 3)
-                {
                     startSceneChoice = 0;
-                }
                 else
-                {
                     startSceneChoice++;
-                }
             }
-            else if(playerInput == 'e' || playerInput == 'E')
-            {
+            else if(playerInput == '\r')
                 isSelected = true;
-            }
         }
         else if (UITarget == 2)
         {

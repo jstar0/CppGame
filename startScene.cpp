@@ -18,9 +18,13 @@ extern bool screenOutputReady;
 extern mutex startSceneLock;
 
 extern short targetThread;
+extern bool willExit;
 
 short startSceneChoice = 0;
 bool isSelected = false;
+
+// when getUserInput is needed
+extern bool willGetUserInput;
 
 void startSceneMainLoop()
 {
@@ -32,24 +36,24 @@ void startSceneMainLoop()
     while(!isSelected)
     {
         if(startSceneChoice == 0)
-            setcolor(15, 14);
+            setcolor("white", "yellow");
         else
-            setcolor(15, 0);
+            setcolor("white", "black");
         print("开始游戏", 0, 2);
         if(startSceneChoice == 1)
-            setcolor(15, 14);
+            setcolor("white", "yellow");
         else
-            setcolor(15, 0);
+            setcolor("white", "black");
         print("读取存档", 0, 4);
         if(startSceneChoice == 2)
-            setcolor(15, 14);
+            setcolor("white", "yellow");
         else
-            setcolor(15, 0);
+            setcolor("white", "black");
         print("多人游戏", 0, 6);
         if(startSceneChoice == 3)
-            setcolor(15, 14);
+            setcolor("white", "yellow");
         else
-            setcolor(15, 0);
+            setcolor("white", "black");
         print("退出游戏", 0, 8);
     }
     if(startSceneChoice == 0)
@@ -67,5 +71,8 @@ void startSceneMainLoop()
     else if(startSceneChoice == 3)
     {
         // exit the game
+        willExit = true;
+        willGetUserInput = false;
     }
+    return;
 }
