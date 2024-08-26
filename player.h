@@ -1,7 +1,11 @@
+#ifndef PLAYER_H
+#define PLAYER_H
 #include<vector>
-class Card;
+#include"card.h"
 class Player{
 public:
-    int HP,HP_Max,MP,MP_Max,card_s;
-    std::vector<Card> cardHave;
+    static int HP,HP_Max,MP,MP_Max;
+    static std::vector<Card> card;
+    Player();
 };
+#endif

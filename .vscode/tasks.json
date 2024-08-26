@@ -6,6 +6,7 @@
             "command": "D:\\mingw64\\bin\\g++.exe",
             "args": [
                 "-fdiagnostics-color=always",
+                "-fmax-include-depth=600",
                 "-g",
                 "${workspaceFolder}\\*.cpp",
                 "-o",

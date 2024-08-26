@@ -7,12 +7,12 @@ extern int cardPrintX,cardPrintY;
 
 void print(Card card)
 {
-    if (card.rarity==1) setcolor("white");
-    if (card.rarity==2) setcolor("green");
-    if (card.rarity==3) setcolor("blue");
-    if (card.rarity==4) setcolor("purple");
-    if (card.rarity==5) setcolor("red");
+    setcolor(card);
     print(card.description,cardPrintX,cardPrintY);
+}
+void Card::effect()
+{
+    
 }
 void AttackCard::effect(Enemy enemy)
 {
