@@ -1,0 +1,2 @@
+bool playermove();
+bool attack();
