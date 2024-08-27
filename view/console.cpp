@@ -4,7 +4,6 @@
 #include<stdio.h>
 #include<vector>
 #include"console.h"
-#include"card.h"
 using namespace std;
 void setscreensize(int cols,int lines)
 {
@@ -16,7 +15,7 @@ void setcolor(int fore/* =7 */,int back/* =0 */)
 {
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),(back<<4)+fore);
 }
-void setcolor(string fore_s,string back_s/* ="black" */)
+void setcolor(string fore_s,string back_s)
 {
     int fore=-1,back=-1;
     if (back_s=="black") back=0;
@@ -52,14 +51,6 @@ void setcolor(string fore_s,string back_s/* ="black" */)
     if (fore_s=="lightyellow") fore=14;
     if (fore_s=="white") fore=15;
     setcolor(fore,back);
-}
-void setcolor(Card card)
-{
-    if (card.rarity==1) setcolor("white");
-    if (card.rarity==2) setcolor("green");
-    if (card.rarity==3) setcolor("blue");
-    if (card.rarity==4) setcolor("purple");
-    if (card.rarity==5) setcolor("red");
 }
 void setposition(int x/* =1 */,int y/* =1 */)
 {
