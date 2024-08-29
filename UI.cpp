@@ -5,7 +5,6 @@
 #include"UI.h"
 void initUI()
 {
-    SetConsoleOutputCP(CP_UTF8);
     setcursor(false);
     setscreensize(101,42);
     HWND consoleWindow = GetConsoleWindow(); // 获取控制台窗口句柄 
