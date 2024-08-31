@@ -153,7 +153,7 @@ bool selectcard()
                 hand[currentselect].effect();
                 used.push_back(hand[currentselect]);
                 hand.erase(hand.begin()+currentselect);
-                if (currentselect>hand.size()) currentselect=hand.size()-1;
+                if (currentselect>hand.size()-1) currentselect=hand.size()-1;
                 clear(cardSelectPrintX,cardSelectPrintY,cardSelectPrintX2,cardSelectPrintY2);
                 for (int i=0; i<hand.size(); i++) 
                 {
