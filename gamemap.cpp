@@ -29,7 +29,10 @@ void EnemyObject::run()
     have_s=Player::card.size();
     hand_s=0;
     used_s=0;
-    have=Player::card;
+    for (int i=0; i<have_s; i++)
+    {
+        have.push_back(*Player::card[i]);
+    }
     currentenemy=&enemy;
-    while(attack(enemy));
+    while(attack(&enemy));
 }

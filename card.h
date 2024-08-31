@@ -2,19 +2,28 @@
 #define CARD_H
 #include<string>
 #include<vector>
-class Enemy;
+#include"enemy.h"
+#include"player.h"
+using namespace std;
+
 class Card{
 public:
-    std::string name;
-    std::vector<std::string> description;
+    string name;
+    vector<string> description;
     int ID,cost,rarity;
+    Card();
+    Card(string name,vector<string> description,int ID,int cost,int rarity);
     void effect();
-    friend void print(Card card);
+    string getcolor();
+    friend void print(Card *card);
 };
+
 class AttackCard:public Card{
 public:
-    int damage;
-    void effect(Enemy enemy);
+    int damage,times;
+    AttackCard();
+    AttackCard(string name,vector<string> description,int ID,int cost,int rarity,int damage,int times);
+    void effect(Enemy *enemy);
 };
 
 #endif

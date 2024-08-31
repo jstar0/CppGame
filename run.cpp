@@ -83,7 +83,7 @@ bool playermove()
             clear();
             setcolor("red","black");
             print("按任意键开始战斗",0,0);
-            while(attack(room[playerCurrentRoom].enemyobject[i].enemy));
+            while(attack(&room[playerCurrentRoom].enemyobject[i].enemy));
         }
     }
     Sleep(100);
@@ -94,10 +94,8 @@ std::vector<Card> have,hand,used;
 int have_s,hand_s,used_s;
 Enemy *currentenemy=nullptr;
 int currentselect;
-bool attack(Enemy enemy)
+bool attack(Enemy *enemy)
 {
-    Enemy temp=enemy;
-    currentenemy=&temp;
     srand(time(NULL));
     for (int i=1; i<=5; i++)
     {
@@ -121,64 +119,67 @@ bool attack(Enemy enemy)
         }
     }
     currentselect=0;
-    Player::MP=Player::MP_Max;
+    Player::turnset();
     while(selectcard());
-    return attack(temp);
+    return attack(enemy);
 }
 
-extern int handPrintX,handPrintY,
-           cardPrintX,cardPrintY;
+extern int cardSelectPrintX,cardSelectPrintY,cardSelectPrintX2,cardSelectPrintY2,
+           cardPrintX,cardPrintY,cardPrintX2,cardPrintY2;
 bool selectcard()
 {
     char r=getch();
-    if (r=='W' || r=='w') currentselect+=hand.size()-1;
-    if (r=='S' || r=='s') currentselect+=1;
-    currentselect%=hand.size();
-    setcolor(hand[currentselect]);
-    for (int i=0; i<hand.size(); i++) print(std::to_string(hand[i].cost)+"费  "+hand[i].name,handPrintX,handPrintY+i);
-    print(hand[currentselect].description,cardPrintX,cardPrintY);
-    if (r=='\r') 
+    if (hand.size()>0)
     {
-        if (Player::MP>=hand[currentselect].cost)
+        if (r=='W' || r=='w') currentselect+=hand.size()-1;
+        if (r=='S' || r=='s') currentselect+=1;
+        currentselect%=hand.size();
+        clear(cardSelectPrintX,cardSelectPrintY,cardSelectPrintX2,cardSelectPrintY2);
+        for (int i=0; i<hand.size(); i++) 
         {
-            Player::MP-=hand[currentselect].cost;
-            hand[currentselect].effect();
-            hand.erase(hand.begin()+currentselect);
+            if (currentselect==i) setcolor(hand[i].getcolor(),"white");
+            else setcolor(hand[i].getcolor(),"black");
+            print(std::to_string(hand[i].cost)+"费  "+hand[i].name,cardSelectPrintX,cardSelectPrintY+i);
         }
-        else 
+        clear(cardPrintX,cardPrintY,cardPrintX2,cardPrintY2);
+        setcolor("white","black");
+        print(hand[currentselect].description,cardPrintX,cardPrintY);
+        if (r=='\r') 
         {
-            setcolor("red","black");
-            print("费用不够",0,0);
+            if (Player::MP>=hand[currentselect].cost)
+            {
+                Player::MP-=hand[currentselect].cost;
+                hand[currentselect].effect();
+                used.push_back(hand[currentselect]);
+                hand.erase(hand.begin()+currentselect);
+                if (currentselect>hand.size()) currentselect=hand.size()-1;
+                clear(cardSelectPrintX,cardSelectPrintY,cardSelectPrintX2,cardSelectPrintY2);
+                for (int i=0; i<hand.size(); i++) 
+                {
+                    if (currentselect==i) setcolor(hand[i].getcolor(),"white");
+                    else setcolor(hand[i].getcolor(),"black");
+                    print(std::to_string(hand[i].cost)+"费  "+hand[i].name,cardSelectPrintX,cardSelectPrintY+i);
+                }
+                clear(cardPrintX,cardPrintY,cardPrintX2,cardPrintY2);
+                setcolor("white","black");
+                print(hand[currentselect].description,cardPrintX,cardPrintY);
+            }
+            else 
+            {
+                setcolor("red","black");
+                print("费用不够",0,0);
+            }
         }
     }
+    else 
+    {
+        clear(cardSelectPrintX,cardSelectPrintY,cardSelectPrintX2,cardSelectPrintY2);
+        setcolor("red","black");
+        print("手牌为空",0,0);
+    }
     if (r=='E' || r=='e') return false;
+    setcolor("red","black");    
+    print("sleep",0,5);
     Sleep(100);
     return true;
 }
-/* bool attack()
-{
-    string select[3]={"攻击","防御","逃跑"};
-    static int currentSelect=0;
-    char r=getch();
-    clear();
-    if (r=='W' || r=='w') currentSelect=(currentSelect+2)%3;
-    if (r=='S' || r=='s') currentSelect=(currentSelect+1)%3;
-    if (r=='E' || r=='e') 
-    {
-        if (currentSelect==2) return false;
-        else 
-        {
-            setcolor("green","black");
-            print("执行"+select[currentSelect],0,5);
-        }
-    }
-    for (int i=0; i<=2; i++)
-    {
-        if (currentSelect==i) setcolor("red","white");
-        else setcolor("red","black");
-        print(std::to_string(i+1)+"."+select[i],0,i);
-    }
-    
-    Sleep(100);
-    return true;
-} */

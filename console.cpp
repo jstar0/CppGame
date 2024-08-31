@@ -53,14 +53,6 @@ void setcolor(string fore_s,string back_s/* ="black" */)
     if (fore_s=="white") fore=15;
     setcolor(fore,back);
 }
-void setcolor(Card card)
-{
-    if (card.rarity==1) setcolor("white");
-    if (card.rarity==2) setcolor("green");
-    if (card.rarity==3) setcolor("blue");
-    if (card.rarity==4) setcolor("purple");
-    if (card.rarity==5) setcolor("red");
-}
 void setposition(int x/* =1 */,int y/* =1 */)
 {
     COORD cursorposition;
