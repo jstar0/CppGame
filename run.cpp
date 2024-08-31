@@ -122,6 +122,7 @@ bool attack(Enemy *enemy)
     currentselect=0;
     Player::turnset();
     while(selectcard());
+    message("回合结束","lightblue");
     return attack(enemy);
 }
 
@@ -135,6 +136,7 @@ bool selectcard()
         if (r=='W' || r=='w') currentselect+=hand.size()-1;
         if (r=='S' || r=='s') currentselect+=1;
         currentselect%=hand.size();
+        message("当前选择卡牌"+to_string(currentselect));
         clear(cardSelectPrintX,cardSelectPrintY,cardSelectPrintX2,cardSelectPrintY2);
         for (int i=0; i<hand.size(); i++) 
         {
@@ -165,22 +167,11 @@ bool selectcard()
                 setcolor("white","black");
                 print(hand[currentselect].description,cardPrintX,cardPrintY);
             }
-            else 
-            {
-                setcolor("red","black");
-                message("费用不够");
-            }
+            else message("费用不够","red");
         }
     }
-    else 
-    {
-        clear(cardSelectPrintX,cardSelectPrintY,cardSelectPrintX2,cardSelectPrintY2);
-        setcolor("red","black");
-        message("没有卡牌");    
-    }
+    else message("没有卡牌","red");    
     if (r=='E' || r=='e') return false;
-    setcolor("red","black");    
-    print("sleep",0,5);
     Sleep(100);
     return true;
 }

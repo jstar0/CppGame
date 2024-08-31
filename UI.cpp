@@ -56,20 +56,16 @@ void printUI()
     for (int i=3; i<=55; i++) print("墙",i,27);
 }
 
-vector<string> messagebox;
+vector<Message> messagebox;
 extern int messagePrintX,messagePrintY,messagePrintX2,messagePrintY2,messageMax;
-void message(string s)
+void message(string s,string fore/* ="white" */,string back/* ="black" */)
 {
-    if (messagebox.size()<messageMax) messagebox.push_back(s);
-    else 
-    {
-        messagebox.erase(messagebox.begin());
-        messagebox.push_back(s);
-    }
+    if (messagebox.size()>=messageMax) messagebox.erase(messagebox.begin());
+    messagebox.push_back(Message(s,fore,back));
     clear(messagePrintX,messagePrintY,messagePrintX2,messagePrintY2);
-    setcolor("white");
     for (int i=0; i<messagebox.size(); i++)
     {
-        print(messagebox[i],messagePrintX,messagePrintY+i);
+        setcolor(messagebox[i].fore,messagebox[i].back);
+        print(messagebox[i].s,messagePrintX,messagePrintY+i);
     }
 }
