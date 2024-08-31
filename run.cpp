@@ -8,17 +8,18 @@
 #include"gamemap.h"
 #include"card.h"
 #include"player.h"
+#include"UI.h"
 extern int playerCurrentX,playerCurrentY,playerCurrentRoom,playerSpeedX,playerSpeedY,
-           roomPrintX,roomPrintY,roomX,roomY;
+           roomPrintX,roomPrintY,roomWidth,roomHeight;
 extern Room room[];
 bool playermove()
 {
-    clear(roomPrintX,roomPrintY,roomPrintX+roomX-1,roomPrintY+roomY-1);
+    clear(roomPrintX,roomPrintY,roomPrintX+roomWidth-1,roomPrintY+roomHeight-1);
     print(room[playerCurrentRoom]);
     setcolor("white","blue");
     print("我",roomPrintX+playerCurrentX,roomPrintY+playerCurrentY);
     char r=getch();
-    clear(roomPrintX,roomPrintY,roomPrintX+roomX-1,roomPrintY+roomY-1);
+    clear(roomPrintX,roomPrintY,roomPrintX+roomWidth-1,roomPrintY+roomHeight-1);
     if (r=='W' || r=='w') 
     {
         if (playerCurrentY>0) playerCurrentY-=playerSpeedY;
@@ -33,7 +34,7 @@ bool playermove()
     }
     if (r=='S' || r=='s') 
     {
-        if (playerCurrentY<roomY-1) playerCurrentY+=playerSpeedY;
+        if (playerCurrentY<roomHeight-1) playerCurrentY+=playerSpeedY;
         else 
         {
             if (room[playerCurrentRoom].DOWN_ID>=0) 
@@ -57,7 +58,7 @@ bool playermove()
     }
     if (r=='D' || r=='d') 
     {
-        if (playerCurrentX<roomX-2) playerCurrentX+=playerSpeedX;
+        if (playerCurrentX<roomWidth-2) playerCurrentX+=playerSpeedX;
         else 
         {
             if (room[playerCurrentRoom].RIGHT_ID>=0) 
@@ -167,7 +168,7 @@ bool selectcard()
             else 
             {
                 setcolor("red","black");
-                print("费用不够",0,0);
+                message("费用不够");
             }
         }
     }
@@ -175,7 +176,7 @@ bool selectcard()
     {
         clear(cardSelectPrintX,cardSelectPrintY,cardSelectPrintX2,cardSelectPrintY2);
         setcolor("red","black");
-        print("手牌为空",0,0);
+        message("没有卡牌");    
     }
     if (r=='E' || r=='e') return false;
     setcolor("red","black");    

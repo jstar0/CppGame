@@ -12,15 +12,21 @@
 #include"UI.h"
 
 int playerCurrentX=0,playerCurrentY=0,playerCurrentRoom=0,playerSpeedX=2,playerSpeedY=1,
-    roomPrintX=5,roomPrintY=4,roomX=50,roomY=23,
+    roomPrintX=5,roomPrintY=4,roomWidth=50,roomHeight=23,
     cardSelectPrintX=1,cardSelectPrintY=31,cardSelectPrintX2=29,cardSelectPrintY2=39,
-    cardPrintX=38,cardPrintY=32,cardPrintX2=51,cardPrintY2=39;
+    cardPrintX=38,cardPrintY=32,cardPrintX2=51,cardPrintY2=39,
+    messagePrintX=61,messagePrintY=16,messagePrintX2=100,messagePrintY2=34,messageMax=19;
 Room room[10];
 
 int main()
 {
     initUI();
     printUI();
+    for (int i=1; i<=20; i++)
+    {
+        message("这是一条消息"+std::to_string(i));
+        Sleep(40);
+    }
     Player::addcard(new AttackCard("打击",{"打击"},0,1,1,5,1));
     Player::addcard(new AttackCard("打击",{"打击"},0,1,1,5,1));
     Player::addcard(new AttackCard("打击",{"打击"},0,1,1,5,1));

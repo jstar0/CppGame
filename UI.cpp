@@ -3,6 +3,7 @@
 #include<string>
 #include"console.h"
 #include"UI.h"
+using namespace std;
 void initUI()
 {
     setcursor(false);
@@ -24,7 +25,7 @@ void printUI()
     for (int i=60; i<100; i++) print("=",i,35);
     for (int i=60; i<100; i++) print("=",i,15);
     for (int i=31; i<=40; i++) print("|",30,i);
-    std::vector<std::string> s1=
+    vector<string> s1=
     {
         "┌──────────────┐",
         "│              │",
@@ -37,7 +38,7 @@ void printUI()
         "│              │",
         "└──────────────┘"
     };
-    std::vector<std::string> s2=
+    vector<string> s2=
     {
         "  死亡收割",
         "",
@@ -53,4 +54,22 @@ void printUI()
     for (int i=3; i<=27; i++) print("墙",3,i);
     for (int i=3; i<=27; i++) print("墙",55,i);
     for (int i=3; i<=55; i++) print("墙",i,27);
+}
+
+vector<string> messagebox;
+extern int messagePrintX,messagePrintY,messagePrintX2,messagePrintY2,messageMax;
+void message(string s)
+{
+    if (messagebox.size()<messageMax) messagebox.push_back(s);
+    else 
+    {
+        messagebox.erase(messagebox.begin());
+        messagebox.push_back(s);
+    }
+    clear(messagePrintX,messagePrintY,messagePrintX2,messagePrintY2);
+    setcolor("white");
+    for (int i=0; i<messagebox.size(); i++)
+    {
+        print(messagebox[i],messagePrintX,messagePrintY+i);
+    }
 }
