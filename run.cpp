@@ -156,21 +156,28 @@ bool selectcard()
                 used.push_back(hand[currentselect]);
                 hand.erase(hand.begin()+currentselect);
                 if (currentselect>hand.size()-1) currentselect=hand.size()-1;
-                clear(cardSelectPrintX,cardSelectPrintY,cardSelectPrintX2,cardSelectPrintY2);
-                for (int i=0; i<hand.size(); i++) 
+                if (hand.size()>0)
                 {
-                    if (currentselect==i) setcolor(hand[i].getcolor(),"white");
-                    else setcolor(hand[i].getcolor(),"black");
-                    print(std::to_string(hand[i].cost)+"费  "+hand[i].name,cardSelectPrintX,cardSelectPrintY+i);
+                    clear(cardSelectPrintX,cardSelectPrintY,cardSelectPrintX2,cardSelectPrintY2);
+                    for (int i=0; i<hand.size(); i++) 
+                    {
+                        if (currentselect==i) setcolor(hand[i].getcolor(),"white");
+                        else setcolor(hand[i].getcolor(),"black");
+                        print(std::to_string(hand[i].cost)+"费  "+hand[i].name,cardSelectPrintX,cardSelectPrintY+i);
+                    }
+                    clear(cardPrintX,cardPrintY,cardPrintX2,cardPrintY2);
+                    setcolor("white","black");
+                    print(hand[currentselect].description,cardPrintX,cardPrintY);
                 }
-                clear(cardPrintX,cardPrintY,cardPrintX2,cardPrintY2);
-                setcolor("white","black");
-                print(hand[currentselect].description,cardPrintX,cardPrintY);
             }
             else message("费用不够","red");
         }
     }
-    else message("没有卡牌","red");    
+    else 
+    {
+        clear(cardSelectPrintX,cardSelectPrintY,cardSelectPrintX2,cardSelectPrintY2);
+        message("没有卡牌","red");    
+    }
     if (r=='E' || r=='e') return false;
     Sleep(100);
     return true;
