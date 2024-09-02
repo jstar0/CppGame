@@ -95,14 +95,14 @@ bool playermove()
 }
 
 std::vector<Card> have,hand,used;
-int have_s,hand_s,used_s;
 Enemy *currentenemy=nullptr;
 int currentselect;
 extern int cardSelectPrintX,cardSelectPrintY,cardSelectPrintX2,cardSelectPrintY2,
            cardPrintX,cardPrintY,cardPrintX2,cardPrintY2;
 bool attack(Enemy *enemy)
 {
-    for (int i=1; i<=5; i++)
+    currentenemy=enemy;
+    while(hand.size()<5)
     {
         if (!have.empty())
         {
@@ -117,8 +117,6 @@ bool attack(Enemy *enemy)
             {
                 have=used;
                 used.clear();
-                i--;
-                continue;
             }
             else break;
         }

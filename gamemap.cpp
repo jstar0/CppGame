@@ -23,13 +23,9 @@ void Object::run()
 }
 void EnemyObject::run()
 {
-    extern int have_s,hand_s,used_s;
     extern std::vector<Card> have,hand,used;
     extern Enemy *currentenemy;
-    have_s=Player::card.size();
-    hand_s=0;
-    used_s=0;
-    for (int i=0; i<have_s; i++)
+    for (int i=0; i<have.size(); i++)
     {
         have.push_back(*Player::card[i]);
     }

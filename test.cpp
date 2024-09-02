@@ -31,6 +31,7 @@ int main()
     Player::addcard(new AttackCard("打击",{"打击"},0,1,1,5,1));
     Player::addcard(new AttackCard("打击",{"打击"},0,1,1,5,1));
     Player::addcard(new AttackCard("打击",{"打击"},0,1,1,5,1));
+    Player::addcard(new Card("防御",{"防御"},3,1,1));
     Player::addcard(new AttackCard("完美闪击",{"完美闪击"},1,2,3,10,1));
     Player::addcard(new AttackCard("死亡收割",{"死亡收割"},2,3,4,15,1));
     extern vector<Card> have;
