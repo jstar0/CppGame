@@ -5,6 +5,7 @@
 #include"console.h"
 #include"enemy.h"
 #include"player.h"
+#include"UI.h"
 using namespace std;
 
 extern int cardPrintX,cardPrintY;
@@ -27,26 +28,30 @@ Card::Card(string name,vector<string> description,int ID,int cost,int rarity)
     this->rarity=rarity;
 }
 
-AttackCard::AttackCard()
+CardKind::CardKind()
 {
-    name="未知";
-    description={"未知"};
-    ID=0;
-    cost=0;
-    rarity=0;
+    isattack=false;
+    isdefend=false;
     damage=0;
-    times=0;
+    damagetimes=0;
+    defense=0;
 }
 
-AttackCard::AttackCard(string name,vector<string> description,int ID,int cost,int rarity,int damage,int times)
+CardKind::CardKind(bool isattack,bool isdefend)
 {
-    this->name=name;
-    this->description=description;
-    this->ID=ID;
-    this->cost=cost;
-    this->rarity=rarity;
+    this->isattack=isattack;
+    this->isdefend=isdefend;
+}
+
+void CardKind::setattack(int damage,int times)
+{
     this->damage=damage;
-    this->times=times;
+    this->damagetimes=times;
+}
+
+void CardKind::setdefend(int defense)
+{
+    this->defense=defense;
 }
 
 string Card::getcolor()
@@ -64,14 +69,64 @@ void print(Card *card)
     print(card->description,cardPrintX,cardPrintY);
 }
 
+extern Enemy *currentenemy;
 void Card::effect()
 {
-    
-}
-void AttackCard::effect(Enemy *enemy)
-{
-    for (int i=1; i<=times; i++)
+    if (kind.isattack) 
     {
-        enemy->getdamage(damage);
+        message("对"+currentenemy->name+"使用"+name);
+        for (int i=1; i<=kind.damagetimes; i++)
+        {
+            currentenemy->getdamage(Player::damage(kind.damage));
+        }
     }
+    if (kind.isdefend) 
+    {
+        message("使用"+name);
+        Player::state.defense+=kind.defense;
+    }
+}
+
+AttackCard::AttackCard()
+{
+    name="攻击卡";
+    description={"攻击卡"};
+    ID=0;
+    cost=0;
+    rarity=0;
+    kind=CardKind(true,false);
+    kind.setattack(0,0);
+}
+
+AttackCard::AttackCard(string name,vector<string> description,int ID,int cost,int rarity,int damage,int times)
+{
+    this->name=name;
+    this->description=description;
+    this->ID=ID;
+    this->cost=cost;
+    this->rarity=rarity;
+    kind=CardKind(true,false);
+    kind.setattack(damage,times);
+}
+
+DefendCard::DefendCard()
+{
+    name="防御卡";
+    description={"防御卡"};
+    ID=0;
+    cost=0;
+    rarity=0;
+    kind=CardKind(false,true);
+    kind.setdefend(0);
+}
+
+DefendCard::DefendCard(string name,vector<string> description,int ID,int cost,int rarity,int defense)
+{
+    this->name=name;
+    this->description=description;
+    this->ID=ID;
+    this->cost=cost;
+    this->rarity=rarity;
+    kind=CardKind(false,true);
+    kind.setdefend(defense);
 }

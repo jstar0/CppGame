@@ -15,6 +15,7 @@ int playerCurrentX=0,playerCurrentY=0,playerCurrentRoom=0,playerSpeedX=2,playerS
     roomPrintX=5,roomPrintY=4,roomWidth=50,roomHeight=23,
     cardSelectPrintX=1,cardSelectPrintY=31,cardSelectPrintX2=29,cardSelectPrintY2=39,
     cardPrintX=38,cardPrintY=32,cardPrintX2=51,cardPrintY2=39,
+    attackPlayerPrintX=15,attackPlayerPrintY=10,attackEnemyPrintX=40,attackEnemyPrintY=10,
     messagePrintX=61,messagePrintY=16,messagePrintX2=99,messagePrintY2=34,messageMax=19;
 Room room[10];
 
@@ -22,16 +23,11 @@ int main()
 {
     initUI();
     printUI();
-    for (int i=1; i<=20; i++)
-    {
-        message("这是一条消息"+std::to_string(i));
-        Sleep(40);
-    }
     Player::addcard(new AttackCard("打击",{"打击"},0,1,1,5,1));
     Player::addcard(new AttackCard("打击",{"打击"},0,1,1,5,1));
     Player::addcard(new AttackCard("打击",{"打击"},0,1,1,5,1));
     Player::addcard(new AttackCard("打击",{"打击"},0,1,1,5,1));
-    Player::addcard(new Card("防御",{"防御"},3,1,1));
+    Player::addcard(new DefendCard("防御",{"防御"},3,1,1,5));
     Player::addcard(new AttackCard("完美闪击",{"完美闪击"},1,2,3,10,1));
     Player::addcard(new AttackCard("死亡收割",{"死亡收割"},2,3,4,15,1));
     extern vector<Card> have;
@@ -40,15 +36,14 @@ int main()
         have.push_back(*Player::card[i]);
     }
     EnemyObject tenemyobject;
-    Enemy tenemy;
+    Enemy tenemy=Enemy("于景一",{"于景一"},100);
+    tenemy.init();
+    tenemy.state.defense=30;
+    message("开始战斗:"+tenemy.name);
+    while(attack(&tenemy));
     tenemyobject.name="????";
     tenemyobject.x=4;
     tenemyobject.y=4;
-    tenemyobject.enemy.name="几牢";
-    tenemyobject.enemy.HP_Max=10;
-    print("按任意键开始战斗",0,0);
-    getch();
-    while(attack(&tenemy));
     room[0].object.clear();
     room[0].enemyobject.push_back(tenemyobject);
     room[0].RIGHT_ID=1;

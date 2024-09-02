@@ -24,7 +24,8 @@ public:
     static void addcard(Card* card);
     static void clearcard();
     static int damage(int d);
-    static int getdamage(int gd);
+    static void getdamage(int gd);
     static void turnset();
+    friend void printPlayer();
 };
 #endif

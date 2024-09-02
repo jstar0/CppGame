@@ -21,15 +21,16 @@ public:
 class Enemy{
 public:
     Enemy();
-    Enemy(string name,vector<string> description,int HP,int HP_Max);
+    Enemy(string name,vector<string> description,int HP_Max);
     string name;
     vector<std::string> description;
     int HP,HP_Max,intention_s;
     EnemyState state;
     vector<EnemyIntention> intention;
-
     int damage(int d);
-    int getdamage(int gd); 
+    void getdamage(int gd); 
+    void init();
+    friend void print(Enemy enemy);
 };
 
 #endif

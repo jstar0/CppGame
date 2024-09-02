@@ -99,10 +99,10 @@ Enemy *currentenemy=nullptr;
 int currentselect;
 extern int cardSelectPrintX,cardSelectPrintY,cardSelectPrintX2,cardSelectPrintY2,
            cardPrintX,cardPrintY,cardPrintX2,cardPrintY2;
-bool attack(Enemy *enemy)
+void printPlayer();
+void drawcard(int n=1)
 {
-    currentenemy=enemy;
-    while(hand.size()<5)
+    while(hand.size()<n)
     {
         if (!have.empty())
         {
@@ -121,6 +121,15 @@ bool attack(Enemy *enemy)
             else break;
         }
     }
+}
+bool attack(Enemy *enemy)
+{
+    currentenemy=enemy;
+    Player::turnset();
+    clear(roomPrintX,roomPrintY,roomPrintX+roomWidth-1,roomPrintY+roomHeight-1);
+    printPlayer();
+    print(*currentenemy);
+    drawcard(5);
     currentselect=0;
     clear(cardSelectPrintX,cardSelectPrintY,cardSelectPrintX2,cardSelectPrintY2);
     for (int i=0; i<hand.size(); i++) 
@@ -132,7 +141,6 @@ bool attack(Enemy *enemy)
     clear(cardPrintX,cardPrintY,cardPrintX2,cardPrintY2);
     setcolor("white","black");
     print(hand[currentselect].description,cardPrintX,cardPrintY);
-    Player::turnset();
     while(selectcard());
     message("回合结束","lightblue");
     return attack(enemy);
@@ -146,7 +154,6 @@ bool selectcard()
         if (r=='W' || r=='w') currentselect+=hand.size()-1;
         if (r=='S' || r=='s') currentselect+=1;
         currentselect%=hand.size();
-        message("当前选择卡牌"+to_string(currentselect));
         clear(cardSelectPrintX,cardSelectPrintY,cardSelectPrintX2,cardSelectPrintY2);
         for (int i=0; i<hand.size(); i++) 
         {
@@ -167,6 +174,9 @@ bool selectcard()
                 used.push_back(hand[currentselect]);
                 hand.erase(hand.begin()+currentselect);
                 if (currentselect>hand.size()-1) currentselect=hand.size()-1;
+                clear(roomPrintX,roomPrintY,roomPrintX+roomWidth-1,roomPrintY+roomHeight-1);
+                printPlayer();
+                print(*currentenemy);
                 if (hand.size()>0)
                 {
                     clear(cardSelectPrintX,cardSelectPrintY,cardSelectPrintX2,cardSelectPrintY2);

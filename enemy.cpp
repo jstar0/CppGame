@@ -1,5 +1,8 @@
 #include<iostream>
+#include<cstdlib>
 #include"enemy.h"
+#include"console.h"
+#include"UI.h"
 using namespace std;
 
 Enemy::Enemy()
@@ -11,11 +14,10 @@ Enemy::Enemy()
     intention_s=0;
 }
 
-Enemy::Enemy(string name,vector<string> description,int HP,int HP_Max)
+Enemy::Enemy(string name,vector<string> description,int HP_Max)
 {
     this->name=name;
     this->description=description;
-    this->HP=HP;
     this->HP_Max=HP_Max;
     intention_s=0;
 }
@@ -25,11 +27,37 @@ int Enemy::damage(int d)
     return d+state.strength;
 }
 
-int Enemy::getdamage(int gd)
+void Enemy::getdamage(int gd)
 {
-    HP-=gd-state.defense>0;
-    state.defense=(gd-state.defense>0)?gd-state.defense:0;
-    return gd-state.defense;
+    int gde=gd-state.defense>0?gd-state.defense:0;
+    if (gde>0) message(name+"受到"+to_string(gd-Player::state.defense)+"点伤害!","purple");
+    else 
+    {
+        srand(time(0));
+        int x=rand()%3;
+        if (x==0) message(name+"完美格挡!","purple");
+        if (x==1) message(name+"觉得不痛不痒","purple");
+        if (x==2) message(name+"说你没吃饭","purple");
+    }
+    HP-=gde;
+    state.defense=(state.defense-gd>0)?state.defense-gd:0;
+}
+
+void print(Enemy enemy)
+{
+    extern int attackEnemyPrintX,attackEnemyPrintY;
+    int x=attackEnemyPrintX,y=attackEnemyPrintY;
+    setcolor("white");
+    print(enemy.name,x,y++);
+    print("HP:"+to_string(enemy.HP)+"/"+to_string(enemy.HP_Max),x,y++);
+    if (enemy.state.strength>0) print("力量:"+to_string(enemy.state.strength),x,y++);
+    if (enemy.state.defense>0) print("防御:"+to_string(enemy.state.defense),x,y++);
+}
+
+void Enemy::init()
+{
+    HP=HP_Max;
+    state.EnemyStateSet();
 }
 
 EnemyState::EnemyState()
