@@ -17,7 +17,7 @@ int playerCurrentX=0,playerCurrentY=0,playerCurrentRoom=0,playerSpeedX=2,playerS
     cardPrintX=38,cardPrintY=32,cardPrintX2=51,cardPrintY2=39,
     attackPlayerPrintX=15,attackPlayerPrintY=10,attackEnemyPrintX=40,attackEnemyPrintY=10,
     messagePrintX=61,messagePrintY=16,messagePrintX2=99,messagePrintY2=34,messageMax=19;
-Room room[10];
+std::vector<Room> room;
 std::vector<Card> have,hand,used;
 Enemy *currentenemy=nullptr;
 int currentselect;
@@ -56,18 +56,8 @@ int main()
     tenemy.addintention(new EnemyIntentionStrengthen({"力量10点"},10));
     tenemy.addintention(new EnemyIntentionStrengthen({"力量10点"},10));
     tenemy.addintention(new EnemyIntentionGiveCard({"施加混乱"},{new Card("混乱",{"混乱"},0,99,1),new Card("混乱",{"混乱"},0,99,1),new Card("混乱",{"混乱"},0,99,1)}));
-    message("开始战斗:"+tenemy.name);
-    while(attack(&tenemy));
-    tenemyobject.name="????";
-    tenemyobject.x=4;
-    tenemyobject.y=4;
-    room[0].object.clear();
-    room[0].enemyobject.push_back(tenemyobject);
-    room[0].RIGHT_ID=1;
-    room[0].LEFT_ID=2;
-    room[0].UP_ID=3;
-    room[0].DOWN_ID=4;
-    getch();
+    room.push_back(Room("起始房间",0,-1,-1,-1,-1));
+    room[0].addobject(new EnemyObject("人",4,4,tenemy));
     while(playermove());
     return 0;
 }

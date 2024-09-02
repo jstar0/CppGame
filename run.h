@@ -3,6 +3,6 @@
 #include"enemy.h"
 bool playermove();
 void drawcard(int n);
-bool attack(Enemy *enemy);
+bool fight(Enemy *enemy);
 bool selectcard();
 #endif
