@@ -1,5 +1,6 @@
 #include<iostream>
 #include<cstdlib>
+#include<ctime>
 #include"enemy.h"
 #include"console.h"
 #include"UI.h"
