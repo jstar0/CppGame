@@ -15,7 +15,7 @@ int playerCurrentX=0,playerCurrentY=0,playerCurrentRoom=0,playerSpeedX=2,playerS
     roomPrintX=5,roomPrintY=4,roomWidth=50,roomHeight=23,
     cardSelectPrintX=1,cardSelectPrintY=31,cardSelectPrintX2=29,cardSelectPrintY2=39,
     cardPrintX=38,cardPrintY=32,cardPrintX2=51,cardPrintY2=39,
-    messagePrintX=61,messagePrintY=16,messagePrintX2=100,messagePrintY2=34,messageMax=19;
+    messagePrintX=61,messagePrintY=16,messagePrintX2=99,messagePrintY2=34,messageMax=19;
 Room room[10];
 
 int main()
@@ -30,8 +30,9 @@ int main()
     Player::addcard(new AttackCard("打击",{"打击"},0,1,1,5,1));
     Player::addcard(new AttackCard("打击",{"打击"},0,1,1,5,1));
     Player::addcard(new AttackCard("打击",{"打击"},0,1,1,5,1));
+    Player::addcard(new AttackCard("打击",{"打击"},0,1,1,5,1));
     Player::addcard(new AttackCard("完美闪击",{"完美闪击"},1,2,3,10,1));
-    Player::addcard(new AttackCard("死亡收割",{"死亡收割"},2,3,5,15,1));
+    Player::addcard(new AttackCard("死亡收割",{"死亡收割"},2,3,4,15,1));
     extern vector<Card> have;
     for (int i=0; i<Player::card.size(); i++)
     {

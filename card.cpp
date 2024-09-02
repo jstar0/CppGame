@@ -51,11 +51,10 @@ AttackCard::AttackCard(string name,vector<string> description,int ID,int cost,in
 
 string Card::getcolor()
 {
-    if (rarity==1) return "white";
-    if (rarity==2) return "green";
-    if (rarity==3) return "blue";
-    if (rarity==4) return "purple";
-    if (rarity==5) return "red";
+    if (rarity==1) return "green";
+    if (rarity==2) return "blue";
+    if (rarity==3) return "purple";
+    if (rarity==4) return "red";
     return "white";
 }
 

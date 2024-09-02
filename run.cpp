@@ -1,8 +1,11 @@
 #include<iostream>
+#include<string>
+#include<vector>
 #include<windows.h>
 #include<conio.h>
 #include<algorithm>
 #include<random>
+#include<ctime>
 #include"run.h"
 #include"console.h"
 #include"gamemap.h"
@@ -95,14 +98,15 @@ std::vector<Card> have,hand,used;
 int have_s,hand_s,used_s;
 Enemy *currentenemy=nullptr;
 int currentselect;
+extern int cardSelectPrintX,cardSelectPrintY,cardSelectPrintX2,cardSelectPrintY2,
+           cardPrintX,cardPrintY,cardPrintX2,cardPrintY2;
 bool attack(Enemy *enemy)
 {
-    srand(time(NULL));
     for (int i=1; i<=5; i++)
     {
-        if (have.size()>0)
+        if (!have.empty())
         {
-            auto dre=std::default_random_engine{};
+            auto dre=std::default_random_engine{static_cast<unsigned>(std::time(nullptr))};
             std::shuffle(have.begin(),have.end(),dre);
             hand.push_back(have.back());
             have.pop_back();
@@ -120,14 +124,22 @@ bool attack(Enemy *enemy)
         }
     }
     currentselect=0;
+    clear(cardSelectPrintX,cardSelectPrintY,cardSelectPrintX2,cardSelectPrintY2);
+    for (int i=0; i<hand.size(); i++) 
+    {
+        if (currentselect==i) setcolor(hand[i].getcolor(),"white");
+        else setcolor(hand[i].getcolor(),"black");
+        print(std::to_string(hand[i].cost)+"费  "+hand[i].name,cardSelectPrintX,cardSelectPrintY+i);
+    }
+    clear(cardPrintX,cardPrintY,cardPrintX2,cardPrintY2);
+    setcolor("white","black");
+    print(hand[currentselect].description,cardPrintX,cardPrintY);
     Player::turnset();
     while(selectcard());
     message("回合结束","lightblue");
     return attack(enemy);
 }
 
-extern int cardSelectPrintX,cardSelectPrintY,cardSelectPrintX2,cardSelectPrintY2,
-           cardPrintX,cardPrintY,cardPrintX2,cardPrintY2;
 bool selectcard()
 {
     char r=getch();
@@ -152,6 +164,7 @@ bool selectcard()
             if (Player::MP>=hand[currentselect].cost)
             {
                 Player::MP-=hand[currentselect].cost;
+                message("打出卡牌"+hand[currentselect].name);
                 hand[currentselect].effect();
                 used.push_back(hand[currentselect]);
                 hand.erase(hand.begin()+currentselect);
@@ -169,6 +182,11 @@ bool selectcard()
                     setcolor("white","black");
                     print(hand[currentselect].description,cardPrintX,cardPrintY);
                 }
+                else 
+                {
+                    clear(cardSelectPrintX,cardSelectPrintY,cardSelectPrintX2,cardSelectPrintY2);
+                    message("没有卡牌","red");
+                }
             }
             else message("费用不够","red");
         }
@@ -178,7 +196,15 @@ bool selectcard()
         clear(cardSelectPrintX,cardSelectPrintY,cardSelectPrintX2,cardSelectPrintY2);
         message("没有卡牌","red");    
     }
-    if (r=='E' || r=='e') return false;
+    if (r=='E' || r=='e') 
+    {
+        for (int i=0; i<hand.size(); i++)
+        {
+            used.push_back(hand[0]);
+            hand.erase(hand.begin());
+        }
+        return false;
+    }
     Sleep(100);
     return true;
 }
