@@ -47,11 +47,11 @@ int main()
     Enemy tenemy=Enemy("于景一",{"于景一"},100);
     tenemy.init();
     tenemy.state.defense=100;
-    tenemy.addintention(new EnemyIntentionAttack({"攻击40点"},40,1));
-    tenemy.addintention(new EnemyIntentionAttack({"攻击6X5点"},6,5));
-    tenemy.addintention(new EnemyIntentionAttack({"攻击8X3点"},8,3));
-    tenemy.addintention(new EnemyIntentionAttack({"攻击10X2点"},10,2));
-    tenemy.addintention(new EnemyIntentionDefend({"防御40点"},40));
+    tenemy.addintention(new EnemyIntentionAttack({"攻击20点"},20,1));
+    tenemy.addintention(new EnemyIntentionAttack({"攻击6X3点"},6,3));
+    tenemy.addintention(new EnemyIntentionAttack({"攻击8X2点"},8,2));
+    tenemy.addintention(new EnemyIntentionAttack({"攻击8X2点"},8,2));
+    tenemy.addintention(new EnemyIntentionDefend({"防御20点"},20));
     tenemy.addintention(new EnemyIntentionStrengthen({"力量10点"},10));
     tenemy.addintention(new EnemyIntentionStrengthen({"力量10点"},10));
     tenemy.addintention(new EnemyIntentionStrengthen({"力量10点"},10));
