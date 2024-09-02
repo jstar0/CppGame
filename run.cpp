@@ -126,11 +126,13 @@ void drawcard(int n=1)
 }
 bool attack(Enemy *enemy)
 {
+    srand(time(0));
     currentenemy=enemy;
     Player::turnset();
+    currentenemy->currentintention=*currentenemy->intention[rand()%currentenemy->intention.size()];
     clear(roomPrintX,roomPrintY,roomPrintX+roomWidth-1,roomPrintY+roomHeight-1);
     printPlayer();
-    print(*currentenemy);
+    print(currentenemy);
     drawcard(5);
     currentselect=0;
     clear(cardSelectPrintX,cardSelectPrintY,cardSelectPrintX2,cardSelectPrintY2);
@@ -144,6 +146,7 @@ bool attack(Enemy *enemy)
     setcolor("white","black");
     print(hand[currentselect].description,cardPrintX,cardPrintY);
     while(selectcard());
+    currentenemy->currentintention.effect();
     message("回合结束","lightblue");
     return attack(enemy);
 }
@@ -178,7 +181,7 @@ bool selectcard()
                 if (currentselect>hand.size()-1) currentselect=hand.size()-1;
                 clear(roomPrintX,roomPrintY,roomPrintX+roomWidth-1,roomPrintY+roomHeight-1);
                 printPlayer();
-                print(*currentenemy);
+                print(currentenemy);
                 if (hand.size()>0)
                 {
                     clear(cardSelectPrintX,cardSelectPrintY,cardSelectPrintX2,cardSelectPrintY2);

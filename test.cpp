@@ -44,6 +44,12 @@ int main()
     Enemy tenemy=Enemy("于景一",{"于景一"},100);
     tenemy.init();
     tenemy.state.defense=100;
+    tenemy.addintention(new EnemyIntentionAttack({"攻击30点"},30,1));
+    tenemy.addintention(new EnemyIntentionAttack({"攻击8X4点"},8,4));
+    tenemy.addintention(new EnemyIntentionDefend({"防御20点"},20));
+    tenemy.addintention(new EnemyIntentionDefend({"防御40点"},40));
+    tenemy.addintention(new EnemyIntentionStrengthen({"力量10点"},6));
+    tenemy.addintention(new EnemyIntentionGiveCard({"施加混乱"},{new Card("混乱",{"混乱"},0,99,1),new Card("混乱",{"混乱"},0,99,1),new Card("混乱",{"混乱"},0,99,1)}));
     message("开始战斗:"+tenemy.name);
     while(attack(&tenemy));
     tenemyobject.name="????";

@@ -2,6 +2,9 @@
 #define ENEMY_H
 #include<string>
 #include<vector>
+#include"card.h"
+
+class Card;
 
 class EnemyState{
 public:
@@ -14,7 +17,42 @@ public:
 
 class EnemyIntention{
 public:
-    std::string name;
+    EnemyIntention();
+    std::vector<std::string> description;
+    bool isattack,isdefend,isstrengthen,isgivecard;
+    int damage,damagetimes;
+    int defense;
+    int strength;
+    std::vector<Card*> givecard;
+    void setattack(int damage,int times);
+    void setdefend(int defense);
+    void setstrengthen(int strength);
+    void setgivecard(std::vector<Card*> givecard);
+    void effect();
+};
+
+class EnemyIntentionAttack:public EnemyIntention{
+public:
+    EnemyIntentionAttack();
+    EnemyIntentionAttack(std::vector<std::string> description,int damage,int damagetimes);
+};
+
+class EnemyIntentionDefend:public EnemyIntention{
+public:
+    EnemyIntentionDefend();
+    EnemyIntentionDefend(std::vector<std::string> description,int defense);
+};
+
+class EnemyIntentionStrengthen:public EnemyIntention{
+public:
+    EnemyIntentionStrengthen();
+    EnemyIntentionStrengthen(std::vector<std::string> description,int strength);
+};
+
+class EnemyIntentionGiveCard:public EnemyIntention{
+public:
+    EnemyIntentionGiveCard();
+    EnemyIntentionGiveCard(std::vector<std::string> description,std::vector<Card*> givecard);
 };
 
 class Enemy{
@@ -23,13 +61,15 @@ public:
     Enemy(std::string name,std::vector<std::string> description,int HP_Max);
     std::string name;
     std::vector<std::string> description;
-    int HP,HP_Max,intention_s;
+    int HP,HP_Max;
     EnemyState state;
-    std::vector<EnemyIntention> intention;
+    std::vector<EnemyIntention*> intention;
+    EnemyIntention currentintention;
     int damage(int d);
     void getdamage(int gd); 
     void init();
-    friend void print(Enemy enemy);
+    void addintention(EnemyIntention *intention);
+    friend void print(Enemy *enemy);
 };
 
 #endif

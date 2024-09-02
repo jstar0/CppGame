@@ -44,37 +44,29 @@ CardKind::CardKind()
     strength=0;
 }
 
-CardKind::CardKind(bool isattack,bool isdefend,bool isdraw,bool isstrengthen)
+void Card::setattack(int damage,int times)
 {
-    this->isattack=isattack;
-    this->isdefend=isdefend;
-    this->isdraw=isdraw;
-    this->isstrengthen=isstrengthen;
+    kind.isattack=true;
+    kind.damage=damage;
+    kind.damagetimes=times;
 }
 
-void CardKind::setattack(int damage,int times)
+void Card::setdefend(int defense)
 {
-    isattack=true;
-    this->damage=damage;
-    this->damagetimes=times;
+    kind.isdefend=true;
+    kind.defense=defense;
 }
 
-void CardKind::setdefend(int defense)
+void Card::setdraw(int times)
 {
-    isdefend=true;
-    this->defense=defense;
+    kind.isdraw=true;
+    kind.drawtimes=times;
 }
 
-void CardKind::setdraw(int times)
+void Card::setstrengthen(int strength)
 {
-    isdraw=true;
-    this->drawtimes=times;
-}
-
-void CardKind::setstrengthen(int strength)
-{
-    isstrengthen=true;
-    this->strength=strength;
+    kind.isstrengthen=true;
+    kind.strength=strength;
 }
 
 std::string Card::getcolor()
@@ -127,7 +119,7 @@ AttackCard::AttackCard()
     ID=0;
     cost=0;
     rarity=0;
-    kind.setattack(0,0);
+    setattack(0,0);
 }
 
 AttackCard::AttackCard(std::string name,std::vector<std::string> description,int ID,int cost,int rarity,int damage,int times)
@@ -137,7 +129,7 @@ AttackCard::AttackCard(std::string name,std::vector<std::string> description,int
     this->ID=ID;
     this->cost=cost;
     this->rarity=rarity;
-    kind.setattack(damage,times);
+    setattack(damage,times);
 }
 
 DefendCard::DefendCard()
@@ -147,7 +139,7 @@ DefendCard::DefendCard()
     ID=0;
     cost=0;
     rarity=0;
-    kind.setdefend(0);
+    setdefend(0);
 }
 
 DefendCard::DefendCard(std::string name,std::vector<std::string> description,int ID,int cost,int rarity,int defense)
@@ -157,7 +149,7 @@ DefendCard::DefendCard(std::string name,std::vector<std::string> description,int
     this->ID=ID;
     this->cost=cost;
     this->rarity=rarity;
-    kind.setdefend(defense);
+    setdefend(defense);
 }
 
 DrawCard::DrawCard()
@@ -167,7 +159,7 @@ DrawCard::DrawCard()
     ID=0;
     cost=0;
     rarity=0;
-    kind.setdraw(0);
+    setdraw(0);
 }
 
 DrawCard::DrawCard(std::string name,std::vector<std::string> description,int ID,int cost,int rarity,int times)
@@ -177,7 +169,7 @@ DrawCard::DrawCard(std::string name,std::vector<std::string> description,int ID,
     this->ID=ID;
     this->cost=cost;
     this->rarity=rarity;
-    kind.setdraw(times);
+    setdraw(times);
 }
 
 StrengthenCard::StrengthenCard()
@@ -187,7 +179,7 @@ StrengthenCard::StrengthenCard()
     ID=0;
     cost=0;
     rarity=0;
-    kind.setstrengthen(0);
+    setstrengthen(0);
 }
 
 StrengthenCard::StrengthenCard(std::string name,std::vector<std::string> description,int ID,int cost,int rarity,int strength)
@@ -197,5 +189,5 @@ StrengthenCard::StrengthenCard(std::string name,std::vector<std::string> descrip
     this->ID=ID;
     this->cost=cost;
     this->rarity=rarity;
-    kind.setstrengthen(strength);
+    setstrengthen(strength);
 }

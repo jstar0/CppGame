@@ -13,11 +13,6 @@ public:
     int drawtimes;
     int strength;
     CardKind();
-    CardKind(bool isattack,bool isdefend,bool isdraw,bool isstrengthen);
-    void setattack(int damage,int times);
-    void setdefend(int defense);
-    void setdraw(int times);
-    void setstrengthen(int strength);
 };
 
 class Card{
@@ -28,6 +23,10 @@ public:
     CardKind kind;
     Card();
     Card(std::string name,std::vector<std::string> description,int ID,int cost,int rarity);
+    void setattack(int damage,int times);
+    void setdefend(int defense);
+    void setdraw(int times);
+    void setstrengthen(int strength);
     void effect();
     std::string getcolor();
     friend void print(Card *card);
