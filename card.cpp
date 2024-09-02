@@ -6,7 +6,10 @@
 #include"enemy.h"
 #include"player.h"
 #include"UI.h"
-using namespace std;
+#include"run.h"
+#include<algorithm>
+#include<random>
+#include<ctime>
 
 extern int cardPrintX,cardPrintY;
 
@@ -19,7 +22,7 @@ Card::Card()
     rarity=0;
 }
 
-Card::Card(string name,vector<string> description,int ID,int cost,int rarity)
+Card::Card(std::string name,std::vector<std::string> description,int ID,int cost,int rarity)
 {
     this->name=name;
     this->description=description;
@@ -32,29 +35,49 @@ CardKind::CardKind()
 {
     isattack=false;
     isdefend=false;
+    isdraw=false;
+    isstrengthen=false;
     damage=0;
     damagetimes=0;
     defense=0;
+    drawtimes=0;
+    strength=0;
 }
 
-CardKind::CardKind(bool isattack,bool isdefend)
+CardKind::CardKind(bool isattack,bool isdefend,bool isdraw,bool isstrengthen)
 {
     this->isattack=isattack;
     this->isdefend=isdefend;
+    this->isdraw=isdraw;
+    this->isstrengthen=isstrengthen;
 }
 
 void CardKind::setattack(int damage,int times)
 {
+    isattack=true;
     this->damage=damage;
     this->damagetimes=times;
 }
 
 void CardKind::setdefend(int defense)
 {
+    isdefend=true;
     this->defense=defense;
 }
 
-string Card::getcolor()
+void CardKind::setdraw(int times)
+{
+    isdraw=true;
+    this->drawtimes=times;
+}
+
+void CardKind::setstrengthen(int strength)
+{
+    isstrengthen=true;
+    this->strength=strength;
+}
+
+std::string Card::getcolor()
 {
     if (rarity==1) return "green";
     if (rarity==2) return "blue";
@@ -72,6 +95,11 @@ void print(Card *card)
 extern Enemy *currentenemy;
 void Card::effect()
 {
+    if (kind.isstrengthen)
+    {
+        message("获得"+std::to_string(kind.strength)+"点攻势");
+        Player::state.strength+=kind.strength;
+    }
     if (kind.isattack) 
     {
         message("对"+currentenemy->name+"使用"+name);
@@ -85,6 +113,11 @@ void Card::effect()
         message("使用"+name);
         Player::state.defense+=kind.defense;
     }
+    if (kind.isdraw)
+    {
+        message("抽取"+std::to_string(kind.drawtimes)+"张卡牌");
+        drawcard(kind.drawtimes);
+    }
 }
 
 AttackCard::AttackCard()
@@ -94,18 +127,16 @@ AttackCard::AttackCard()
     ID=0;
     cost=0;
     rarity=0;
-    kind=CardKind(true,false);
     kind.setattack(0,0);
 }
 
-AttackCard::AttackCard(string name,vector<string> description,int ID,int cost,int rarity,int damage,int times)
+AttackCard::AttackCard(std::string name,std::vector<std::string> description,int ID,int cost,int rarity,int damage,int times)
 {
     this->name=name;
     this->description=description;
     this->ID=ID;
     this->cost=cost;
     this->rarity=rarity;
-    kind=CardKind(true,false);
     kind.setattack(damage,times);
 }
 
@@ -116,17 +147,55 @@ DefendCard::DefendCard()
     ID=0;
     cost=0;
     rarity=0;
-    kind=CardKind(false,true);
     kind.setdefend(0);
 }
 
-DefendCard::DefendCard(string name,vector<string> description,int ID,int cost,int rarity,int defense)
+DefendCard::DefendCard(std::string name,std::vector<std::string> description,int ID,int cost,int rarity,int defense)
 {
     this->name=name;
     this->description=description;
     this->ID=ID;
     this->cost=cost;
     this->rarity=rarity;
-    kind=CardKind(false,true);
     kind.setdefend(defense);
+}
+
+DrawCard::DrawCard()
+{
+    name="抽取卡";
+    description={"抽取卡"};
+    ID=0;
+    cost=0;
+    rarity=0;
+    kind.setdraw(0);
+}
+
+DrawCard::DrawCard(std::string name,std::vector<std::string> description,int ID,int cost,int rarity,int times)
+{
+    this->name=name;
+    this->description=description;
+    this->ID=ID;
+    this->cost=cost;
+    this->rarity=rarity;
+    kind.setdraw(times);
+}
+
+StrengthenCard::StrengthenCard()
+{
+    name="强化卡";
+    description={"强化卡"};
+    ID=0;
+    cost=0;
+    rarity=0;
+    kind.setstrengthen(0);
+}
+
+StrengthenCard::StrengthenCard(std::string name,std::vector<std::string> description,int ID,int cost,int rarity,int strength)
+{
+    this->name=name;
+    this->description=description;
+    this->ID=ID;
+    this->cost=cost;
+    this->rarity=rarity;
+    kind.setstrengthen(strength);
 }

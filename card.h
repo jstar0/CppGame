@@ -4,40 +4,56 @@
 #include<vector>
 #include"enemy.h"
 #include"player.h"
-using namespace std;
 
 class CardKind{
 public:
-    bool isattack,isdefend;
-    int damage,damagetimes,defense;
+    bool isattack,isdefend,isdraw,isstrengthen;
+    int damage,damagetimes;
+    int defense;
+    int drawtimes;
+    int strength;
     CardKind();
-    CardKind(bool isattack,bool isdefend);
+    CardKind(bool isattack,bool isdefend,bool isdraw,bool isstrengthen);
     void setattack(int damage,int times);
     void setdefend(int defense);
+    void setdraw(int times);
+    void setstrengthen(int strength);
 };
 
 class Card{
 public:
-    string name;
-    vector<string> description;
+    std::string name;
+    std::vector<std::string> description;
     int ID,cost,rarity;
     CardKind kind;
     Card();
-    Card(string name,vector<string> description,int ID,int cost,int rarity);
+    Card(std::string name,std::vector<std::string> description,int ID,int cost,int rarity);
     void effect();
-    string getcolor();
+    std::string getcolor();
     friend void print(Card *card);
 };
 
 class AttackCard:public Card{
 public:
     AttackCard();
-    AttackCard(string name,vector<string> description,int ID,int cost,int rarity,int damage,int times);
+    AttackCard(std::string name,std::vector<std::string> description,int ID,int cost,int rarity,int damage,int times);
 };
 
 class DefendCard:public Card{
 public:
     DefendCard();
-    DefendCard(string name,vector<string> description,int ID,int cost,int rarity,int defense);
+    DefendCard(std::string name,std::vector<std::string> description,int ID,int cost,int rarity,int defense);
+};
+
+class DrawCard:public Card{
+public:
+    DrawCard();
+    DrawCard(std::string name,std::vector<std::string> description,int ID,int cost,int rarity,int times);
+};
+
+class StrengthenCard:public Card{
+public:
+    StrengthenCard();
+    StrengthenCard(std::string name,std::vector<std::string> description,int ID,int cost,int rarity,int strength);
 };
 #endif

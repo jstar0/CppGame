@@ -3,7 +3,6 @@
 #include"enemy.h"
 #include"console.h"
 #include"UI.h"
-using namespace std;
 
 Enemy::Enemy()
 {
@@ -14,7 +13,7 @@ Enemy::Enemy()
     intention_s=0;
 }
 
-Enemy::Enemy(string name,vector<string> description,int HP_Max)
+Enemy::Enemy(std::string name,std::vector<std::string> description,int HP_Max)
 {
     this->name=name;
     this->description=description;
@@ -30,7 +29,7 @@ int Enemy::damage(int d)
 void Enemy::getdamage(int gd)
 {
     int gde=gd-state.defense>0?gd-state.defense:0;
-    if (gde>0) message(name+"受到"+to_string(gd-state.defense)+"点伤害!","purple");
+    if (gde>0) message(name+"受到"+std::to_string(gd-state.defense)+"点伤害!","purple");
     else 
     {
         srand(time(0));
@@ -39,7 +38,7 @@ void Enemy::getdamage(int gd)
         if (x==1) message(name+"觉得不痛不痒","purple");
         if (x==2) message(name+"说你没吃饭","purple");
     }
-    HP-=gde;
+    HP=HP-gde>0?HP-gde:0;
     state.defense=(state.defense-gd>0)?state.defense-gd:0;
 }
 
@@ -49,9 +48,9 @@ void print(Enemy enemy)
     int x=attackEnemyPrintX,y=attackEnemyPrintY;
     setcolor("white");
     print(enemy.name,x,y++);
-    print("HP:"+to_string(enemy.HP)+"/"+to_string(enemy.HP_Max),x,y++);
-    if (enemy.state.strength>0) print("力量:"+to_string(enemy.state.strength),x,y++);
-    if (enemy.state.defense>0) print("防御:"+to_string(enemy.state.defense),x,y++);
+    print("HP:"+std::to_string(enemy.HP)+"/"+std::to_string(enemy.HP_Max),x,y++);
+    if (enemy.state.strength>0) print("力量:"+std::to_string(enemy.state.strength),x,y++);
+    if (enemy.state.defense>0) print("防御:"+std::to_string(enemy.state.defense),x,y++);
 }
 
 void Enemy::init()

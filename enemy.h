@@ -2,7 +2,6 @@
 #define ENEMY_H
 #include<string>
 #include<vector>
-using namespace std;
 
 class EnemyState{
 public:
@@ -15,18 +14,18 @@ public:
 
 class EnemyIntention{
 public:
-    string name;
+    std::string name;
 };
 
 class Enemy{
 public:
     Enemy();
-    Enemy(string name,vector<string> description,int HP_Max);
-    string name;
-    vector<std::string> description;
+    Enemy(std::string name,std::vector<std::string> description,int HP_Max);
+    std::string name;
+    std::vector<std::string> description;
     int HP,HP_Max,intention_s;
     EnemyState state;
-    vector<EnemyIntention> intention;
+    std::vector<EnemyIntention> intention;
     int damage(int d);
     void getdamage(int gd); 
     void init();

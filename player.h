@@ -2,7 +2,6 @@
 #define PLAYER_H
 #include<vector>
 #include"card.h"
-using namespace std;
 
 class Card;
 
@@ -18,7 +17,7 @@ public:
 class Player{
 public:
     static int HP,HP_Max,MP,MP_Max;
-    static vector<Card*> card;
+    static std::vector<Card*> card;
     static PlayerState state;
     Player();
     static void addcard(Card* card);

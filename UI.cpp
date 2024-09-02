@@ -3,7 +3,7 @@
 #include<string>
 #include"console.h"
 #include"UI.h"
-using namespace std;
+
 void initUI()
 {
     setcursor(false);
@@ -25,7 +25,7 @@ void printUI()
     for (int i=60; i<100; i++) print("=",i,35);
     for (int i=60; i<100; i++) print("=",i,15);
     for (int i=31; i<=40; i++) print("|",30,i);
-    vector<string> s1=
+    std::vector<std::string> s1=
     {
         "┌──────────────┐",
         "│              │",
@@ -46,9 +46,9 @@ void printUI()
     for (int i=3; i<=55; i++) print("墙",i,27);
 }
 
-vector<Message> messagebox;
+std::vector<Message> messagebox;
 extern int messagePrintX,messagePrintY,messagePrintX2,messagePrintY2,messageMax;
-void message(string s,string fore/* ="white" */,string back/* ="black" */)
+void message(std::string s,std::string fore/* ="white" */,std::string back/* ="black" */)
 {
     if (messagebox.size()>=messageMax) messagebox.erase(messagebox.begin());
     messagebox.push_back(Message(s,fore,back));

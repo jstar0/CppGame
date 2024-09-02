@@ -5,7 +5,6 @@
 #include<vector>
 #include"console.h"
 #include"card.h"
-using namespace std;
 void setscreensize(int cols,int lines)
 {
     char cmd[64];
@@ -16,7 +15,7 @@ void setcolor(int fore/* =7 */,int back/* =0 */)
 {
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),(back<<4)+fore);
 }
-void setcolor(string fore_s,string back_s/* ="black" */)
+void setcolor(std::string fore_s,std::string back_s/* ="black" */)
 {
     int fore=-1,back=-1;
     if (back_s=="black") back=0;
@@ -73,12 +72,12 @@ void setcursor(bool show/* =true */)
 	    SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &cursor_info);
     }
 }
-void print(string s,int x/* =0 */,int y/* =0 */)
+void print(std::string s,int x/* =0 */,int y/* =0 */)
 {
     setposition(x,y);
-    cout<<s;
+    std::cout<<s;
 }
-void print(vector<string> s,int x/* =0 */,int y/* =0 */,int l/* =-1 */,int r/* =-1 */)
+void print(std::vector<std::string> s,int x/* =0 */,int y/* =0 */,int l/* =-1 */,int r/* =-1 */)
 {
     if (l==-1 && r==-1) 
     {
@@ -91,7 +90,7 @@ void clear()
 {
     setcolor("black","black");
     setposition(0,0);
-    for (int i=0; i<=100; i++) cout<<endl;
+    for (int i=0; i<=100; i++) std::cout<<std::endl;
 }
 void clear(int X1,int Y1,int X2,int Y2)
 {
@@ -99,6 +98,6 @@ void clear(int X1,int Y1,int X2,int Y2)
     for (int i=Y1; i<=Y2; i++)
     {
         setposition(X1,i);
-        for (int j=X1; j<=X2; j++) cout<<" ";
+        for (int j=X1; j<=X2; j++) std::cout<<" ";
     }
 }

@@ -18,19 +18,24 @@ int playerCurrentX=0,playerCurrentY=0,playerCurrentRoom=0,playerSpeedX=2,playerS
     attackPlayerPrintX=15,attackPlayerPrintY=10,attackEnemyPrintX=40,attackEnemyPrintY=10,
     messagePrintX=61,messagePrintY=16,messagePrintX2=99,messagePrintY2=34,messageMax=19;
 Room room[10];
+std::vector<Card> have,hand,used;
+Enemy *currentenemy=nullptr;
+int currentselect;
 
 int main()
 {
     initUI();
     printUI();
-    Player::addcard(new AttackCard("打击",{"打击"},0,1,1,5,1));
-    Player::addcard(new AttackCard("打击",{"打击"},0,1,1,5,1));
-    Player::addcard(new AttackCard("打击",{"打击"},0,1,1,5,1));
-    Player::addcard(new AttackCard("打击",{"打击"},0,1,1,5,1));
-    Player::addcard(new DefendCard("防御",{"防御"},3,1,1,5));
-    Player::addcard(new AttackCard("完美闪击",{"完美闪击"},1,2,3,10,1));
-    Player::addcard(new AttackCard("死亡收割",{"死亡收割"},2,3,4,15,1));
-    extern vector<Card> have;
+    Player::addcard(new AttackCard("决斗",{"决斗"},0,0,1,5,1));
+    Player::addcard(new AttackCard("雷杀",{"雷杀"},0,1,1,5,1));
+    Player::addcard(new AttackCard("火杀",{"火杀"},0,1,1,5,1));
+    Player::addcard(new StrengthenCard("酒",{"酒"},0,1,4,5));
+    Player::addcard(new AttackCard("杀",{"杀"},0,1,1,5,1));
+    Player::addcard(new DefendCard("闪",{"闪"},3,1,1,5));
+    Player::addcard(new DrawCard("无中生有",{"无中生有"},4,0,4,2));
+    Player::addcard(new DrawCard("无中生有",{"无中生有"},4,0,4,2));
+    Player::addcard(new AttackCard("闪电",{"闪电"},1,2,3,10,1));
+    Player::addcard(new AttackCard("南蛮入侵",{"南蛮入侵"},2,3,4,15,1));
     for (int i=0; i<Player::card.size(); i++)
     {
         have.push_back(*Player::card[i]);
@@ -38,7 +43,7 @@ int main()
     EnemyObject tenemyobject;
     Enemy tenemy=Enemy("于景一",{"于景一"},100);
     tenemy.init();
-    tenemy.state.defense=30;
+    tenemy.state.defense=100;
     message("开始战斗:"+tenemy.name);
     while(attack(&tenemy));
     tenemyobject.name="????";

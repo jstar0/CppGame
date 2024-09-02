@@ -94,15 +94,17 @@ bool playermove()
     return true;
 }
 
-std::vector<Card> have,hand,used;
-Enemy *currentenemy=nullptr;
-int currentselect;
+extern std::vector<Card> have,hand,used;
+extern Enemy *currentenemy;
+extern int currentselect;
 extern int cardSelectPrintX,cardSelectPrintY,cardSelectPrintX2,cardSelectPrintY2,
            cardPrintX,cardPrintY,cardPrintX2,cardPrintY2;
 void printPlayer();
 void drawcard(int n=1)
 {
-    while(hand.size()<n)
+    extern std::vector<Card> have,hand,used;
+    int end=n+hand.size();
+    while(hand.size()<end)
     {
         if (!have.empty())
         {
