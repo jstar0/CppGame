@@ -30,7 +30,7 @@ int Enemy::damage(int d)
 void Enemy::getdamage(int gd)
 {
     int gde=gd-state.defense>0?gd-state.defense:0;
-    if (gde>0) message(name+"受到"+to_string(gd-Player::state.defense)+"点伤害!","purple");
+    if (gde>0) message(name+"受到"+to_string(gd-state.defense)+"点伤害!","purple");
     else 
     {
         srand(time(0));
