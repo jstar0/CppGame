@@ -104,7 +104,9 @@ void EnemyObject::run()
     currentenemy->init();
     Player::init();
     message("开始战斗:"+currentenemy->name);
-    while(fight(currentenemy));
+    while(fight());
+    printmap();
+    printsmallmap();
 }
 
 //商品----------------------------------------------------------------------------------------------------------
@@ -187,4 +189,6 @@ void StoreObject::run()
     printgoods();
     while(shopping());
     message("成功退出商店");
+    printmap();
+    printsmallmap();
 }

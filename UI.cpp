@@ -40,10 +40,10 @@ void printUI()
     };
     print(s1,37,31);
     for (int i=1; i<=40; i++) print("|",60,i);
-    for (int i=3; i<55; i++) print("墙",i,3);
-    for (int i=3; i<=27; i++) print("墙",3,i);
-    for (int i=3; i<=27; i++) print("墙",55,i);
-    for (int i=3; i<=55; i++) print("墙",i,27);
+    for (int i=3; i<55; i++) print("空",i,3);
+    for (int i=3; i<=27; i++) print("空",3,i);
+    for (int i=3; i<=27; i++) print("空",55,i);
+    for (int i=3; i<=55; i++) print("空",i,27);
 }
 
 std::vector<Message> messagebox;
