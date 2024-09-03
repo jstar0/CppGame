@@ -77,6 +77,10 @@ void print(std::string s,int x/* =0 */,int y/* =0 */)
     setposition(x,y);
     std::cout<<s;
 }
+void print(int s,int x/* =0 */,int y/* =0 */)
+{
+    print(std::to_string(s),x,y);
+}
 void print(std::vector<std::string> s,int x/* =0 */,int y/* =0 */,int l/* =-1 */,int r/* =-1 */)
 {
     if (l==-1 && r==-1) 

@@ -82,6 +82,7 @@ EnemyState::EnemyState(int s,int d)
 
 void EnemyState::EnemyStateSet()
 {
+    strength=0;
     defense=0;
 }
 

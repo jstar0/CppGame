@@ -7,24 +7,31 @@ int Player::HP_Max=100;
 int Player::HP=Player::HP_Max;
 int Player::MP_Max=6;
 int Player::MP=Player::MP_Max;
+int Player::money=0;
 std::vector<Card*> Player::card;
+std::vector<Prop*> Player::prop;
 PlayerState Player::state;
 Player::Player()
 {
     Player::card.clear();
+    Player::prop.clear();
 }
+
+void Player::init()
+{
+    Player::MP=Player::MP_Max;
+    Player::state.defense=0;
+    Player::state.strength=0;
+}
+
 void Player::addcard(Card* card)
 {
     Player::card.push_back(card);
 }
 
-void Player::clearcard()
+void Player::addprop(Prop* prop)
 {
-    for (int i=0; i<card.size(); i++)
-    {
-        delete card[i];
-    }
-    Player::card.clear();
+    Player::prop.push_back(prop);
 }
 
 int Player::damage(int d)
@@ -44,7 +51,6 @@ void Player::getdamage(int gd)
 void Player::turnset()
 {
     MP=MP_Max;
-    Player::state.PlayerStateSet();
 }
 
 void printPlayer()
@@ -65,14 +71,18 @@ PlayerState::PlayerState()
     defense=0;
 }
 
-PlayerState::PlayerState(int s,int d)
+PlayerState::PlayerState(int strength,int defense)
 {
-    strength=s;
-    defense=d;
+    this->strength=strength;
+    this->defense=defense;
 }
 
-void PlayerState::PlayerStateSet()
+//物品----------------------------------------------------------------------------------------------------------
+Prop::Prop(std::string name,std::vector<std::string> description,std::string forecolor/* ="white" */,std::string backcolor/* ="black" */)
 {
-    defense=0;
+    this->name=name;
+    this->forecolor=forecolor;
+    this->backcolor=backcolor;
+    this->description=description;
 }
 
