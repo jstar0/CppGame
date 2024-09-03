@@ -3,11 +3,12 @@
 #include"console.h"
 #include"UI.h"
 #include<vector>
-int Player::HP_Max=100;
-int Player::HP=Player::HP_Max;
-int Player::MP_Max=6;
-int Player::MP=Player::MP_Max;
-int Player::money=0;
+int Player::HPMax=100,
+    Player::HP=Player::HPMax,
+    Player::MPMax=3,
+    Player::MP=Player::MPMax,
+    Player::money=0,
+    Player::handMax=7;
 std::vector<Card*> Player::card;
 std::vector<Prop*> Player::prop;
 PlayerState Player::state;
@@ -19,7 +20,7 @@ Player::Player()
 
 void Player::init()
 {
-    Player::MP=Player::MP_Max;
+    Player::MP=Player::MPMax;
     Player::state.defense=0;
     Player::state.strength=0;
 }
@@ -50,7 +51,7 @@ void Player::getdamage(int gd)
 
 void Player::turnset()
 {
-    MP=MP_Max;
+    MP=MPMax;
 }
 
 void printPlayer()
@@ -59,8 +60,8 @@ void printPlayer()
     int x=attackPlayerPrintX,y=attackPlayerPrintY;
     setcolor("white");
     print("我",x,y++);
-    print("HP:"+std::to_string(Player::HP)+"/"+std::to_string(Player::HP_Max),x,y++);
-    print("MP:"+std::to_string(Player::MP)+"/"+std::to_string(Player::MP_Max),x,y++);
+    print("HP:"+std::to_string(Player::HP)+"/"+std::to_string(Player::HPMax),x,y++);
+    print("MP:"+std::to_string(Player::MP)+"/"+std::to_string(Player::MPMax),x,y++);
     if (Player::state.strength>0) print("力量:"+std::to_string(Player::state.strength),x,y++);
     if (Player::state.defense>0) print("防御:"+std::to_string(Player::state.defense),x,y++);
 }

@@ -3,6 +3,7 @@
 #include<vector>
 #include"enemy.h"
 #include"gamemap.h"
+void printmap();
 bool playermove();
 void drawcard(int n);
 bool fightend();

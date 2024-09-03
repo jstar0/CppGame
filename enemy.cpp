@@ -11,15 +11,15 @@ Enemy::Enemy()
     name="未知";
     description={"未知"};
     HP=0;
-    HP_Max=0;
+    HPMax=0;
     intention.clear();
 }
 
-Enemy::Enemy(std::string name,std::vector<std::string> description,int HP_Max)
+Enemy::Enemy(std::string name,std::vector<std::string> description,int HPMax)
 {
     this->name=name;
     this->description=description;
-    this->HP_Max=HP_Max;
+    this->HPMax=HPMax;
 }
 
 void Enemy::addintention(EnemyIntention *intention)
@@ -57,14 +57,14 @@ void print(Enemy *enemy)
     y++;
     setcolor("white");
     print(enemy->name,x,y++);
-    print("HP:"+std::to_string(enemy->HP)+"/"+std::to_string(enemy->HP_Max),x,y++);
+    print("HP:"+std::to_string(enemy->HP)+"/"+std::to_string(enemy->HPMax),x,y++);
     if (enemy->state.strength>0) print("力量:"+std::to_string(enemy->state.strength),x,y++);
     if (enemy->state.defense>0) print("防御:"+std::to_string(enemy->state.defense),x,y++);
 }
 
 void Enemy::init()
 {
-    HP=HP_Max;
+    HP=HPMax;
     state.EnemyStateSet();
 }
 
@@ -124,11 +124,11 @@ void EnemyIntention::effect()
     if (isgivecard)
     {
         std::string givecardname="";
-        extern std::vector<Card> have;
+        extern std::vector<Card*> have;
         for (int i=0; i<givecard.size(); i++)
         {
-            givecardname+=givecard[i]->name;
-            have.push_back(*givecard[i]);
+            givecardname+=givecard[i]->name+" ";
+            have.push_back(givecard[i]);
         }
         message(currentenemy->name+"塞给你:"+givecardname);
     }

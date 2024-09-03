@@ -16,7 +16,7 @@ public:
 
 class Player{
 public:
-    static int HP,HP_Max,MP,MP_Max;
+    static int HP,HPMax,MP,MPMax,handMax;
     static int money;
     static std::vector<Card*> card;
     static std::vector<Prop*> prop;

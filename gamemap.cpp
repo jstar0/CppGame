@@ -97,13 +97,10 @@ EnemyObject::EnemyObject(std::string name,int x,int y,Enemy enemy,std::string fo
 
 void EnemyObject::run()
 {
-    extern std::vector<Card> have,hand,used;
+    extern std::vector<Card*> have,hand,used;
     extern Enemy *currentenemy;
     currentenemy=&this->enemy;
-    for (int i=0; i<Player::card.size(); i++)
-    {
-        have.push_back(*Player::card[i]);
-    }
+    have=Player::card;
     currentenemy->init();
     Player::init();
     message("开始战斗:"+currentenemy->name);

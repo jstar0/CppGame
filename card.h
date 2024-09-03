@@ -27,7 +27,7 @@ public:
     void setdefend(int defense);
     void setdraw(int times);
     void setstrengthen(int strength);
-    void effect();
+    virtual void effect();
     std::string getcolor();
     friend void print(Card *card);
 };
@@ -54,5 +54,13 @@ class StrengthenCard:public Card{
 public:
     StrengthenCard();
     StrengthenCard(std::string name,std::vector<std::string> description,int ID,int cost,int rarity,int strength);
+};
+
+class ChangeHaveCard:public Card{
+public:
+    ChangeHaveCard();
+    ChangeHaveCard(std::string name,std::vector<std::string> description,int ID,int cost,int rarity,std::vector<Card*> changehavecard={});
+    std::vector<Card*> changehavecard;
+    void effect() override;
 };
 #endif

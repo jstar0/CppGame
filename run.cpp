@@ -16,12 +16,16 @@
 extern int playerCurrentX,playerCurrentY,playerCurrentRoom,playerSpeedX,playerSpeedY,
            roomPrintX,roomPrintY,roomWidth,roomHeight;
 extern std::vector<Room> room;
-bool playermove()
+void printmap()
 {
     clear(roomPrintX,roomPrintY,roomPrintX+roomWidth-1,roomPrintY+roomHeight-1);
     print(room[playerCurrentRoom]);
     setcolor("white","blue");
     print("我",roomPrintX+playerCurrentX,roomPrintY+playerCurrentY);
+}
+bool playermove()
+{
+    printmap();
     char r=getch();
     clear(roomPrintX,roomPrintY,roomPrintX+roomWidth-1,roomPrintY+roomHeight-1);
     if (r=='W' || r=='w') 
@@ -72,9 +76,7 @@ bool playermove()
             }
         }
     }
-    print(room[playerCurrentRoom]);
-    setcolor("white","blue");
-    print("我",roomPrintX+playerCurrentX,roomPrintY+playerCurrentY);
+    printmap();
     for (int i=0; i<room[playerCurrentRoom].object.size(); i++)
     {
         if (playerCurrentX==room[playerCurrentRoom].object[i]->x && playerCurrentY==room[playerCurrentRoom].object[i]->y) 
@@ -86,7 +88,7 @@ bool playermove()
     return true;
 }
 
-extern std::vector<Card> have,hand,used;
+extern std::vector<Card*> have,hand,used;
 extern Enemy *currentenemy;
 extern int currentselectcard;
 extern int cardSelectPrintX,cardSelectPrintY,cardSelectPrintX2,cardSelectPrintY2,
@@ -94,8 +96,8 @@ extern int cardSelectPrintX,cardSelectPrintY,cardSelectPrintX2,cardSelectPrintY2
 void printPlayer();
 void drawcard(int n=1)
 {
-    extern std::vector<Card> have,hand,used;
-    int end=n+hand.size();
+    extern std::vector<Card*> have,hand,used;
+    int end=n+hand.size()<Player::handMax?n+hand.size():Player::handMax;
     while(hand.size()<end)
     {
         if (!have.empty())
@@ -138,13 +140,13 @@ void printcard()
     clear(cardSelectPrintX,cardSelectPrintY,cardSelectPrintX2,cardSelectPrintY2);
     for (int i=0; i<hand.size(); i++) 
     {
-        if (currentselectcard==i) setcolor(hand[i].getcolor(),"white");
-        else setcolor(hand[i].getcolor(),"black");
-        print(std::to_string(hand[i].cost)+"费  "+hand[i].name,cardSelectPrintX,cardSelectPrintY+i);
+        if (currentselectcard==i) setcolor(hand[i]->getcolor(),"white");
+        else setcolor(hand[i]->getcolor(),"black");
+        print(std::to_string(hand[i]->cost)+"费  "+hand[i]->name,cardSelectPrintX,cardSelectPrintY+i);
     }
     clear(cardPrintX,cardPrintY,cardPrintX2,cardPrintY2);
     setcolor("white","black");
-    print(hand[currentselectcard].description,cardPrintX,cardPrintY);
+    print(hand[currentselectcard]->description,cardPrintX,cardPrintY);
 }
 
 bool fight(Enemy *enemy)
@@ -193,11 +195,11 @@ bool selectcard()
         if (r=='\r') 
         {
             if (selectcardend()) return false;
-            if (Player::MP>=hand[currentselectcard].cost)
+            if (Player::MP>=hand[currentselectcard]->cost)
             {
-                Player::MP-=hand[currentselectcard].cost;
-                message("打出卡牌"+hand[currentselectcard].name);
-                hand[currentselectcard].effect();
+                Player::MP-=hand[currentselectcard]->cost;
+                message("打出卡牌"+hand[currentselectcard]->name);
+                hand[currentselectcard]->effect();
                 used.push_back(hand[currentselectcard]);
                 hand.erase(hand.begin()+currentselectcard);
                 if (currentselectcard>hand.size()-1) currentselectcard=hand.size()-1;

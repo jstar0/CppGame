@@ -191,3 +191,35 @@ StrengthenCard::StrengthenCard(std::string name,std::vector<std::string> descrip
     this->rarity=rarity;
     setstrengthen(strength);
 }
+
+ChangeHaveCard::ChangeHaveCard()
+{
+    name="改变牌库卡";
+    description={"改变牌库卡"};
+    ID=0;
+    cost=0;
+    rarity=0;
+    changehavecard.clear();
+}
+
+ChangeHaveCard::ChangeHaveCard(std::string name,std::vector<std::string> description,int ID,int cost,int rarity,std::vector<Card*> changehavecard)
+{
+    this->name=name;
+    this->description=description;
+    this->ID=ID;
+    this->cost=cost;
+    this->rarity=rarity;
+    this->changehavecard=changehavecard;
+}
+
+void ChangeHaveCard::effect()
+{
+    extern std::vector<Card*> have;
+    Card::effect();
+    message("放入牌堆","red");
+    for (int i=0; i<changehavecard.size(); i++)
+    {
+        have.push_back(changehavecard[i]);
+        message("放入牌堆","red");
+    }
+}

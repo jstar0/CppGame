@@ -58,10 +58,10 @@ public:
 class Enemy{
 public:
     Enemy();
-    Enemy(std::string name,std::vector<std::string> description,int HP_Max);
+    Enemy(std::string name,std::vector<std::string> description,int HPMax);
     std::string name;
     std::vector<std::string> description;
-    int HP,HP_Max;
+    int HP,HPMax;
     EnemyState state;
     std::vector<EnemyIntention*> intention;
     EnemyIntention currentintention;

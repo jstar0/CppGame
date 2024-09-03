@@ -20,7 +20,7 @@ int playerCurrentX=0,playerCurrentY=0,playerCurrentRoom=0,playerSpeedX=2,playerS
     storePrintX=5+50/2-2,storePrintY=4,
     goodsPrintX=5,goodsPricePrintX=40,goodsNumberPrintX=48,goodsPrintY=7;
 std::vector<Room> room;
-std::vector<Card> have,hand,used;
+std::vector<Card*> have,hand,used;
 Enemy *currentenemy=nullptr;
 std::vector<Goods*> *currentgoodss=nullptr;
 int currentselectcard,currentselectgoods;
@@ -30,21 +30,15 @@ int main()
     initUI();
     printUI();
     Player::money=1000;
-    Player::addcard(new AttackCard("决斗",{"决斗"},0,0,1,5,1));
-    Player::addcard(new AttackCard("雷杀",{"雷杀"},0,1,1,5,1));
-    Player::addcard(new AttackCard("火杀",{"火杀"},0,1,1,5,1));
-    Player::addcard(new StrengthenCard("酒",{"酒"},0,1,4,10));
-    Player::addcard(new AttackCard("杀",{"杀"},0,1,1,5,1));
-    Player::addcard(new DefendCard("闪",{"闪"},3,1,1,5));
-    Player::addcard(new DefendCard("闪",{"闪"},3,1,1,5));
-    Player::addcard(new DefendCard("闪",{"闪"},3,1,1,5));
-    Player::addcard(new DefendCard("闪",{"闪"},3,1,1,5));
-    Player::addcard(new AttackCard("闪电",{"闪电","造成6X2点伤害"},1,2,3,6,2));
-    Player::addcard(new AttackCard("南蛮入侵",{"南蛮入侵","造成5X3点伤害"},2,3,4,5,3));
-    for (int i=0; i<Player::card.size(); i++)
-    {
-        have.push_back(*Player::card[i]);
-    }
+    //Player::addcard(new AttackCard("杀",{"杀"},0,1,1,5,1));
+    //Player::addcard(new AttackCard("杀",{"杀"},0,1,1,5,1));
+    //Player::addcard(new AttackCard("杀",{"杀"},0,1,1,5,1));
+    //Player::addcard(new DefendCard("闪",{"闪"},3,1,1,5));
+    //Player::addcard(new DefendCard("闪",{"闪"},3,1,1,5));
+    //Player::addcard(new DefendCard("闪",{"闪"},3,1,1,5));
+    //Player::addcard(new DefendCard("闪",{"闪"},3,1,1,5));
+    //Player::addcard(new AttackCard("闪电",{"闪电","造成6X2点伤害"},1,2,3,6,2));
+    //Player::addcard(new AttackCard("南蛮入侵",{"南蛮入侵","造成5X3点伤害"},2,3,4,5,3));
     EnemyObject tenemyobject;
     Enemy tenemy=Enemy("于景一",{"于景一"},100);
     tenemy.state.defense=100;
@@ -52,15 +46,16 @@ int main()
     tenemy.addintention(new EnemyIntentionAttack({"攻击6X3点"},6,3));
     tenemy.addintention(new EnemyIntentionAttack({"攻击8X2点"},8,2));
     tenemy.addintention(new EnemyIntentionAttack({"攻击8X2点"},8,2));
-    tenemy.addintention(new EnemyIntentionDefend({"防御20点"},20));
-    tenemy.addintention(new EnemyIntentionStrengthen({"力量10点"},10));
-    tenemy.addintention(new EnemyIntentionStrengthen({"力量10点"},10));
+    tenemy.addintention(new EnemyIntentionDefend({"防御100点"},100));
     tenemy.addintention(new EnemyIntentionStrengthen({"力量10点"},10));
     tenemy.addintention(new EnemyIntentionGiveCard({"施加混乱"},{new Card("混乱",{"混乱"},0,99,1),new Card("混乱",{"混乱"},0,99,1),new Card("混乱",{"混乱"},0,99,1)}));
     room.push_back(Room("起始房间",0,-1,-1,-1,-1));
     room[0].addobject(new EnemyObject("人",4,4,tenemy));
-    std::vector<Goods*> goodss={new CardGoods(new DrawCard("无中生有",{"无中生有","摸2张牌"},4,0,4,2),200,3),new PropGoods(new Prop("灵石",{"似乎蕴含着一些神奇的力量"},"red"),100,1)};
-    room[0].addobject(new StoreObject("黑市",20,10,goodss));
+    ChangeHaveCard juedou=ChangeHaveCard("决斗",{"决斗","对敌人造成6点","伤害同时将一张","决斗加入你的","摸牌堆"},5,0,4);
+    juedou.setattack(6,1);
+    juedou.changehavecard.push_back(&juedou);
+    std::vector<Goods*> goodss={new CardGoods(&juedou,50,10),new CardGoods(new StrengthenCard("酒",{"酒"},0,1,4,10),100,5),new CardGoods(new DrawCard("无中生有",{"无中生有","摸2张牌"},4,0,4,2),100,5),new PropGoods(new Prop("灵石",{"似乎蕴含着一些神奇的力量"},"red"),100,1)};
+    room[0].addobject(new StoreObject("黑市",4,0,goodss));
     while(playermove());
     return 0;
 }
