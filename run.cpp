@@ -16,16 +16,27 @@
 extern int FPS,
            playerCurrentX,playerCurrentY,playerCurrentRoom,playerSpeedX,playerSpeedY,
            roomPrintX,roomPrintY,roomWidth,roomHeight;
-extern std::vector<Room> room;
+extern std::vector<Room> rooms;
+
+extern std::string whichObject(Object *object);
 void moveme(int deltax,int deltay)
 {
-    clear(roomPrintX+playerCurrentX,roomPrintY+playerCurrentY,roomPrintX+playerCurrentX+1,roomPrintY+playerCurrentY);
-    for (int i=0; i<room[playerCurrentRoom].object.size(); i++)
+    Object* deltaobject=rooms[playerCurrentRoom].getobject(playerCurrentX+deltax,playerCurrentY+deltay);
+    if (deltaobject!=nullptr) 
     {
-        if (playerCurrentX>=room[playerCurrentRoom].object[i]->x && playerCurrentX<=room[playerCurrentRoom].object[i]->x+room[playerCurrentRoom].object[i]->name.size()-2 && playerCurrentY==room[playerCurrentRoom].object[i]->y) 
+        if (whichObject(deltaobject)=="Wall") 
+        {
+            deltaobject->run();
+            return;
+        }
+    }
+    clear(roomPrintX+playerCurrentX,roomPrintY+playerCurrentY,roomPrintX+playerCurrentX+1,roomPrintY+playerCurrentY);
+    for (int i=0; i<rooms[playerCurrentRoom].object.size(); i++)
+    {
+        if (playerCurrentX>=rooms[playerCurrentRoom].object[i]->x && playerCurrentX<=rooms[playerCurrentRoom].object[i]->x+rooms[playerCurrentRoom].object[i]->name.size()-2 && playerCurrentY==rooms[playerCurrentRoom].object[i]->y) 
         {
             extern void print(Object *object);
-            print(room[playerCurrentRoom].object[i]);
+            print(rooms[playerCurrentRoom].object[i]);
             break;
         }
     }
@@ -38,17 +49,17 @@ void moveme(int deltax,int deltay)
 void printmap()
 {
     clear(roomPrintX,roomPrintY,roomPrintX+roomWidth-1,roomPrintY+roomHeight-1);
-    print(room[playerCurrentRoom]);
+    print(rooms[playerCurrentRoom]);
     moveme(0,0);
     setcolor("white");
-    if (room[playerCurrentRoom].UP_ID<0) for (int i=3; i<55; i++) print("墙",i,3);
+    if (rooms[playerCurrentRoom].UP_ID<0) for (int i=3; i<55; i++) print("墙",i,3);
     else for (int i=3; i<55; i++) print("空",i,3);
-    if (room[playerCurrentRoom].DOWN_ID<0) for (int i=3; i<=55; i++) print("墙",i,27);
+    if (rooms[playerCurrentRoom].DOWN_ID<0) for (int i=3; i<=55; i++) print("墙",i,27);
     else for (int i=3; i<=55; i++) print("空",i,27);
-    if (room[playerCurrentRoom].LEFT_ID<0) for (int i=3; i<=27; i++) print("墙",3,i);
+    if (rooms[playerCurrentRoom].LEFT_ID<0) for (int i=3; i<=27; i++) print("墙",3,i);
     else for (int i=3; i<=27; i++) print("空",3,i);
-    if (room[playerCurrentRoom].RIGHT_ID<0) for (int i=3; i<=27; i++) print("墙",55,i);
-    else for (int i=3; i<=27; i++) print("空",55,i);
+    if (rooms[playerCurrentRoom].RIGHT_ID<0) for (int i=3; i<=27; i++) print("墙",55,i);
+    else for (int i=3; i<=27; i++) print("空",55,i); 
 }
 
 void printsmallmap()
@@ -57,27 +68,27 @@ void printsmallmap()
     int smallmapCenterX=smallmapX+(smallmapWidth-1)/2,smallmapCenterY=smallmapY+(smallmapHeight-1)/2;
     clear(smallmapX,smallmapY,smallmapX+smallmapWidth-1,smallmapY+smallmapHeight-1);
     setcolor("blue","white");
-    print(room[playerCurrentRoom].name,smallmapCenterX-room[playerCurrentRoom].name.size()/2+1,smallmapCenterY);
+    print(rooms[playerCurrentRoom].name,smallmapCenterX-rooms[playerCurrentRoom].name.size()/2+1,smallmapCenterY);
     setcolor("white");
-    if (room[playerCurrentRoom].UP_ID>=0) 
+    if (rooms[playerCurrentRoom].UP_ID>=0) 
     {
-        print("|",smallmapCenterX,smallmapCenterY-1);
-        print(room[room[playerCurrentRoom].UP_ID].name,smallmapCenterX-room[room[playerCurrentRoom].UP_ID].name.size()/2+1,smallmapCenterY-2);
+        print("↑",smallmapCenterX,smallmapCenterY-1);
+        print(rooms[rooms[playerCurrentRoom].UP_ID].name,smallmapCenterX-rooms[rooms[playerCurrentRoom].UP_ID].name.size()/2+1,smallmapCenterY-2);
     }
-    if (room[playerCurrentRoom].DOWN_ID>=0) 
+    if (rooms[playerCurrentRoom].DOWN_ID>=0) 
     {
-        print("|",smallmapCenterX,smallmapCenterY+1);
-        print(room[room[playerCurrentRoom].DOWN_ID].name,smallmapCenterX-room[room[playerCurrentRoom].DOWN_ID].name.size()/2+1,smallmapCenterY+2);
+        print("↓",smallmapCenterX,smallmapCenterY+1);
+        print(rooms[rooms[playerCurrentRoom].DOWN_ID].name,smallmapCenterX-rooms[rooms[playerCurrentRoom].DOWN_ID].name.size()/2+1,smallmapCenterY+2);
     }
-    if (room[playerCurrentRoom].LEFT_ID>=0) 
+    if (rooms[playerCurrentRoom].LEFT_ID>=0) 
     {
-        print("-",smallmapCenterX-room[playerCurrentRoom].name.size()/2,smallmapCenterY);
-        print(room[room[playerCurrentRoom].LEFT_ID].name,smallmapCenterX-room[playerCurrentRoom].name.size()/2-room[room[playerCurrentRoom].LEFT_ID].name.size(),smallmapCenterY);
+        print("←",smallmapCenterX-rooms[playerCurrentRoom].name.size()/2-1,smallmapCenterY);
+        print(rooms[rooms[playerCurrentRoom].LEFT_ID].name,smallmapCenterX-rooms[playerCurrentRoom].name.size()/2-1-rooms[rooms[playerCurrentRoom].LEFT_ID].name.size(),smallmapCenterY);
     }
-    if (room[playerCurrentRoom].RIGHT_ID>=0) 
+    if (rooms[playerCurrentRoom].RIGHT_ID>=0) 
     {
-        print("-",smallmapCenterX+room[playerCurrentRoom].name.size()/2+1,smallmapCenterY);
-        print(room[room[playerCurrentRoom].RIGHT_ID].name,smallmapCenterX+room[playerCurrentRoom].name.size()/2+2,smallmapCenterY);
+        print("→",smallmapCenterX+rooms[playerCurrentRoom].name.size()/2+1,smallmapCenterY);
+        print(rooms[rooms[playerCurrentRoom].RIGHT_ID].name,smallmapCenterX+rooms[playerCurrentRoom].name.size()/2+3,smallmapCenterY);
     }
 }
 
@@ -92,10 +103,10 @@ bool playermove()
         if (playerCurrentY>0) moveme(0,-playerSpeedY);
         else 
         {
-            if (room[playerCurrentRoom].UP_ID>=0) 
+            if (rooms[playerCurrentRoom].UP_ID>=0) 
             {
-                message("进入房间"+room[room[playerCurrentRoom].UP_ID].name,"red");
-                playerCurrentRoom=room[playerCurrentRoom].UP_ID;
+                message("进入房间"+rooms[rooms[playerCurrentRoom].UP_ID].name,"red");
+                playerCurrentRoom=rooms[playerCurrentRoom].UP_ID;
                 playerCurrentY=roomHeight-1;
                 printmap();
                 printsmallmap();
@@ -107,10 +118,10 @@ bool playermove()
         if (playerCurrentY<roomHeight-1) moveme(0,playerSpeedY);
         else 
         {
-            if (room[playerCurrentRoom].DOWN_ID>=0) 
+            if (rooms[playerCurrentRoom].DOWN_ID>=0) 
             {
-                message("进入房间"+room[room[playerCurrentRoom].DOWN_ID].name,"red");
-                playerCurrentRoom=room[playerCurrentRoom].DOWN_ID;
+                message("进入房间"+rooms[rooms[playerCurrentRoom].DOWN_ID].name,"red");
+                playerCurrentRoom=rooms[playerCurrentRoom].DOWN_ID;
                 playerCurrentY=0;
                 printmap();
                 printsmallmap();
@@ -122,10 +133,10 @@ bool playermove()
         if (playerCurrentX>0) moveme(-playerSpeedX,0);
         else 
         {
-            if (room[playerCurrentRoom].LEFT_ID>=0) 
+            if (rooms[playerCurrentRoom].LEFT_ID>=0) 
             {
-                message("进入房间"+room[room[playerCurrentRoom].LEFT_ID].name,"red");
-                playerCurrentRoom=room[playerCurrentRoom].LEFT_ID;
+                message("进入房间"+rooms[rooms[playerCurrentRoom].LEFT_ID].name,"red");
+                playerCurrentRoom=rooms[playerCurrentRoom].LEFT_ID;
                 playerCurrentX=roomWidth-2;
                 printmap();
                 printsmallmap();
@@ -137,21 +148,21 @@ bool playermove()
         if (playerCurrentX<roomWidth-2) moveme(playerSpeedX,0);
         else 
         {
-            if (room[playerCurrentRoom].RIGHT_ID>=0) 
+            if (rooms[playerCurrentRoom].RIGHT_ID>=0) 
             {
-                message("进入房间"+room[room[playerCurrentRoom].RIGHT_ID].name,"red");
-                playerCurrentRoom=room[playerCurrentRoom].RIGHT_ID;
+                message("进入房间"+rooms[rooms[playerCurrentRoom].RIGHT_ID].name,"red");
+                playerCurrentRoom=rooms[playerCurrentRoom].RIGHT_ID;
                 playerCurrentX=0;
                 printmap();
                 printsmallmap();
             }
         }
     }
-    for (int i=0; i<room[playerCurrentRoom].object.size(); i++)
+    for (int i=0; i<rooms[playerCurrentRoom].object.size(); i++)
     {
-        if (playerCurrentX==room[playerCurrentRoom].object[i]->x && playerCurrentY==room[playerCurrentRoom].object[i]->y) 
+        if (playerCurrentX==rooms[playerCurrentRoom].object[i]->x && playerCurrentY==rooms[playerCurrentRoom].object[i]->y) 
         {
-            room[playerCurrentRoom].object[i]->run();
+            rooms[playerCurrentRoom].object[i]->run();
         }
     }
     Sleep(1000/FPS);
@@ -215,7 +226,7 @@ void printcard()
         print(std::to_string(hand[i]->cost)+"费  "+hand[i]->name,cardSelectPrintX,cardSelectPrintY+i);
     }
     clear(cardPrintX,cardPrintY,cardPrintX2,cardPrintY2);
-    setcolor("white","black");
+    setcolor(hand[currentselectcard]->getcolor(),"black");
     print(hand[currentselectcard]->description,cardPrintX,cardPrintY);
 }
 
@@ -254,7 +265,7 @@ bool selectcardend()
 
 bool selectcard()
 {
-    char r=getch();
+    char r=getch(); 
     if (hand.size()>0)
     {
         if (r=='W' || r=='w') currentselectcard+=hand.size()-1;
@@ -327,10 +338,13 @@ void printgoods()
         print(std::to_string(i+1)+".",goodsPrintX,goodsPrintY+i);
         print(std::to_string((*currentgoodss)[i]->price),goodsPricePrintX,goodsPrintY+i);
         print(std::to_string((*currentgoodss)[i]->number),goodsNumberPrintX,goodsPrintY+i);
+
     }
     if (currentselectgoods==currentgoodss->size()) setcolor("blue","white");
     else setcolor("blue","black");
     print("退出商店",goodsPrintX,goodsPrintY+(*currentgoodss).size());
+    /* setcolor((*currentgoodss)[currentselectgoods]->color,"black");
+    print((*currentgoodss)[currentselectgoods]->description,cardPrintX,cardPrintY); */
 }
 
 bool shopping()
@@ -343,6 +357,7 @@ bool shopping()
     printgoods();
     if (r=='\r') 
     {
+        message(std::to_string(currentselectgoods));
         if (currentselectgoods<currentgoodss->size())
         {
             if (Player::money>=(*currentgoodss)[currentselectgoods]->price)
@@ -351,7 +366,6 @@ bool shopping()
                 (*currentgoodss)[currentselectgoods]->buy();
                 if ((*currentgoodss)[currentselectgoods]->number==0) (*currentgoodss).erase((*currentgoodss).begin()+currentselectgoods);
                 printgoods();
-
             }
             else message("你的钱不够","red");
         }

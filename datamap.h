@@ -1,0 +1,1 @@
+void datamap1();

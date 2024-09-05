@@ -1,0 +1,5 @@
+$客厅(1F)$0,1,2,3,4,$/1/00-KeTing.mapdata$
+$练功房$1,-1,0,-1,-1,$/1/01-LianGongFang.mapdata$
+$书房$2,0,-1,-1,-1,$/2/02-ShuFang.mapdata$
+$厕所$3,-1,-1,-1,0,$/2/03-CeSuo.mapdata$
+$卧室$4,-1,-1,0,-1,$/2/04-WoShi.mapdata$

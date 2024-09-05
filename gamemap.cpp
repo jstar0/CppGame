@@ -1,4 +1,5 @@
 #include<iostream>
+#include<string>
 #include"gamemap.h"
 #include"console.h"
 #include"card.h"
@@ -6,6 +7,14 @@
 #include"run.h"
 #include"UI.h"
 extern int roomPrintX,roomPrintY;
+
+std::string whichObject(Object *object)
+{
+    if (dynamic_cast<WallObject*>(object)) return "Wall";
+    else if (dynamic_cast<EnemyObject*>(object)) return "Enemy";
+    else if (dynamic_cast<StoreObject*>(object)) return "Store";
+    else return "Object";
+}
 
 //一般事件----------------------------------------------------------------------------------------------------------
 Object::Object()
@@ -26,6 +35,15 @@ Object::Object(std::string name,int x,int y,std::string forecolor/* ="white" */,
     this->y=y;
 }
 
+Object::Object(const Object &object)
+{
+    name=object.name;
+    forecolor=object.forecolor;
+    backcolor=object.backcolor;
+    x=object.x;
+    y=object.y;
+}
+
 void Object::run()
 {
     message("碰到了"+name);
@@ -37,6 +55,11 @@ void print(Object *object)
     print(object->name,roomPrintX+object->x,roomPrintY+object->y);
 }
 
+Object* Object::clone()
+{
+    return new Object(*this);
+}
+
 //房间----------------------------------------------------------------------------------------------------------
 Room::Room()
 {
@@ -46,10 +69,11 @@ Room::Room()
     DOWN_ID=-1;
     LEFT_ID=-1;
     RIGHT_ID=-1;
+    filePath="";
     object.clear();
 }
 
-Room::Room(std::string name,int ID,int UP_ID,int DOWN_ID,int LEFT_ID,int RIGHT_ID)
+Room::Room(std::string name,int ID,int UP_ID,int DOWN_ID,int LEFT_ID,int RIGHT_ID,std::string filePath/* ="" */)
 {
     this->name=name;
     this->ID=ID;
@@ -57,6 +81,7 @@ Room::Room(std::string name,int ID,int UP_ID,int DOWN_ID,int LEFT_ID,int RIGHT_I
     this->DOWN_ID=DOWN_ID;
     this->LEFT_ID=LEFT_ID;
     this->RIGHT_ID=RIGHT_ID;
+    this->filePath=filePath;
     object.clear();
 }
 
@@ -71,6 +96,105 @@ void print(Room room)
 void Room::addobject(Object *object)
 {
     this->object.push_back(object);
+}
+
+void Room::addobject(Object *object,std::vector<xy> xy)
+{
+    for (int i=0; i<xy.size(); i++)
+    {
+        Object *tobject=object->clone();
+        tobject->x=xy[i].x;
+        tobject->y=xy[i].y;
+        this->object.push_back(tobject);
+    }
+}
+
+Object* Room::getobject(int x,int y)
+{
+    for (int i=0; i<object.size(); i++)
+    {
+        if (object[i]->x==x && object[i]->y==y) return object[i];
+    }
+    return nullptr;
+}
+
+void addroom(Room room)
+{
+    extern std::vector<Room> rooms;
+    if (room.ID>rooms.size()-1) rooms.resize(room.ID+1);
+    message("resize");
+    rooms[room.ID]=room;
+}
+
+//墙----------------------------------------------------------------------------------------------------------
+WallObject::WallObject()
+{
+    name="墙";
+    x=0;
+    y=0;
+    forecolor="white";
+    backcolor="black";
+    warning="撞到了墙";
+}
+
+WallObject::WallObject(std::string name)
+{
+    this->name=name;
+    x=0;
+    y=0;
+    forecolor="white";
+    backcolor="black";
+    warning="撞到了"+name;
+}
+
+WallObject::WallObject(std::string name,std::string warning)
+{
+    this->name=name;
+    x=0;
+    y=0;
+    forecolor="white";
+    backcolor="black";
+    this->warning=warning;
+}
+
+WallObject::WallObject(std::string name,int x,int y,std::string forecolor/* ="white" */,std::string backcolor/* ="black" */)
+{
+    this->name=name;
+    this->forecolor=forecolor;
+    this->backcolor=backcolor;
+    this->x=x;
+    this->y=y;
+    warning="撞到了"+name;
+}
+
+WallObject::WallObject(std::string name,std::string warning,int x,int y,std::string forecolor/* ="white" */,std::string backcolor/* ="black" */)
+{
+    this->name=name;
+    this->forecolor=forecolor;
+    this->backcolor=backcolor;
+    this->x=x;
+    this->y=y;
+    this->warning=warning;
+}
+
+WallObject::WallObject(const WallObject &other)
+{
+    name=other.name;
+    forecolor=other.forecolor;
+    backcolor=other.backcolor;
+    x=other.x;
+    y=other.y;
+    warning=other.warning;  
+}
+
+void WallObject::run()
+{
+    message(warning);
+}
+
+WallObject* WallObject::clone()
+{
+    return new WallObject(*this);
 }
 
 //敌人事件----------------------------------------------------------------------------------------------------------
@@ -116,6 +240,7 @@ Goods::Goods()
     number=0;
     color="white";
     name="未知???";
+    description={"未知"};
 }
 
 void Goods::buy()
@@ -132,6 +257,7 @@ CardGoods::CardGoods(Card *card,int price,int number/* =1 */)
     this->number=number;
     this->color=card->getcolor();
     this->name="卡牌  "+card->name;
+    this->description=card->description;
 }
 
 void CardGoods::buy()
@@ -149,6 +275,7 @@ PropGoods::PropGoods(Prop *prop,int price,int number/* =1 */)
     this->number=number;
     this->color=prop->forecolor;
     this->name="道具  "+prop->name;
+    this->description=prop->description;
 }
 
 void PropGoods::buy()
