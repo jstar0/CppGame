@@ -43,7 +43,6 @@ int main()
     Player::addcard(new DefendCard("闪",{"闪"},3,1,1,5));
     Player::addcard(new DefendCard("闪",{"闪"},3,1,1,5));
     Player::addcard(new DefendCard("闪",{"闪"},3,1,1,5));
-    EnemyObject tenemyobject;
     Enemy tenemy=Enemy("于景一",{"于景一"},100);
     tenemy.state.defense=100;
     tenemy.addintention(new EnemyIntentionAttack({"攻击20点"},20,1));
