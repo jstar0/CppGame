@@ -53,6 +53,7 @@ int main()
     tenemy.addintention(new EnemyIntentionStrengthen({"力量30点"},30));
     tenemy.addintention(new EnemyIntentionGiveCard({"施加混乱"},{new Card("混乱",{"混乱"},0,99,1),new Card("混乱",{"混乱"},0,99,1),new Card("混乱",{"混乱"},0,99,1)}));
     getMapList();
+    loadMap(0);
     rooms[0].addobject(new EnemyObject("人",4,4,tenemy));
     ChangeHaveCard juedou=ChangeHaveCard("决斗",{"决斗","对敌人造成6点","伤害同时将一张","决斗加入你的","摸牌堆"},5,0,4);
     juedou.setattack(6,1);
