@@ -319,3 +319,40 @@ void StoreObject::run()
     printmap();
     printsmallmap();
 }
+
+//传送事件----------------------------------------------------------------------------------------------------------
+moveObject::moveObject()
+{
+    name="楼梯";
+    x=0;
+    y=0;
+    moveX=0;
+    moveY=0;
+    moveID=0;
+    forecolor="white";
+    backcolor="black";
+}
+
+moveObject::moveObject(std::string name,int x,int y,int moveID,int moveX,int moveY,std::string forecolor/* ="white" */,std::string backcolor/* ="black" */)
+{
+    this->name=name;
+    this->forecolor=forecolor;
+    this->backcolor=backcolor;
+    this->x=x;
+    this->y=y;
+    this->moveID=moveID;
+    this->moveX=moveX;
+    this->moveY=moveY;
+}
+
+void moveObject::run()
+{
+    extern int playerCurrentX,playerCurrentY,playerCurrentRoom;
+    extern std::vector<Room> rooms;
+    message("传送到了"+rooms[moveID].name);
+    playerCurrentX=moveX;
+    playerCurrentY=moveY;
+    playerCurrentRoom=moveID;
+    printmap();
+    printsmallmap();
+}

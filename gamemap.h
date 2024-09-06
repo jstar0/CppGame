@@ -96,6 +96,14 @@ public:
     void run() override;
 };
 
+class moveObject:public Object{
+public:
+    moveObject();
+    moveObject(std::string name,int x,int y,int moveID,int moveX,int moveY,std::string forecolor="white",std::string backcolor="black");
+    int moveX,moveY,moveID;
+    void run() override;
+};
+
 #endif
 
 

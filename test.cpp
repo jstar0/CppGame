@@ -61,7 +61,10 @@ int main()
     std::vector<Goods*> goodss={new CardGoods(&juedou,50,10),new CardGoods(new StrengthenCard("酒",{"酒"},0,1,4,10),100,5),new CardGoods(new DrawCard("无中生有",{"无中生有","摸2张牌"},4,0,4,2),100,5),new PropGoods(new Prop("灵石",{"似乎蕴含着一些神奇的力量"},"red"),100,1)};
     rooms[0].addobject(new StoreObject("黑市",4,0,goodss));
     rooms[0].addobject(new WallObject("墙","撞墙了，好痛"),{{10,0},{10,1},{10,2},{10,3},{10,4},{10,5},{10,6}});  
-    
+    rooms[5].addobject(new moveObject("楼梯",0,0,9,0,0));
+    rooms[5].addobject(new moveObject("楼梯",0,1,9,0,0));
+    rooms[9].addobject(new moveObject("楼梯",0,0,5,0,0));
+    rooms[9].addobject(new moveObject("楼梯",0,0,5,0,0));
     playerCurrentRoom=0;
     printmap();
     printsmallmap();
