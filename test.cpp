@@ -53,19 +53,22 @@ int main()
     tenemy.addintention(new EnemyIntentionStrengthen({"力量30点"},30));
     tenemy.addintention(new EnemyIntentionGiveCard({"施加混乱"},{new Card("混乱",{"混乱"},0,99,1),new Card("混乱",{"混乱"},0,99,1),new Card("混乱",{"混乱"},0,99,1)}));
     getMapList();
-    loadMap(0);
-    rooms[0].addobject(new EnemyObject("人",4,4,tenemy));
+    message("getMapList");
+    message(rooms[0].filePath);
+    message(rooms[1].filePath);
+    //loadMap(0);
+    /* rooms[0].addobject(new EnemyObject("人",4,4,tenemy));
     ChangeHaveCard juedou=ChangeHaveCard("决斗",{"决斗","对敌人造成6点","伤害同时将一张","决斗加入你的","摸牌堆"},5,0,4);
     juedou.setattack(6,1);
     juedou.changehavecard.push_back(&juedou);
     std::vector<Goods*> goodss={new CardGoods(&juedou,50,10),new CardGoods(new StrengthenCard("酒",{"酒"},0,1,4,10),100,5),new CardGoods(new DrawCard("无中生有",{"无中生有","摸2张牌"},4,0,4,2),100,5),new PropGoods(new Prop("灵石",{"似乎蕴含着一些神奇的力量"},"red"),100,1)};
     rooms[0].addobject(new StoreObject("黑市",4,0,goodss));
-    rooms[0].addobject(new WallObject("墙","撞墙了，好痛"),{{10,0},{10,1},{10,2},{10,3},{10,4},{10,5},{10,6}});  
+    rooms[0].addobject(new WallObject("墙","撞墙了，好痛"),{{10,0},{10,1},{10,2},{10,3},{10,4},{10,5},{10,6}});  */ 
     rooms[5].addobject(new moveObject("楼梯",0,0,9,0,0));
     rooms[5].addobject(new moveObject("楼梯",0,1,9,0,0));
     rooms[9].addobject(new moveObject("楼梯",0,0,5,0,0));
     rooms[9].addobject(new moveObject("楼梯",0,0,5,0,0));
-    playerCurrentRoom=0;
+    playerCurrentRoom=0; 
     printmap();
     printsmallmap();
     while(playermove());

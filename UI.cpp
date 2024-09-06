@@ -8,8 +8,8 @@ void initUI()
 {
     setcursor(false);
     setscreensize(101,42);
-    HWND consoleWindow = GetConsoleWindow(); // 获取控制台窗口句柄 
-    LONG style = GetWindowLong(consoleWindow, GWL_STYLE); // 获取当前窗口样式 
+    HWND consoleWindow=GetConsoleWindow(); // 获取控制台窗口句柄 
+    LONG style=GetWindowLong(consoleWindow, GWL_STYLE); // 获取当前窗口样式 
     style &= ~(WS_MAXIMIZEBOX | WS_SIZEBOX); // 禁用最大化按钮和调整窗口大小 
     SetWindowLong(consoleWindow, GWL_STYLE, style); // 设置新的窗口样式 
     system("color 0C");

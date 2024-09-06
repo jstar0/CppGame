@@ -13,6 +13,7 @@
 #include"card.h"
 #include"player.h"
 #include"UI.h"
+#include"loadmap.h"
 extern int FPS,
            playerCurrentX,playerCurrentY,playerCurrentRoom,playerSpeedX,playerSpeedY,
            roomPrintX,roomPrintY,roomWidth,roomHeight;
@@ -48,6 +49,7 @@ void moveme(int deltax,int deltay)
 
 void printmap()
 {
+    loadMap(playerCurrentRoom);
     clear(roomPrintX,roomPrintY,roomPrintX+roomWidth-1,roomPrintY+roomHeight-1);
     print(rooms[playerCurrentRoom]);
     moveme(0,0);
@@ -317,7 +319,7 @@ extern int storePrintX,storePrintY,
 extern int currentselectgoods;  
 int getdigits(int number) 
 {
-    if (number == 0) return 1;
+    if (number==0) return 1;
     return std::log10(std::abs(number)) + 1;
 }
 void printgoods()

@@ -46,7 +46,7 @@ Object::Object(const Object &object)
 
 void Object::run()
 {
-    message("碰到了"+name);
+    
 }
 
 void print(Object *object)

@@ -63,12 +63,12 @@ void setcursor(bool show/* =true */)
 {
     if (!show) 
     {
-        CONSOLE_CURSOR_INFO cursor_info = {1, 0};
+        CONSOLE_CURSOR_INFO cursor_info={1, 0};
 	    SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &cursor_info);
     }
     else
     {
-        CONSOLE_CURSOR_INFO cursor_info = {100, 1};
+        CONSOLE_CURSOR_INFO cursor_info={100, 1};
 	    SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &cursor_info);
     }
 }
