@@ -345,6 +345,18 @@ moveObject::moveObject(std::string name,int x,int y,int moveID,int moveX,int mov
     this->moveY=moveY;
 }
 
+moveObject::moveObject(const moveObject &other)
+{
+    name=other.name;
+    forecolor=other.forecolor;
+    backcolor=other.backcolor;
+    x=other.x;
+    y=other.y;
+    moveID=other.moveID;
+    moveX=other.moveX;
+    moveY=other.moveY;
+}
+
 void moveObject::run()
 {
     extern int playerCurrentX,playerCurrentY,playerCurrentRoom;
@@ -355,4 +367,9 @@ void moveObject::run()
     playerCurrentRoom=moveID;
     printmap();
     printsmallmap();
+}
+
+moveObject* moveObject::clone()
+{
+    return new moveObject(*this);
 }

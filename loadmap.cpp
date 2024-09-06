@@ -157,13 +157,13 @@ void loadMap(int mapIndex)
         {
             string objectName,forecolor,backcolor;
             int x, y;
-            getline(ss, objectName, ',');
+            getline(ss,objectName,',');
             ss>>x;
             ss.ignore(1);
             ss>>y;
             ss.ignore(1);
             // 颜色可缺省
-            if (!getline(ss, forecolor, ',')) forecolor="white";
+            if (!getline(ss,forecolor,',')) forecolor="white";
             if (!(ss>>backcolor)) backcolor="black";
             rooms[mapIndex].addobject(new Object(objectName,x,y,forecolor,backcolor));
         }
@@ -171,7 +171,7 @@ void loadMap(int mapIndex)
         {
             string objectName,forecolor,backcolor,warning;
             int number,x,y;
-            vector<xy>xy;
+            vector<xy> xy;
             getline(ss,objectName,',');
             ss>>number;
             for (int i=0; i<number; i++)
@@ -188,6 +188,54 @@ void loadMap(int mapIndex)
             if (!getline(ss,forecolor,',')) forecolor="white";
             if (!(ss>>backcolor)) backcolor="black";
             rooms[mapIndex].addobject(new Object(objectName,0,0,forecolor,backcolor),xy);
+        }
+        else if (type=="M")
+        {
+            string objectName,forecolor,backcolor;
+            int x,y,moveID,moveX,moveY;
+            getline(ss,objectName,',');
+            ss>>x;
+            ss.ignore(1);
+            ss>>y;
+            ss.ignore(1);
+            ss>>moveID;
+            ss.ignore(1);
+            ss>>moveX;
+            ss.ignore(1);
+            ss>>moveY;
+            ss.ignore(1);
+            // 颜色可缺省
+            if (!getline(ss, forecolor, ',')) forecolor="white";
+            if (!(ss>>backcolor)) backcolor="black";
+            rooms[mapIndex].addobject(new moveObject(objectName,x,y,moveID,moveX,moveY,forecolor,backcolor));
+        }
+        else if (type=="ML")
+        {   
+            string objectName,forecolor,backcolor;
+            int x,y,moveID,moveX,moveY,number;
+            vector<xy> xy;
+            getline(ss,objectName,',');
+            ss>>moveID;
+            ss.ignore(1);
+            ss>>moveX;
+            ss.ignore(1);
+            ss>>moveY;
+            ss.ignore(1);
+            ss>>number;
+            for (int i=0; i<number; i++)
+            {
+                ss.ignore(2);
+                ss>>x;
+                ss.ignore(1);
+                ss>>y;
+                ss.ignore(1);
+                xy.push_back({x,y});
+            }
+            ss.ignore(1);
+            // 颜色可缺省
+            if (!getline(ss, forecolor, ',')) forecolor="white";
+            if (!(ss>>backcolor)) backcolor="black";
+            rooms[mapIndex].addobject(new moveObject(objectName,0,0,moveID,moveX,moveY,forecolor,backcolor),xy);
         }
     }
     fin.close();

@@ -100,8 +100,10 @@ class moveObject:public Object{
 public:
     moveObject();
     moveObject(std::string name,int x,int y,int moveID,int moveX,int moveY,std::string forecolor="white",std::string backcolor="black");
+    moveObject(const moveObject &other);
     int moveX,moveY,moveID;
     void run() override;
+    moveObject* clone() override;
 };
 
 #endif
