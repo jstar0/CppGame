@@ -250,9 +250,10 @@ void Goods::buy()
 }
 
 //卡牌商品----------------------------------------------------------------------------------------------------------
-CardGoods::CardGoods(Card *card,int price,int number/* =1 */)
+CardGoods::CardGoods(int cardID,int price,int number/* =1 */)
 {
-    this->card=card;
+    extern std::vector<Card*> cards;    
+    this->card=cards[cardID];
     this->price=price;
     this->number=number;
     this->color=card->getcolor();
@@ -268,9 +269,10 @@ void CardGoods::buy()
 }
 
 //道具商品----------------------------------------------------------------------------------------------------------
-PropGoods::PropGoods(Prop *prop,int price,int number/* =1 */)
+PropGoods::PropGoods(int propID,int price,int number/* =1 */)
 {
-    this->prop=prop;
+    extern std::vector<Prop*> props;
+    this->prop=props[propID];
     this->price=price;
     this->number=number;
     this->color=prop->forecolor;

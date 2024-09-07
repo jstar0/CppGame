@@ -8,7 +8,7 @@ int Player::HPMax=100,
     Player::MPMax=3,
     Player::MP=Player::MPMax,
     Player::money=0,
-    Player::handMax=7;
+    Player::handMax=10;
 std::vector<Card*> Player::card;
 std::vector<Prop*> Player::prop;
 PlayerState Player::state;

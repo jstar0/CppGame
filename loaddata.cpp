@@ -2,11 +2,13 @@
 #include <string>
 #include <fstream>
 #include <sstream>
-#include "loadmap.h"
+#include "loaddata.h"
 #include "gamemap.h"
+#include "card.h"
 using namespace std;
 
 extern vector<Room> rooms;
+extern vector<Card*> cards;
 
 // mapList文件结构示例
 // $客厅(1F)$0,1,2,3,4,$/1/00-KeTing.mapdata$
@@ -50,6 +52,117 @@ void getMapList()
         getline(ss,filePath);
         newRoom=Room(name,ID,UP_ID,DOWN_ID,LEFT_ID,RIGHT_ID,filePath);
         rooms.push_back(newRoom);
+    }
+    fin.close();
+}
+
+void getCardList()
+{
+    // 从文件./cards/CardList.data中读取卡牌列表
+    // 读取成功后将卡牌列表存入全局变量cards中
+    // 读取失败则抛出异常
+    // 每一行一个卡牌，格式如下
+    // 卡牌类型，卡牌名，卡牌描述，卡牌编号，卡牌花费，卡牌稀有度，对应类型参数
+    // 编码为GBK
+    // 卡牌类型：A-攻击卡牌，D-防御卡牌，S-强化卡牌，R-摸牌卡牌，C-转换卡牌
+    ifstream fin("./cards/CardList.data");
+    if (!fin)
+    {
+        throw "无法打开卡牌列表文件";
+    }
+    string line;
+    while (getline(fin,line))
+    {
+        stringstream ss(line);
+        string name,type,s;
+        int ID,cost,rarity;
+        std::vector<std::string> description;
+        //A,攻击,{对敌人造成5点伤害},0,1,1,5,1
+        getline(ss,type,',');
+        if (type=="add")
+        {
+            getline(ss,type,',');
+            ss>>ID;
+            ss.ignore(1);
+            if (type=="A")
+            {
+                int damage,times;
+                ss>>damage;
+                ss.ignore(1);
+                ss>>times;
+                cards[ID]->setattack(damage,times);
+            }
+            else if (type=="D")
+            {
+                int defense;
+                ss>>defense;
+                ss.ignore(1);
+                cards[ID]->setdefend(defense);
+            }
+            else if (type=="S")
+            {
+                int strength;
+                ss>>strength;
+                ss.ignore(1);
+                cards[ID]->setstrengthen(strength);
+            }
+            else if (type=="R")
+            {
+                int times;
+                ss>>times;
+                ss.ignore(1);
+                cards[ID]->setdraw(times);
+            }
+        }
+        else
+        {
+            getline(ss,name,',');
+            ss.ignore(1);
+            getline(ss,s,'}');
+            while(s.find("$")!=std::string::npos)
+            {
+                description.push_back(s.substr(0,s.find("$")));
+                s=s.substr(s.find("$")+1);
+            }
+            description.push_back(s);
+            ss.ignore(1);
+            ss>>ID;
+            if (ID>cards.size()-1) cards.resize(ID+1);
+            ss.ignore(1);
+            ss>>cost;
+            ss.ignore(1);
+            ss>>rarity;
+            ss.ignore(1);
+            if (type=="A")
+            {
+                int damage,times;
+                ss>>damage;
+                ss.ignore(1);
+                ss>>times;
+                cards[ID]=new AttackCard(name,description,ID,cost,rarity,damage,times);
+            }
+            else if (type=="D")
+            {
+                int defense;
+                ss>>defense;
+                ss.ignore(1);
+                cards[ID]=new DefendCard(name,description,ID,cost,rarity,defense);
+            }
+            else if (type=="S")
+            {
+                int strength;
+                ss>>strength;
+                ss.ignore(1);
+                cards[ID]=(new StrengthenCard(name,description,ID,cost,rarity,strength));
+            }
+            else if (type=="R")
+            {
+                int times;
+                ss>>times;
+                ss.ignore(1);
+                cards[ID]=(new DrawCard(name,description,ID,cost,rarity,times));
+            }
+        }
     }
     fin.close();
 }
@@ -140,17 +253,15 @@ void loadMap(int mapIndex)
         {
             string enemyName, filePath, forecolor, backcolor;
             int x, y;
-            getline(ss, enemyName, ',');
+            getline(ss,enemyName,',');
             ss>>x;
             ss.ignore(1);
             ss>>y;
             ss.ignore(1);
-            getline(ss, filePath, ',');
+            getline(ss,filePath,',');
             // 颜色可缺省
-            if (!getline(ss, forecolor, ','))
-                forecolor="white";
-            if (!(ss>>backcolor))
-                backcolor="black";
+            if (!getline(ss, forecolor,',')) forecolor="white";
+            if (!(ss>>backcolor)) backcolor="black";
             // rooms[mapIndex].addobject(new EnemyObject(enemyName, x, y, filePath, forecolor, backcolor));
         }
         else if (type=="O")

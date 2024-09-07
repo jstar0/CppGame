@@ -76,14 +76,14 @@ public:
 
 class CardGoods:public Goods{
 public:
-    CardGoods(Card *card,int price,int number=1);
+    CardGoods(int cardID,int price,int number=1);
     Card *card;
     void buy() override;
 };
 
 class PropGoods:public Goods{
 public:
-    PropGoods(Prop *prop,int price,int number=1);
+    PropGoods(int propID,int price,int number=1);
     Prop *prop;
     void buy() override;
 };

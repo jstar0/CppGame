@@ -13,6 +13,9 @@ public:
     int drawtimes;
     int strength;
     CardKind();
+    CardKind(const CardKind &other);
+    //重载=运算符
+    CardKind& operator=(const CardKind &other);
 };
 
 class Card{
@@ -23,6 +26,9 @@ public:
     CardKind kind;
     Card();
     Card(std::string name,std::vector<std::string> description,int ID,int cost,int rarity);
+    Card(const Card &other);
+    //重载=运算符
+    Card& operator=(const Card &other);
     void setattack(int damage,int times);
     void setdefend(int defense);
     void setdraw(int times);

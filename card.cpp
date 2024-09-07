@@ -1,15 +1,16 @@
 #include<iostream>
 #include<string>
 #include<vector>
+#include<algorithm>
+#include<random>
+#include<ctime>
+#include<string>
 #include"card.h"
 #include"console.h"
 #include"enemy.h"
 #include"player.h"
 #include"UI.h"
 #include"run.h"
-#include<algorithm>
-#include<random>
-#include<ctime>
 
 extern int cardPrintX,cardPrintY;
 
@@ -20,6 +21,7 @@ Card::Card()
     ID=0;
     cost=0;
     rarity=0;
+    kind=CardKind();
 }
 
 Card::Card(std::string name,std::vector<std::string> description,int ID,int cost,int rarity)
@@ -29,6 +31,29 @@ Card::Card(std::string name,std::vector<std::string> description,int ID,int cost
     this->ID=ID;
     this->cost=cost;
     this->rarity=rarity;
+    kind=CardKind();
+}
+
+Card& Card::operator=(const Card &other)
+{
+    if (this==&other) return *this; 
+    name=other.name;
+    description=other.description;
+    ID=other.ID;
+    cost=other.cost;
+    rarity=other.rarity;
+    kind=other.kind;
+    return *this;
+}
+
+Card::Card(const Card &other)
+{
+    name=other.name;
+    description=other.description;
+    ID=other.ID;
+    cost=other.cost;
+    rarity=other.rarity;
+    kind=other.kind;
 }
 
 CardKind::CardKind()
@@ -42,6 +67,34 @@ CardKind::CardKind()
     defense=0;
     drawtimes=0;
     strength=0;
+}
+
+CardKind& CardKind::operator=(const CardKind &other)
+{
+    if (this==&other) return *this;
+    isattack=other.isattack;
+    isdefend=other.isdefend;
+    isdraw=other.isdraw;
+    isstrengthen=other.isstrengthen;
+    damage=other.damage;
+    damagetimes=other.damagetimes;
+    defense=other.defense;
+    drawtimes=other.drawtimes;
+    strength=other.strength;
+    return *this;
+}
+
+CardKind::CardKind(const CardKind &other)
+{
+    isattack=other.isattack;
+    isdefend=other.isdefend;
+    isdraw=other.isdraw;
+    isstrengthen=other.isstrengthen;
+    damage=other.damage;
+    damagetimes=other.damagetimes;
+    defense=other.defense;
+    drawtimes=other.drawtimes;
+    strength=other.strength;
 }
 
 void Card::setattack(int damage,int times)
@@ -107,8 +160,16 @@ void Card::effect()
     }
     if (kind.isdraw)
     {
-        message("抽取"+std::to_string(kind.drawtimes)+"张卡牌");
-        drawcard(kind.drawtimes);
+        if (kind.drawtimes>0)
+        {
+            message("抽取"+std::to_string(kind.drawtimes)+"张卡牌");
+            drawcard(kind.drawtimes);
+        }
+        if (kind.drawtimes<0)
+        {
+            message("弃置"+std::to_string(-kind.drawtimes)+"张卡牌");
+            drawcard(kind.drawtimes);
+        }
     }
 }
 

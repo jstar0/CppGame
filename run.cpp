@@ -13,7 +13,7 @@
 #include"card.h"
 #include"player.h"
 #include"UI.h"
-#include"loadmap.h"
+#include"loaddata.h"
 extern int FPS,
            playerCurrentX,playerCurrentY,playerCurrentRoom,playerSpeedX,playerSpeedY,
            roomPrintX,roomPrintY,roomWidth,roomHeight;
@@ -180,26 +180,39 @@ void printPlayer();
 void drawcard(int n=1)
 {
     extern std::vector<Card*> have,hand,used;
-    int end=n+hand.size()<Player::handMax?n+hand.size():Player::handMax;
-    while(hand.size()<end)
+    if (n>0)
     {
-        if (!have.empty())
+        int end=n+hand.size()<Player::handMax?n+hand.size():Player::handMax;
+        while(hand.size()<end)
         {
-            auto dre=std::default_random_engine{static_cast<unsigned>(std::time(nullptr))};
-            std::shuffle(have.begin(),have.end(),dre);
-            hand.push_back(have.back());
-            have.pop_back();
-        }
-        else
-        {
-            if (used.size()>0)
+            if (!have.empty())
             {
-                have=used;
-                used.clear();
+                auto dre=std::default_random_engine{static_cast<unsigned>(std::time(nullptr))};
+                std::shuffle(have.begin(),have.end(),dre);
+                hand.push_back(have.back());
+                have.pop_back();
             }
-            else break;
+            else
+            {
+                if (used.size()>0)
+                {
+                    have=used;
+                    used.clear();
+                }
+                else break;
+            }
         }
     }
+    if (n<0)
+    {
+        int end=n+hand.size()>0?n+hand.size():0;
+        while(hand.size()>end)
+        {
+            used.push_back(hand.back());
+            hand.pop_back();
+        }
+    }
+
 }
 
 bool fightend()
@@ -220,6 +233,8 @@ bool fightend()
 
 void printcard()
 {
+    extern int currentselectcard;
+    extern std::vector<Card*> hand;
     clear(cardSelectPrintX,cardSelectPrintY,cardSelectPrintX2,cardSelectPrintY2);
     for (int i=0; i<hand.size(); i++) 
     {
@@ -359,7 +374,6 @@ bool shopping()
     printgoods();
     if (r=='\r') 
     {
-        message(std::to_string(currentselectgoods));
         if (currentselectgoods<currentgoodss->size())
         {
             if (Player::money>=(*currentgoodss)[currentselectgoods]->price)
