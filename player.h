@@ -18,6 +18,7 @@ class Player{
 public:
     static int HP,HPMax,MP,MPMax,handMax;
     static int money;
+    static int EXP,level;
     static std::vector<Card*> card;
     static std::vector<Prop*> prop;
     static PlayerState state;
@@ -27,6 +28,8 @@ public:
     static void addprop(Prop* prop);
     static int damage(int d);
     static void getdamage(int gd);
+    static void getEXP(int e);
+    static int calculatelevel(int level);
     static void turnset();
     friend void printPlayer();
 };

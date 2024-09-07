@@ -6,6 +6,7 @@
 void moveme(int deltax,int deltay); 
 void printmap();
 void printsmallmap();
+void printPlayerState();
 bool playermove();
 void drawcard(int n);
 bool fightend();
@@ -15,4 +16,5 @@ bool selectcard();
 int getdigits(int number);
 void printgoods();
 bool shopping();
+void printStory(int ID);
 #endif

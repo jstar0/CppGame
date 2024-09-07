@@ -94,6 +94,24 @@ void printsmallmap()
     }
 }
 
+void printPlayerState()
+{
+    extern int playerStatePrintX,playerStatePrintY,playerStatePrintX2,playerStatePrintY2;
+    clear(playerStatePrintX,playerStatePrintY,playerStatePrintX2,playerStatePrintY2);
+    setcolor("white","black");
+    setcolor("lightred");
+    print("体力(HP):"+std::to_string(Player::HP)+"/"+std::to_string(Player::HPMax),playerStatePrintX,playerStatePrintY);
+    setcolor("lightblue");  
+    print("精力(MP)上限:"+std::to_string(Player::MPMax),playerStatePrintX+21,playerStatePrintY);
+    setcolor("deepgreen");
+    print("经验(EXP):"+std::to_string(Player::EXP)+"/"+std::to_string(Player::calculatelevel(Player::level)),playerStatePrintX,playerStatePrintY+1);
+    setcolor("yellow");
+    print("金币:"+std::to_string(Player::money),playerStatePrintX+21,playerStatePrintY+1);
+    setcolor("gray");
+    print("牌库:"+std::to_string(Player::card.size())+"张牌",playerStatePrintX,playerStatePrintY+2);
+    print("手牌上限:"+std::to_string(Player::handMax),playerStatePrintX+21,playerStatePrintY+2);
+}
+
 bool playermove()
 {
     //printmap();
@@ -175,7 +193,7 @@ extern std::vector<Card*> have,hand,used;
 extern Enemy *currentenemy;
 extern int currentselectcard;
 extern int cardSelectPrintX,cardSelectPrintY,cardSelectPrintX2,cardSelectPrintY2,
-           cardPrintX,cardPrintY,cardPrintX2,cardPrintY2;
+           descriptionPrintX,descriptionPrintY,descriptionPrintX2,descriptionPrintY2;
 void printPlayer();
 void drawcard(int n=1)
 {
@@ -242,9 +260,9 @@ void printcard()
         else setcolor(hand[i]->getcolor(),"black");
         print(std::to_string(hand[i]->cost)+"费  "+hand[i]->name,cardSelectPrintX,cardSelectPrintY+i);
     }
-    clear(cardPrintX,cardPrintY,cardPrintX2,cardPrintY2);
+    clear(descriptionPrintX,descriptionPrintY,descriptionPrintX2,descriptionPrintY2);
     setcolor(hand[currentselectcard]->getcolor(),"black");
-    print(hand[currentselectcard]->description,cardPrintX,cardPrintY);
+    print(hand[currentselectcard]->description,descriptionPrintX,descriptionPrintY);
 }
 
 bool fight()
@@ -261,6 +279,7 @@ bool fight()
     while(selectcard());
     if (fightend()) return false;
     currentenemy->currentintention.effect();
+    printPlayerState();
     message("回合结束","lightblue");
     return true;
 }
@@ -322,6 +341,7 @@ bool selectcard()
             used.push_back(hand[0]);
             hand.erase(hand.begin());
         }
+        hand.resize(0);
         selectcardend();
         return false;
     }
@@ -355,13 +375,16 @@ void printgoods()
         print(std::to_string(i+1)+".",goodsPrintX,goodsPrintY+i);
         print(std::to_string((*currentgoodss)[i]->price),goodsPricePrintX,goodsPrintY+i);
         print(std::to_string((*currentgoodss)[i]->number),goodsNumberPrintX,goodsPrintY+i);
-
     }
-    if (currentselectgoods==currentgoodss->size()) setcolor("blue","white");
-    else setcolor("blue","black");
+    clear(descriptionPrintX,descriptionPrintY,descriptionPrintX2,descriptionPrintY2);
+    if (currentselectgoods!=currentgoodss->size()) 
+    {
+        setcolor((*currentgoodss)[currentselectgoods]->color,"black");
+        print((*currentgoodss)[currentselectgoods]->description,descriptionPrintX,descriptionPrintY);
+        setcolor("blue","black");
+    }
+    else setcolor("blue","white");
     print("退出商店",goodsPrintX,goodsPrintY+(*currentgoodss).size());
-    /* setcolor((*currentgoodss)[currentselectgoods]->color,"black");
-    print((*currentgoodss)[currentselectgoods]->description,cardPrintX,cardPrintY); */
 }
 
 bool shopping()
@@ -382,6 +405,7 @@ bool shopping()
                 (*currentgoodss)[currentselectgoods]->buy();
                 if ((*currentgoodss)[currentselectgoods]->number==0) (*currentgoodss).erase((*currentgoodss).begin()+currentselectgoods);
                 printgoods();
+                printPlayerState();
             }
             else message("你的钱不够","red");
         }
@@ -393,4 +417,59 @@ bool shopping()
     }
     Sleep(1000/FPS);
     return true;
+}
+
+void printStory(int ID)
+{
+    extern std::vector<std::string> story;
+    int x=roomPrintX,y=roomPrintY;
+    std::string forecolor="white",backcolor="black";
+    clear(x,y,x+roomWidth-1,y+roomHeight-1);
+    int i=0;
+    while(i<story[ID].size())
+    {
+        if (story[ID][i]=='&')
+        {
+            int next=story[ID].find(",",i+1);
+            forecolor=story[ID].substr(i+1,next-i-1);
+            i=next;
+            next=story[ID].find("&",i+1);
+            backcolor=story[ID].substr(i+1,next-i-1);
+            i=next;
+        }
+        else if (story[ID][i]=='$')
+        {
+            x=roomPrintX;
+            y++;
+            if (y>=roomPrintY+roomHeight) 
+            {
+                y=roomPrintY;
+                clear(roomPrintX,roomPrintY,roomPrintX+roomWidth-1,roomPrintY+roomHeight-1);
+            }
+            setcolor("white");
+            print("(按任意键继续)",x,y);
+            getch();
+            clear(x,y,x+14,y);
+        }
+        else
+        {
+            std::string gbk_char=story[ID].substr(i,2);
+            setcolor(forecolor,backcolor);
+            print(gbk_char,x,y);
+            Sleep(10);
+            x+=2;
+            if (x>=roomPrintX+roomWidth)
+            {
+                x=roomPrintX;
+                y++;
+                if (y>=roomPrintY+roomHeight) 
+                {
+                    y=roomPrintY;
+                    clear(roomPrintX,roomPrintY,roomPrintX+roomWidth-1,roomPrintY+roomHeight-1);
+                }
+            }
+            i+=1;
+        }
+        i+=1;
+    }
 }

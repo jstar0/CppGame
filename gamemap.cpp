@@ -221,6 +221,7 @@ EnemyObject::EnemyObject(std::string name,int x,int y,Enemy enemy,std::string fo
 
 void EnemyObject::run()
 {
+    extern int descriptionPrintX,descriptionPrintY,descriptionPrintX2,descriptionPrintY2;
     extern std::vector<Card*> have,hand,used;
     extern Enemy *currentenemy;
     currentenemy=&this->enemy;
@@ -229,8 +230,10 @@ void EnemyObject::run()
     Player::init();
     message("开始战斗:"+currentenemy->name);
     while(fight());
+    clear(descriptionPrintX,descriptionPrintY,descriptionPrintX2,descriptionPrintY2);
     printmap();
     printsmallmap();
+    printPlayerState();
 }
 
 //商品----------------------------------------------------------------------------------------------------------
@@ -320,6 +323,7 @@ void StoreObject::run()
     message("成功退出商店");
     printmap();
     printsmallmap();
+    printPlayerState();
 }
 
 //传送事件----------------------------------------------------------------------------------------------------------

@@ -12,7 +12,7 @@
 #include"UI.h"
 #include"run.h"
 
-extern int cardPrintX,cardPrintY;
+extern int descriptionPrintX,descriptionPrintY;
 
 Card::Card()
 {
@@ -134,7 +134,7 @@ std::string Card::getcolor()
 void print(Card *card)
 {
     setcolor(card->getcolor());
-    print(card->description,cardPrintX,cardPrintY);
+    print(card->description,descriptionPrintX,descriptionPrintY);
 }
 
 extern Enemy *currentenemy;

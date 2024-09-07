@@ -5,6 +5,8 @@
 #include "loaddata.h"
 #include "gamemap.h"
 #include "card.h"
+#include "console.h"
+#include "conio.h"
 using namespace std;
 
 extern vector<Room> rooms;
@@ -163,6 +165,30 @@ void getCardList()
                 cards[ID]=(new DrawCard(name,description,ID,cost,rarity,times));
             }
         }
+    }
+    fin.close();
+}
+
+void getStoryList()
+{
+    // 从文件./story/StoryList.data中读取剧情列表
+    // 读取成功后将剧情列表存入全局变量story中
+    // 读取失败则抛出异常
+    // 每一行一个剧情，格式如下
+    // 剧情内容
+    // 编码为GBK
+    int i=0;
+    extern vector<string> story;
+    ifstream fin("./story/StoryList.data");
+    if (!fin)
+    {
+        throw "无法打开剧情列表文件";
+    }
+    string line;
+    while (getline(fin,line))
+    {
+        story[i]=line;
+        i++;
     }
     fin.close();
 }

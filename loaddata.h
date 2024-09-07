@@ -3,6 +3,7 @@
 
 void getMapList();
 void getCardList();
+void getStoryList();
 
 // 加载地图
 void loadMap(int mapIndex);

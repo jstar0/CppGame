@@ -8,7 +8,9 @@ int Player::HPMax=100,
     Player::MPMax=3,
     Player::MP=Player::MPMax,
     Player::money=0,
-    Player::handMax=10;
+    Player::handMax=10,
+    Player::EXP=0,
+    Player::level=1;    
 std::vector<Card*> Player::card;
 std::vector<Prop*> Player::prop;
 PlayerState Player::state;
@@ -47,6 +49,18 @@ void Player::getdamage(int gd)
     else message("全部防下来了","red");
     HP=HP-gde>0?HP-gde:0;
     state.defense=(Player::state.defense-gd>0)?Player::state.defense-gd:0;
+}
+
+void Player::getEXP(int e)
+{
+    EXP+=e;
+    while(EXP>=calculatelevel(Player::level)) level+=1;
+}
+
+int Player::calculatelevel(int level)
+{
+    if (level<=10) return 10*level;
+    else return 1000;
 }
 
 void Player::turnset()
