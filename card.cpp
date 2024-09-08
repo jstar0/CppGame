@@ -163,14 +163,14 @@ void Card::effect()
     else if (name=="铁牛功")
     {
         message("对"+currentenemy->name+"使用"+name);
-        if (Player::HP==Player::HPMax)
-            currentenemy->getdamage(2*Player::damage(kind.damage));
-        else currentenemy->getdamage(Player::damage(kind.damage));
+        currentenemy->getdamage(Player::damage(kind.damage*Player::HP/100));
     }
     else if (name=="裂地崩")
     {
         message("对"+currentenemy->name+"使用"+name);
-        currentenemy->getdamage(Player::damage(kind.damage));
+        if (Player::HP==Player::HPMax)
+            currentenemy->getdamage(2*Player::damage(kind.damage));
+        else currentenemy->getdamage(Player::damage(kind.damage));
     }
     else if (name=="极阴剑诀")
     {

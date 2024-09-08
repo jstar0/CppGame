@@ -14,6 +14,7 @@
 #include"player.h"
 #include"UI.h"
 #include"loaddata.h"
+#include"save.h"
 extern int FPS,
            playerCurrentX,playerCurrentY,playerCurrentRoom,playerSpeedX,playerSpeedY,
            roomPrintX,roomPrintY,roomWidth,roomHeight;
@@ -49,7 +50,6 @@ void moveme(int deltax,int deltay)
 
 void printmap()
 {
-    loadMap(playerCurrentRoom);
     clear(roomPrintX,roomPrintY,roomPrintX+roomWidth-1,roomPrintY+roomHeight-1);
     print(rooms[playerCurrentRoom]);
     moveme(0,0);
@@ -104,12 +104,15 @@ void printPlayerState()
     setcolor("lightblue");  
     print("灵力上限:"+std::to_string(Player::MPMax),playerStatePrintX+21,playerStatePrintY);
     setcolor("deepgreen");
-    print("经验:"+std::to_string(Player::EXP)+"/"+std::to_string(Player::calculatelevel(Player::level)),playerStatePrintX,playerStatePrintY+1);
+    print("等级:"+std::to_string(Player::level)+"("+std::to_string(Player::EXP)+"/"+std::to_string(Player::calculatelevel(Player::level))+")",playerStatePrintX,playerStatePrintY+1);
     setcolor("yellow");
     print("金币:"+std::to_string(Player::money),playerStatePrintX+21,playerStatePrintY+1);
     setcolor("gray");
     print("牌库:"+std::to_string(Player::card.size())+"张牌",playerStatePrintX,playerStatePrintY+2);
     print("手牌上限:"+std::to_string(Player::handMax),playerStatePrintX+21,playerStatePrintY+2);
+    setcolor("red");
+    print("按Q保存游戏",playerStatePrintX,playerStatePrintY+3);
+    print("按L读取存档",playerStatePrintX+21,playerStatePrintY+3);
 }
 
 bool playermove()
@@ -118,6 +121,14 @@ bool playermove()
     //printsmallmap();
     char r=getch();
     //clear(roomPrintX,roomPrintY,roomPrintX+roomWidth-1,roomPrintY+roomHeight-1);
+    if (r=='Q' || r=='q') 
+    {
+        save();
+    }
+    if (r=='L' || r=='l')
+    {
+        load();
+    }
     if (r=='W' || r=='w') 
     {
         if (playerCurrentY>0) moveme(0,-playerSpeedY);
@@ -182,7 +193,7 @@ bool playermove()
     {
         if (playerCurrentX==rooms[playerCurrentRoom].object[i]->x && playerCurrentY==rooms[playerCurrentRoom].object[i]->y) 
         {
-            rooms[playerCurrentRoom].object[i]->run();
+            if (rooms[playerCurrentRoom].object[i]->times!=0) rooms[playerCurrentRoom].object[i]->run();
         }
     }
     Sleep(1000/FPS);
@@ -290,6 +301,27 @@ bool selectcardend()
     if (currentenemy->HP==0)
     {
         message("你打败了"+currentenemy->name,"red");
+        if (currentenemy->giveCard>=0)
+        {
+            extern std::vector<Card*> cards;
+            Player::addcard(cards[currentenemy->giveCard]);
+            message("获得卡牌"+cards[currentenemy->giveCard]->name);
+        }
+        if (currentenemy->giveProp>=0)
+        {
+            extern std::vector<Prop*> props;
+            Player::addprop(props[currentenemy->giveProp]);
+            message("获得道具"+props[currentenemy->giveProp]->name);
+        }
+        if (currentenemy->giveMoney>0)
+        {
+            Player::money+=currentenemy->giveMoney;
+            message("获得金币"+std::to_string(currentenemy->giveMoney),"yellow");
+        }
+        if (currentenemy->giveEXP>0)
+        {
+            Player::getEXP(currentenemy->giveEXP);
+        }
         return true;
     }
     if (Player::HP==0)

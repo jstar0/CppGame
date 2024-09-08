@@ -11,16 +11,33 @@ struct xy{
     xy(int x,int y):x(x),y(y){}
 };
 
+class ObjectKind{
+public:
+    bool isenemy,isstory,isgivecard,isgiveprop,isgiveEXP,isgivemoney,ismove;
+    int enemyID,storyID,cardID,propID,EXP,money,moveID,moveX,moveY;
+    ObjectKind();
+    ObjectKind(const ObjectKind &other);
+    ObjectKind& operator=(const ObjectKind &other);
+};
+
 class Object{
 public:
     Object();
-    Object(std::string name,int x,int y,std::string forecolor="white",std::string backcolor="black");
+    Object(std::string name,int x,int y,int times=-1,std::string forecolor="white",std::string backcolor="black");
     Object(const Object &object);
+    ObjectKind kind;
     std::string name,forecolor,backcolor;
     int x,y;
+    int times=-1;
+    //void setenemy(int enemyID);
+    void setstory(int storyID);
+    void setgivecard(int cardID);
+    void setgiveprop(int propID);
+    void setgiveEXP(int EXP);
+    void setgivemoney(int money);
+    void setmove(int moveID,int moveX,int moveY);
     virtual void run();
     friend void print(Object object);
-    virtual ~Object()=default;
     virtual Object* clone();
 };
 
@@ -32,6 +49,7 @@ public:
     Room(std::string name,int ID,int UP_ID,int DOWN_ID,int LEFT_ID,int RIGHT_ID,std::string filePath="");  
     //Room(const Room &other);  
     int ID,UP_ID,DOWN_ID,LEFT_ID,RIGHT_ID,initX,initY;
+    bool isload;
     std::string name;
     std::string filePath;
     std::vector<Object*> object;
@@ -60,7 +78,7 @@ public:
 class EnemyObject:public Object{
 public:
     EnemyObject();
-    EnemyObject(std::string name,int x,int y,Enemy enemy,std::string forecolor="white",std::string backcolor="black");
+    EnemyObject(std::string name,int x,int y,Enemy enemy,int times=-1,std::string forecolor="white",std::string backcolor="black");
     Enemy enemy;
     void run() override;
 };
@@ -96,60 +114,23 @@ public:
     void run() override;
 };
 
-class moveObject:public Object{
+class MoveObject:public Object{
 public:
-    moveObject();
-    moveObject(std::string name,int x,int y,int moveID,int moveX,int moveY,std::string forecolor="white",std::string backcolor="black");
-    moveObject(const moveObject &other);
+    MoveObject();
+    MoveObject(std::string name,int x,int y,int moveID,int moveX,int moveY,std::string forecolor="white",std::string backcolor="black");
+    MoveObject(const MoveObject &other);
     int moveX,moveY,moveID;
     void run() override;
-    moveObject* clone() override;
+    MoveObject* clone() override;
+};
+
+class NPCObject:public Object{
+public:
+    NPCObject();
+    NPCObject(std::string name,int x,int y,int storyID,int times=-1,std::string forecolor="white",std::string backcolor="black");
+    int storyID;
+    void run() override;
 };
 
 #endif
 
-
-/* Room::Room(const Room &room)
-{
-    message("1copy0");
-    name=room.name;
-    ID=room.ID;
-    UP_ID=room.UP_ID;
-    DOWN_ID=room.DOWN_ID;
-    LEFT_ID=room.LEFT_ID;
-    RIGHT_ID=room.RIGHT_ID;
-    message("1copy1");
-    object.clear();
-    message("1clear");
-    if (room.object.size()==0) return;
-    message("1not resize");
-    for (int i=0; i<room.object.size(); i++)
-    {
-        object.push_back(room.object[i]->clone());
-    }
-    message("1copyright");
-}
-
-Room& Room::operator=(const Room& other)
-{
-    message("copy0");
-    //this->name=other.name;
-    message("namecopy");
-    this->ID=other.ID;
-    this->UP_ID=other.UP_ID;
-    this->DOWN_ID=other.DOWN_ID;
-    this->LEFT_ID=other.LEFT_ID;
-    this->RIGHT_ID=other.RIGHT_ID; 
-    message("copy1");
-    if (other.object.empty()) return *this;
-    else 
-    {
-        this->object.clear();
-        message("clear");
-        for (int i=0; i<other.object.size(); i++)
-        {
-            this->object.push_back(other.object[i]);
-        }
-    }
-    return *this;
-} */

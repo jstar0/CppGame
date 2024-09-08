@@ -54,6 +54,7 @@ void getMapList()
         getline(ss,filePath);
         newRoom=Room(name,ID,UP_ID,DOWN_ID,LEFT_ID,RIGHT_ID,filePath);
         rooms.push_back(newRoom);
+        loadMap(ID);
     }
     fin.close();
 }
@@ -210,10 +211,10 @@ void loadMap(int mapIndex)
 
     //std::string testPath="./maps/1/00-KeTing.mapdata";
     //ifstream fin(testPath);
+    if (rooms[mapIndex].isload) return;
     ifstream fin("./maps"+rooms[mapIndex].filePath);
     if (!fin)
     {
-        //getchar();
         message("无法打开地图文件");
     }
     string line;
@@ -222,7 +223,52 @@ void loadMap(int mapIndex)
         stringstream ss(line);
         string type;
         getline(ss,type,',');
-        if (type=="S")
+        if (type=="add")
+        {   
+            Object *object=rooms[mapIndex].object[rooms[mapIndex].object.size()-1];
+            getline(ss,type,',');
+            if (type=="story")
+            {
+                int storyID;
+                ss>>storyID;
+                object->setstory(storyID);
+            }
+            if (type=="card")
+            {
+                int cardID;
+                ss>>cardID;
+                object->setgivecard(cardID);
+            }
+            if (type=="prop")
+            {
+                int propID;
+                ss>>propID;
+                object->setgiveprop(propID);
+            }
+            if (type=="money")
+            {
+                int money;
+                ss>>money;
+                object->setgivemoney(money);
+            }
+            if (type=="EXP")
+            {
+                int EXP;
+                ss>>EXP;
+                object->setgiveEXP(EXP);
+            }
+            if (type=="move")
+            {
+                int moveID,moveX,moveY;
+                ss>>moveID;
+                ss.ignore(1);
+                ss>>moveX;
+                ss.ignore(1);
+                ss>>moveY;
+                object->setmove(moveID,moveX,moveY);
+            }
+        }
+        else if (type=="S")
         {
             string storeName, filePath, forecolor, backcolor;
             int x, y;
@@ -293,16 +339,36 @@ void loadMap(int mapIndex)
         else if (type=="O")
         {
             string objectName,forecolor,backcolor;
-            int x, y;
+            int x,y,times;
             getline(ss,objectName,',');
             ss>>x;
             ss.ignore(1);
             ss>>y;
             ss.ignore(1);
+            ss>>times;
+            ss.ignore(1);
             // 颜色可缺省
             if (!getline(ss,forecolor,',')) forecolor="white";
             if (!(ss>>backcolor)) backcolor="black";
-            rooms[mapIndex].addobject(new Object(objectName,x,y,forecolor,backcolor));
+            rooms[mapIndex].addobject(new Object(objectName,x,y,times,forecolor,backcolor));
+        }
+        else if (type=="N")
+        {
+            string NPCName,forecolor,backcolor;
+            int x,y,times,storyID;
+            getline(ss,NPCName,',');
+            ss>>x;
+            ss.ignore(1);
+            ss>>y;
+            ss.ignore(1);
+            ss>>storyID;
+            ss.ignore(1);
+            ss>>times;
+            ss.ignore(1);
+            // 颜色可缺省
+            if (!getline(ss,forecolor,',')) forecolor="white";
+            if (!(ss>>backcolor)) backcolor="black";
+            rooms[mapIndex].addobject(new NPCObject(NPCName,x,y,storyID,times,forecolor,backcolor));
         }
         else if (type=="OL")
         {
@@ -324,7 +390,7 @@ void loadMap(int mapIndex)
             // 颜色可缺省
             if (!getline(ss,forecolor,',')) forecolor="white";
             if (!(ss>>backcolor)) backcolor="black";
-            rooms[mapIndex].addobject(new Object(objectName,0,0,forecolor,backcolor),xy);
+            rooms[mapIndex].addobject(new Object(objectName,0,0,-1,forecolor,backcolor),xy);
         }
         else if (type=="M")
         {
@@ -344,7 +410,7 @@ void loadMap(int mapIndex)
             // 颜色可缺省
             if (!getline(ss, forecolor, ',')) forecolor="white";
             if (!(ss>>backcolor)) backcolor="black";
-            rooms[mapIndex].addobject(new moveObject(objectName,x,y,moveID,moveX,moveY,forecolor,backcolor));
+            rooms[mapIndex].addobject(new MoveObject(objectName,x,y,moveID,moveX,moveY,forecolor,backcolor));
         }
         else if (type=="ML")
         {   
@@ -372,107 +438,8 @@ void loadMap(int mapIndex)
             // 颜色可缺省
             if (!getline(ss, forecolor, ',')) forecolor="white";
             if (!(ss>>backcolor)) backcolor="black";
-            rooms[mapIndex].addobject(new moveObject(objectName,0,0,moveID,moveX,moveY,forecolor,backcolor),xy);
+            rooms[mapIndex].addobject(new MoveObject(objectName,0,0,moveID,moveX,moveY,forecolor,backcolor),xy);
         }
-    }
-    fin.close();
-}
-
-// goodss（商品）文件结构示例
-// 分为卡牌CardGoods，道具PropGoods两种
-//=卡牌分为攻击卡牌AttackCard，防御卡牌DefendCard，强化卡牌StrengthenCard，摸牌卡牌DrawCard，转换卡牌ChangeHaveCard（添加它本身）
-// 第一行为售卖的：卡牌数量,道具数量
-// 第二行开始，先读取卡牌，再读取道具（每一行是一个卡牌，卡牌结束后是道具，如果卡牌是0，则上来就是道具，反之亦然）
-// 对于ChangeHaveCard，特别的根据卡牌名字来读取（写死在程序）
-
-void readGoodss(string filePath)
-{
-    // 从 filePath 中读取商品数据
-    // 读取成功后将商品数据存入全局变量goodss中
-    // 读取失败则抛出异常
-    // 每一行一个商品，格式如下
-    // 卡牌,卡牌名,价格,数量
-    // 道具,道具名,价格,数量
-    // 编码为GBK
-
-    ifstream fin(filePath);
-    if (!fin)
-    {
-        throw "无法打开商品文件";
-    }
-    string line;
-    while (getline(fin, line))
-    {
-        stringstream ss(line);
-        string type;
-        ss>>type;
-        if (type=="卡牌")
-        {
-            string cardName;
-            int price, number;
-            ss.ignore(1);
-            getline(ss, cardName, ',');
-            ss>>price;
-            ss.ignore(1);
-            ss>>number;
-            // goodss.push_back(new CardGoods(new Card(cardName), price, number));
-        }
-        else if (type=="道具")
-        {
-            string propName;
-            int price, number;
-            ss.ignore(1);
-            getline(ss, propName, ',');
-            ss>>price;
-            ss.ignore(1);
-            ss>>number;
-            // goodss.push_back(new PropGoods(new Prop(propName), price, number));
-        }
-    }
-    fin.close();
-}
-
-
-// enemy文件结构示例
-// 敌人名字$敌人介绍$HPMax$力量(tenemy.state.strength)$防御(tenemy.state.defense)
-// 敌人意图1(A)$介绍$攻击力$攻击次数
-// 敌人意图2(D)$介绍$防御力
-// 敌人意图3(S)$介绍$强化力
-// 敌人意图4(C)$介绍$给予卡牌总数$卡牌1$卡牌2$卡牌3...
-// ...
-
-void readEnemy(string filePath)
-{
-    // 从 filePath 中读取敌人数据
-    // 读取成功后将敌人数据存入全局变量enemies中
-    // 读取失败则抛出异常
-    // 每一行一个敌人，格式如下
-    // 敌人名,HP,攻击力,防御力,前景色,背景色
-    // 编码为GBK
-
-    ifstream fin(filePath);
-    if (!fin)
-    {
-        throw "无法打开敌人文件";
-    }
-    string line;
-    while (getline(fin, line))
-    {
-        stringstream ss(line);
-        string enemyName;
-        int HP, attack, defense;
-        string forecolor, backcolor;
-        ss.ignore(1);
-        getline(ss, enemyName, ',');
-        ss>>HP;
-        ss.ignore(1);
-        ss>>attack;
-        ss.ignore(1);
-        ss>>defense;
-        ss.ignore(1);
-        getline(ss, forecolor, ',');
-        ss>>backcolor;
-        // enemies.push_back(new Enemy(enemyName, HP, attack, defense, forecolor, backcolor));
     }
     fin.close();
 }

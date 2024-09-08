@@ -12,9 +12,10 @@
 #include"enemy.h"
 #include"UI.h"
 #include"loaddata.h"
+#include"save.h"
 
 int FPS=30,
-    playerCurrentX=0,playerCurrentY=0,playerCurrentRoom=0,playerSpeedX=2,playerSpeedY=1,
+    playerCurrentX=24,playerCurrentY=7,playerCurrentRoom=14,playerSpeedX=2,playerSpeedY=1,
     roomPrintX=5,roomPrintY=4,roomWidth=50,roomHeight=23,
     cardSelectPrintX=1,cardSelectPrintY=31,cardSelectPrintX2=29,cardSelectPrintY2=39,
     descriptionPrintX=38,descriptionPrintY=32,descriptionPrintX2=51,descriptionPrintY2=39,
@@ -41,8 +42,6 @@ int main()
 
     printUI();
     Player::money=1000;
-    playerCurrentX=24;
-    playerCurrentY=20;
     getCardList();
     for (int i=0; i<=29; i++) 
     {
@@ -63,15 +62,10 @@ int main()
     tenemy.addintention(new EnemyIntentionGiveCard({"施加混乱"},{new Card("混乱",{"混乱"},0,99,1),new Card("混乱",{"混乱"},0,99,1),new Card("混乱",{"混乱"},0,99,1)}));
     tenemy.addintention(new EnemyIntentionGiveCard({"施加混乱"},{new Card("混乱",{"混乱"},0,99,1),new Card("混乱",{"混乱"},0,99,1),new Card("混乱",{"混乱"},0,99,1)}));
     getMapList();
-    rooms[0].addobject(new EnemyObject("人",4,4,tenemy));
-    /*ChangeHaveCard juedou=ChangeHaveCard("决斗",{"决斗","对敌人造成6点","伤害同时将一张","决斗加入你的","摸牌堆"},5,0,4);
-    juedou.setattack(6,1);
-    juedou.changehavecard.push_back(&juedou);
-    std::vector<Goods*> goodss={new CardGoods(&juedou,50,10),new CardGoods(new StrengthenCard("酒",{"酒"},0,1,4,10),100,5),new CardGoods(new DrawCard("无中生有",{"无中生有","摸2张牌"},4,0,4,2),100,5),new PropGoods(new Prop("灵石",{"似乎蕴含着一些神奇的力量"},"red"),100,1)};
-    */
+    tenemy.giveEXP=100;
+    tenemy.giveMoney=100;
     rooms[0].addobject(new StoreObject("黑市",4,0,{new CardGoods(66,50,10)}));  
-    getStoryList(); 
-    //printStory(0);
+    getStoryList();
     printmap();
     printsmallmap();
     printPlayerState();
