@@ -5,7 +5,7 @@
 #include<vector>
 int Player::HPMax=100,
     Player::HP=Player::HPMax,
-    Player::MPMax=3,
+    Player::MPMax=5,
     Player::MP=Player::MPMax,
     Player::money=0,
     Player::handMax=10,
@@ -66,6 +66,7 @@ int Player::calculatelevel(int level)
 void Player::turnset()
 {
     MP=MPMax;
+    state.defense=0;
 }
 
 void printPlayer()
@@ -74,10 +75,10 @@ void printPlayer()
     int x=attackPlayerPrintX,y=attackPlayerPrintY;
     setcolor("white");
     print("我",x,y++);
-    print("HP:"+std::to_string(Player::HP)+"/"+std::to_string(Player::HPMax),x,y++);
-    print("MP:"+std::to_string(Player::MP)+"/"+std::to_string(Player::MPMax),x,y++);
-    if (Player::state.strength>0) print("力量:"+std::to_string(Player::state.strength),x,y++);
-    if (Player::state.defense>0) print("防御:"+std::to_string(Player::state.defense),x,y++);
+    print("体力:"+std::to_string(Player::HP)+"/"+std::to_string(Player::HPMax),x,y++);
+    print("灵力:"+std::to_string(Player::MP)+"/"+std::to_string(Player::MPMax),x,y++);
+    if (Player::state.strength>0) print("攻势:"+std::to_string(Player::state.strength),x,y++);
+    if (Player::state.defense>0) print("守势:"+std::to_string(Player::state.defense),x,y++);
 }
 
 PlayerState::PlayerState()

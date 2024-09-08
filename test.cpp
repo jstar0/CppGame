@@ -38,18 +38,30 @@ int main()
     initUI();
     printUI();
     Player::money=1000;
-    playerCurrentX=roomWidth/2-1;
-    playerCurrentY=roomHeight/2;
+    playerCurrentX=24;
+    playerCurrentY=20;
     getCardList();
-    for (int i=0; i<=7; i++) Player::addcard(cards[i]);
+    for (int i=0; i<=29; i++) 
+    {
+        Player::addcard(cards[i]);
+        message("获得卡牌"+cards[i]->name,"purple");    
+        message("费用:"+std::to_string(cards[i]->cost),"purple");
+        message("稀有度:"+std::to_string(cards[i]->rarity),"purple");
+        message("ID:"+std::to_string(cards[i]->ID),"purple");
+    }
     Enemy tenemy=Enemy("汪希",{"汪希"},100);
     tenemy.state.defense=100;
     tenemy.addintention(new EnemyIntentionAttack({"攻击20点"},20,1));
     tenemy.addintention(new EnemyIntentionAttack({"攻击10X3点"},10,3));
+    tenemy.addintention(new EnemyIntentionAttack({"攻击10X3点"},10,3));
+    tenemy.addintention(new EnemyIntentionAttack({"攻击10X3点"},10,3));
     tenemy.addintention(new EnemyIntentionAttack({"攻击8X2点"},8,2));
     tenemy.addintention(new EnemyIntentionAttack({"攻击8X2点"},8,2));
     tenemy.addintention(new EnemyIntentionDefend({"防御100点"},100));
+    tenemy.addintention(new EnemyIntentionDefend({"防御100点"},100));
     tenemy.addintention(new EnemyIntentionStrengthen({"力量30点"},30));
+    tenemy.addintention(new EnemyIntentionStrengthen({"力量30点"},30));
+    tenemy.addintention(new EnemyIntentionGiveCard({"施加混乱"},{new Card("混乱",{"混乱"},0,99,1),new Card("混乱",{"混乱"},0,99,1),new Card("混乱",{"混乱"},0,99,1)}));
     tenemy.addintention(new EnemyIntentionGiveCard({"施加混乱"},{new Card("混乱",{"混乱"},0,99,1),new Card("混乱",{"混乱"},0,99,1),new Card("混乱",{"混乱"},0,99,1)}));
     getMapList();
     rooms[0].addobject(new EnemyObject("人",4,4,tenemy));
@@ -60,7 +72,7 @@ int main()
     */
     rooms[0].addobject(new StoreObject("黑市",4,0,{new CardGoods(66,50,10)}));  
     getStoryList(); 
-    printStory(0);
+    //printStory(0);
     printmap();
     printsmallmap();
     printPlayerState();

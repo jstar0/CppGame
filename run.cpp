@@ -100,11 +100,11 @@ void printPlayerState()
     clear(playerStatePrintX,playerStatePrintY,playerStatePrintX2,playerStatePrintY2);
     setcolor("white","black");
     setcolor("lightred");
-    print("体力(HP):"+std::to_string(Player::HP)+"/"+std::to_string(Player::HPMax),playerStatePrintX,playerStatePrintY);
+    print("体力:"+std::to_string(Player::HP)+"/"+std::to_string(Player::HPMax),playerStatePrintX,playerStatePrintY);
     setcolor("lightblue");  
-    print("精力(MP)上限:"+std::to_string(Player::MPMax),playerStatePrintX+21,playerStatePrintY);
+    print("灵力上限:"+std::to_string(Player::MPMax),playerStatePrintX+21,playerStatePrintY);
     setcolor("deepgreen");
-    print("经验(EXP):"+std::to_string(Player::EXP)+"/"+std::to_string(Player::calculatelevel(Player::level)),playerStatePrintX,playerStatePrintY+1);
+    print("经验:"+std::to_string(Player::EXP)+"/"+std::to_string(Player::calculatelevel(Player::level)),playerStatePrintX,playerStatePrintY+1);
     setcolor("yellow");
     print("金币:"+std::to_string(Player::money),playerStatePrintX+21,playerStatePrintY+1);
     setcolor("gray");
@@ -269,6 +269,7 @@ bool fight()
 {
     srand(time(0));
     Player::turnset();
+    currentenemy->turnset();
     currentenemy->currentintention=*currentenemy->intention[rand()%currentenemy->intention.size()];
     clear(roomPrintX,roomPrintY,roomPrintX+roomWidth-1,roomPrintY+roomHeight-1);
     printPlayer();

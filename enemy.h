@@ -68,6 +68,7 @@ public:
     int damage(int d);
     void getdamage(int gd); 
     void init();
+    void turnset();
     void addintention(EnemyIntention *intention);
     friend void print(Enemy *enemy);
 };

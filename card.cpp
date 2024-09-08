@@ -140,35 +140,109 @@ void print(Card *card)
 extern Enemy *currentenemy;
 void Card::effect()
 {
-    if (kind.isstrengthen)
+    if (name=="坚守")
     {
-        message("获得"+std::to_string(kind.strength)+"点攻势");
-        Player::state.strength+=kind.strength;
+        extern std::vector<Card*> hand;
+        message("使用"+name);
+        Player::state.defense+=kind.defense*hand.size();    
+        drawcard(-hand.size());
     }
-    if (kind.isattack) 
+    else if (name=="盛阳剑法")
     {
         message("对"+currentenemy->name+"使用"+name);
-        for (int i=1; i<=kind.damagetimes; i++)
+        for (int i=1; i<=Player::HP/10; i++)
         {
             currentenemy->getdamage(Player::damage(kind.damage));
         }
     }
-    if (kind.isdefend) 
+    else if (name=="阳炎")
     {
-        message("使用"+name);
-        Player::state.defense+=kind.defense;
+        message("获得"+std::to_string(kind.strength)+"点攻势");
+        Player::state.strength+=kind.strength*(Player::HP/10);
     }
-    if (kind.isdraw)
+    else if (name=="铁牛功")
     {
-        if (kind.drawtimes>0)
+        message("对"+currentenemy->name+"使用"+name);
+        if (Player::HP==Player::HPMax)
+            currentenemy->getdamage(2*Player::damage(kind.damage));
+        else currentenemy->getdamage(Player::damage(kind.damage));
+    }
+    else if (name=="裂地崩")
+    {
+        message("对"+currentenemy->name+"使用"+name);
+        currentenemy->getdamage(Player::damage(kind.damage));
+    }
+    else if (name=="极阴剑诀")
+    {
+        message("对"+currentenemy->name+"使用"+name);
+        for (int i=0; i<=(Player::HPMax-Player::HP)/8; i++)
         {
+            currentenemy->getdamage(Player::damage(kind.damage));
+        }
+    }
+    else if (name=="阴雷")
+    {
+        message("获得"+std::to_string(kind.strength)+"点攻势");
+        Player::state.strength+=kind.strength*((Player::HPMax-Player::HP)/8);
+    }
+    else if (name=="血魔功")
+    {
+        message("陷入疯狂","red");
+        Player::state.strength+=10;
+        Player::HP/=2;
+    }
+    else if (name=="走火入魔")
+    {
+        message("彻底疯狂","red");
+        currentenemy->getdamage(Player::damage(kind.damage*(Player::HPMax-Player::HP)/2));
+        Player::HP=1;
+    }
+    else if (name=="妙手")
+    {
+        extern std::vector<Card*> hand;
+        if (hand.size()<3) 
+        {
+            message("妙手回春","green");    
             message("抽取"+std::to_string(kind.drawtimes)+"张卡牌");
             drawcard(kind.drawtimes);
         }
-        if (kind.drawtimes<0)
+        else
         {
-            message("弃置"+std::to_string(-kind.drawtimes)+"张卡牌");
-            drawcard(kind.drawtimes);
+            message("发动失败","green");
+        }
+    }
+    else
+    {
+        if (kind.isstrengthen)
+        {
+            message("获得"+std::to_string(kind.strength)+"点攻势");
+            Player::state.strength+=kind.strength;
+        }
+        if (kind.isattack) 
+        {
+            message("对"+currentenemy->name+"使用"+name);
+            for (int i=1; i<=kind.damagetimes; i++)
+            {
+                currentenemy->getdamage(Player::damage(kind.damage));
+            }   
+        }
+        if (kind.isdefend) 
+        {
+            message("使用"+name);
+            Player::state.defense+=kind.defense;
+        }
+        if (kind.isdraw)
+        {
+            if (kind.drawtimes>0)
+            {
+                message("抽取"+std::to_string(kind.drawtimes)+"张卡牌");
+                drawcard(kind.drawtimes);
+            }
+            if (kind.drawtimes<0)
+            {
+                message("弃置"+std::to_string(-kind.drawtimes)+"张卡牌");
+                drawcard(kind.drawtimes);
+            }
         }
     }
 }

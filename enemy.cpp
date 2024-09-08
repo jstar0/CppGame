@@ -68,6 +68,11 @@ void Enemy::init()
     state.EnemyStateSet();
 }
 
+void Enemy::turnset()
+{
+    state.defense=0;
+}
+
 EnemyState::EnemyState()
 {
     strength=0;
