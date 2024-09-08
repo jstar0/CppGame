@@ -44,10 +44,6 @@ int main()
     for (int i=0; i<=29; i++) 
     {
         Player::addcard(cards[i]);
-        message("获得卡牌"+cards[i]->name,"purple");    
-        message("费用:"+std::to_string(cards[i]->cost),"purple");
-        message("稀有度:"+std::to_string(cards[i]->rarity),"purple");
-        message("ID:"+std::to_string(cards[i]->ID),"purple");
     }
     Enemy tenemy=Enemy("汪希",{"汪希"},100);
     tenemy.state.defense=100;
