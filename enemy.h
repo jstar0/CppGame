@@ -18,7 +18,7 @@ public:
 class EnemyIntention{
 public:
     EnemyIntention();
-    std::vector<std::string> description;
+    std::string description;
     bool isattack,isdefend,isstrengthen,isgivecard;
     int damage,damagetimes;
     int defense;
@@ -34,33 +34,32 @@ public:
 class EnemyIntentionAttack:public EnemyIntention{
 public:
     EnemyIntentionAttack();
-    EnemyIntentionAttack(std::vector<std::string> description,int damage,int damagetimes);
+    EnemyIntentionAttack(std::string description,int damage,int damagetimes);
 };
 
 class EnemyIntentionDefend:public EnemyIntention{
 public:
     EnemyIntentionDefend();
-    EnemyIntentionDefend(std::vector<std::string> description,int defense);
+    EnemyIntentionDefend(std::string description,int defense);
 };
 
 class EnemyIntentionStrengthen:public EnemyIntention{
 public:
     EnemyIntentionStrengthen();
-    EnemyIntentionStrengthen(std::vector<std::string> description,int strength);
+    EnemyIntentionStrengthen(std::string description,int strength);
 };
 
 class EnemyIntentionGiveCard:public EnemyIntention{
 public:
     EnemyIntentionGiveCard();
-    EnemyIntentionGiveCard(std::vector<std::string> description,std::vector<Card*> givecard);
+    EnemyIntentionGiveCard(std::string description,std::vector<Card*> givecard);
 };
 
 class Enemy{
 public:
     Enemy();
-    Enemy(std::string name,std::vector<std::string> description,int HPMax);
+    Enemy(std::string name,int HPMax);
     std::string name;
-    std::vector<std::string> description;
     int HP,HPMax;
     int giveEXP=-1,giveMoney=-1,giveProp=-1,giveCard=-1;
     EnemyState state;
@@ -70,6 +69,7 @@ public:
     void getdamage(int gd); 
     void init();
     void turnset();
+    void addintention(int EnemyIntention);
     void addintention(EnemyIntention *intention);
     friend void print(Enemy *enemy);
 };

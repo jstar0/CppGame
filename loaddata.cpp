@@ -69,10 +69,6 @@ void getCardList()
     // 编码为GBK
     // 卡牌类型：A-攻击卡牌，D-防御卡牌，S-强化卡牌，R-摸牌卡牌，C-转换卡牌
     ifstream fin("./cards/CardList.data");
-    if (!fin)
-    {
-        throw "无法打开卡牌列表文件";
-    }
     string line;
     while (getline(fin,line))
     {
@@ -165,6 +161,168 @@ void getCardList()
                 ss.ignore(1);
                 cards[ID]=(new DrawCard(name,description,ID,cost,rarity,times));
             }
+        }
+    }
+    fin.close();
+}
+
+void getEnemyIntentionList()
+{
+    extern vector<EnemyIntention*> enemyintentions;
+    ifstream fin("./enemys/EnemyIntentionList.data");
+    string line;
+    while (getline(fin,line))
+    {
+        stringstream ss(line);
+        string type;
+        int ID;
+        getline(ss,type,',');
+        if (type=="add")
+        {
+            getline(ss,type,',');
+            if (type=="A")
+            {
+                int damage,times;
+                ss>>ID;
+                ss.ignore(1);
+                ss>>damage;
+                ss.ignore(1);
+                ss>>times;
+                enemyintentions[ID]->setattack(damage,times);
+            }
+            if (type=="D")
+            {
+                int defense;
+                ss>>ID;
+                ss.ignore(1);
+                ss>>defense;
+                enemyintentions[ID]->setdefend(defense);
+            }
+            if (type=="S")
+            {
+                int strength;
+                ss>>ID;
+                ss.ignore(1);
+                ss>>strength;
+                enemyintentions[ID]->setstrengthen(strength);
+            }
+            if (type=="G")
+            {   
+                vector<Card*> givecard;
+                //G,0,1,2,3,4,5,6,7,8,9读入左边形式
+                string cardID;
+                ss>>ID;
+                ss.ignore(1);
+                while (getline(ss,cardID,',')) givecard.push_back(cards[stoi(cardID)]);
+                enemyintentions[ID]->setgivecard(givecard);
+            }
+        }
+        else
+        {
+            extern vector<EnemyIntention*> enemyintentions;
+            string description,cardID;
+            getline(ss,description,',');
+            if (type=="A")
+            {
+                int damage,times;
+                ss>>ID;
+                ss.ignore(1);
+                ss>>damage;
+                ss.ignore(1);
+                ss>>times;
+                enemyintentions[ID]=new EnemyIntentionAttack(description,damage,times);
+            }
+            if (type=="D")
+            {
+                int defense;
+                ss>>ID;
+                ss.ignore(1);
+                ss>>defense;
+                enemyintentions[ID]=new EnemyIntentionDefend(description,defense);
+            }
+            if (type=="S")
+            {
+                int strength;
+                ss>>ID;
+                ss.ignore(1);
+                ss>>strength;
+                enemyintentions[ID]=new EnemyIntentionStrengthen(description,strength);
+            }
+            if (type=="G")
+            {
+                vector<Card*> givecard;
+                ss>>ID;
+                ss.ignore(1);
+                while (getline(ss,cardID,',')) givecard.push_back(cards[stoi(cardID)]);
+               enemyintentions[ID]=new EnemyIntentionGiveCard(description,givecard);
+            }
+        }
+    }
+    fin.close();
+}
+
+void getEnemyList()
+{
+    extern vector<Enemy> enemys;    
+    extern vector<EnemyIntention*> enemyintentions;
+    ifstream fin("./enemys/EnemyList.data");
+    string line;
+    while (getline(fin,line))
+    {
+        stringstream ss(line);
+        string type;
+        getline(ss,type,',');
+        if (type=="new")
+        {
+            message("new");
+            string name;
+            int HP,ID;
+            getline(ss,name,',');
+            ss>>ID;
+            ss.ignore(1);
+            ss>>HP;
+            enemys[ID]=Enemy(name,HP);
+            message(name+" "+to_string(HP));  
+        }
+        if (type=="add")
+        {
+            int intentionID,ID;
+            ss>>ID;
+            ss.ignore(1);
+            ss>>intentionID;
+            enemys[ID].addintention(enemyintentions[intentionID]);
+        }
+        if (type=="EXP")
+        {
+            int EXP,ID;
+            ss>>ID;
+            ss.ignore(1);
+            ss>>EXP;
+            enemys[ID].giveEXP=EXP;
+        }
+        if (type=="money")
+        {
+            int money,ID;
+            ss>>ID;
+            ss.ignore(1);
+            ss>>money;
+            enemys[ID].giveMoney=money;
+        }
+        if (type=="card")
+        {
+            int cardID,ID;
+            ss>>ID; 
+            ss.ignore(1);
+            ss>>cardID;
+            enemys[ID].giveCard=cardID;
+        }
+        if (type=="prop")
+        {
+            int propID,ID;
+            ss>>ID;
+            ss.ignore(1);
+            ss>>propID;
+            enemys[ID].giveProp=propID;
         }
     }
     fin.close();
@@ -323,18 +481,21 @@ void loadMap(int mapIndex)
         }
         else if (type=="E")
         {
-            string enemyName, filePath, forecolor, backcolor;
-            int x, y;
+            string enemyName,forecolor,backcolor;
+            int x,y,times,enemyID;
             getline(ss,enemyName,',');
             ss>>x;
             ss.ignore(1);
             ss>>y;
             ss.ignore(1);
-            getline(ss,filePath,',');
+            ss>>enemyID;
+            ss.ignore(1);
+            ss>>times;
+            ss.ignore(1);
             // 颜色可缺省
             if (!getline(ss, forecolor,',')) forecolor="white";
             if (!(ss>>backcolor)) backcolor="black";
-            // rooms[mapIndex].addobject(new EnemyObject(enemyName, x, y, filePath, forecolor, backcolor));
+            rooms[mapIndex].addobject(new EnemyObject(enemyName,x,y,enemyID,times,forecolor,backcolor));
         }
         else if (type=="O")
         {

@@ -241,7 +241,6 @@ void drawcard(int n=1)
             hand.pop_back();
         }
     }
-
 }
 
 bool fightend()
@@ -369,7 +368,8 @@ bool selectcard()
     }
     if (r=='E' || r=='e') 
     {
-        for (int i=0; i<hand.size(); i++)
+        int n=hand.size();
+        for (int i=0; i<n; i++)
         {
             used.push_back(hand[0]);
             hand.erase(hand.begin());

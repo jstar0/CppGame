@@ -4,6 +4,8 @@
 void getMapList();
 void getCardList();
 void getStoryList();
+void getEnemyIntentionList();
+void getEnemyList();
 
 // 加载地图
 void loadMap(int mapIndex);

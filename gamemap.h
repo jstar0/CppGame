@@ -78,7 +78,7 @@ public:
 class EnemyObject:public Object{
 public:
     EnemyObject();
-    EnemyObject(std::string name,int x,int y,Enemy enemy,int times=-1,std::string forecolor="white",std::string backcolor="black");
+    EnemyObject(std::string name,int x,int y,int enemyID,int times=-1,std::string forecolor="white",std::string backcolor="black");
     Enemy enemy;
     void run() override;
 };

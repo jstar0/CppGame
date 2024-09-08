@@ -9,19 +9,21 @@
 Enemy::Enemy()
 {
     name="未知";
-    description={"未知"};
     HP=0;
     HPMax=0;
     intention.clear();
 }
 
-Enemy::Enemy(std::string name,std::vector<std::string> description,int HPMax)
+Enemy::Enemy(std::string name,int HPMax)
 {
     this->name=name;
-    this->description=description;
     this->HPMax=HPMax;
 }
-
+void Enemy::addintention(int intentionID)
+{
+    extern std::vector<EnemyIntention*> enemyintentions;
+    intention.push_back(enemyintentions[intentionID]);
+}
 void Enemy::addintention(EnemyIntention *intention)
 {
     this->intention.push_back(intention);
@@ -93,7 +95,7 @@ void EnemyState::EnemyStateSet()
 
 EnemyIntention::EnemyIntention()
 {
-    description={"未知"};
+    description="未知";
     damage=0;
     damagetimes=0;
     defense=0;
@@ -170,7 +172,7 @@ EnemyIntentionAttack::EnemyIntentionAttack()
     setattack(0,0);
 }
 
-EnemyIntentionAttack::EnemyIntentionAttack(std::vector<std::string> description,int damage,int damagetimes)
+EnemyIntentionAttack::EnemyIntentionAttack(std::string description,int damage,int damagetimes)
 {
     this->description=description;
     setattack(damage,damagetimes);
@@ -182,7 +184,7 @@ EnemyIntentionDefend::EnemyIntentionDefend()
     setdefend(0);
 }
 
-EnemyIntentionDefend::EnemyIntentionDefend(std::vector<std::string> description,int defense)
+EnemyIntentionDefend::EnemyIntentionDefend(std::string description,int defense)
 {
     this->description=description;
     setdefend(defense);
@@ -194,7 +196,7 @@ EnemyIntentionStrengthen::EnemyIntentionStrengthen()
     setstrengthen(0);
 }
 
-EnemyIntentionStrengthen::EnemyIntentionStrengthen(std::vector<std::string> description,int strength)
+EnemyIntentionStrengthen::EnemyIntentionStrengthen(std::string description,int strength)
 {
     this->description=description;
     setstrengthen(strength);
@@ -206,7 +208,7 @@ EnemyIntentionGiveCard::EnemyIntentionGiveCard()
     setgivecard({});
 }
 
-EnemyIntentionGiveCard::EnemyIntentionGiveCard(std::vector<std::string> description,std::vector<Card*> givecard)
+EnemyIntentionGiveCard::EnemyIntentionGiveCard(std::string description,std::vector<Card*> givecard)
 {
     this->description=description;
     setgivecard(givecard);

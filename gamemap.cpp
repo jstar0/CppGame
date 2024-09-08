@@ -167,12 +167,17 @@ void Object::run()
         if (kind.isstory) 
         {
             printStory(kind.storyID);
+            clear(roomPrintX,roomPrintY,roomPrintX+roomWidth-1,roomPrintY+roomHeight-1);
+            printmap();
+            printsmallmap();
+            printPlayerState();
         }
         if (kind.isgivecard) 
         {
             extern std::vector<Card*> cards;
             Player::addcard(cards[kind.cardID]);
             message("获得卡牌"+cards[kind.cardID]->name);
+            printPlayerState();
         }
         if (kind.isgiveprop) 
         {
@@ -184,10 +189,12 @@ void Object::run()
         {
             Player::money+=kind.money;
             message("获得金币"+std::to_string(kind.money),"yellow");
+            printPlayerState();
         }
         if (kind.isgiveEXP)
         {
             Player::getEXP(kind.EXP);
+            printPlayerState();
         }
         if (kind.ismove)
         {
@@ -195,11 +202,11 @@ void Object::run()
             playerCurrentRoom=kind.moveID;
             playerCurrentX=kind.moveX;
             playerCurrentY=kind.moveY;
+            clear(roomPrintX,roomPrintY,roomPrintX+roomWidth-1,roomPrintY+roomHeight-1);
+            printmap();
+            printsmallmap();
+            printPlayerState();
         }
-        clear(roomPrintX,roomPrintY,roomPrintX+roomWidth-1,roomPrintY+roomHeight-1);
-        printmap();
-        printsmallmap();
-        printPlayerState();
     }
 }
 
@@ -362,24 +369,24 @@ EnemyObject::EnemyObject()
     x=0;
     y=0;
     times=-1;
-    enemy=Enemy("未知",{"未知"},0);
+    enemy=Enemy("未知",0);
     enemy.intention.clear();
 }
 
-EnemyObject::EnemyObject(std::string name,int x,int y,Enemy enemy,int times/* =-1 */,std::string forecolor/* ="white" */,std::string backcolor/* ="black" */)
+EnemyObject::EnemyObject(std::string name,int x,int y,int enemyID,int times/* =-1 */,std::string forecolor/* ="white" */,std::string backcolor/* ="black" */)
 {
+    extern std::vector<Enemy> enemys;   
     this->name=name;
     this->forecolor=forecolor;
     this->backcolor=backcolor;
     this->x=x;
     this->y=y;
     this->times=times;
-    this->enemy=enemy;
+    this->enemy=enemys[enemyID];
 }
 
 void EnemyObject::run()
 {
-    Object::run();
     extern int descriptionPrintX,descriptionPrintY,descriptionPrintX2,descriptionPrintY2;
     extern std::vector<Card*> have,hand,used;
     extern Enemy *currentenemy;
@@ -389,6 +396,7 @@ void EnemyObject::run()
     Player::init();
     message("开始战斗:"+currentenemy->name);
     while(fight());
+    if (Player::HP>0) Object::run();
     clear(descriptionPrintX,descriptionPrintY,descriptionPrintX2,descriptionPrintY2);
     printmap();
     printsmallmap();

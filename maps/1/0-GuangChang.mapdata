@@ -10,5 +10,6 @@ WL,,请往左下走,1,(0,12),white,black
 WL,,请往左上走,1,(0,17),white,black
 WL,,请往右上走,1,(12,0),white,black
 WL,,,1,(48,0),white,black
+E,于景一,10,10,0,1
 
 
