@@ -168,8 +168,8 @@ void Object::run()
         {
             printStory(kind.storyID);
             clear(roomPrintX,roomPrintY,roomPrintX+roomWidth-1,roomPrintY+roomHeight-1);
-            printmap();
-            printsmallmap();
+            printMap();
+            printSmallMap();
             printPlayerState();
         }
         if (kind.isgivecard) 
@@ -203,8 +203,8 @@ void Object::run()
             playerCurrentX=kind.moveX;
             playerCurrentY=kind.moveY;
             clear(roomPrintX,roomPrintY,roomPrintX+roomWidth-1,roomPrintY+roomHeight-1);
-            printmap();
-            printsmallmap();
+            printMap();
+            printSmallMap();
             printPlayerState();
         }
     }
@@ -398,8 +398,8 @@ void EnemyObject::run()
     while(fight());
     if (Player::HP>0) Object::run();
     clear(descriptionPrintX,descriptionPrintY,descriptionPrintX2,descriptionPrintY2);
-    printmap();
-    printsmallmap();
+    printMap();
+    printSmallMap();
     printPlayerState();
 }
 
@@ -490,8 +490,8 @@ void StoreObject::run()
     printgoods();
     while(shopping());
     message("成功退出商店");
-    printmap();
-    printsmallmap();
+    printMap();
+    printSmallMap();
     printPlayerState();
 }
 
@@ -543,8 +543,8 @@ void MoveObject::run()
     playerCurrentX=moveX;
     playerCurrentY=moveY;
     playerCurrentRoom=moveID;
-    printmap();
-    printsmallmap();
+    printMap();
+    printSmallMap();
 }
 
 MoveObject* MoveObject::clone()
@@ -582,8 +582,38 @@ void NPCObject::run()
     extern std::vector<std::string> story;
     printStory(storyID);
     clear(roomPrintX,roomPrintY,roomPrintX+roomWidth-1,roomPrintY+roomHeight-1);
-    printmap();
-    printsmallmap();
+    printMap();
+    printSmallMap();
     printPlayerState();
 }
 
+//睡觉事件----------------------------------------------------------------------------------------------------------
+SleepObject::SleepObject()
+{
+    name="床";
+    forecolor="white";
+    backcolor="black";
+    x=0;
+    y=0;
+    times=-1;
+}
+
+SleepObject::SleepObject(std::string name,int x,int y,std::string forecolor/* ="white" */,std::string backcolor/* ="black" */)
+{
+    this->name=name;
+    this->forecolor=forecolor;
+    this->backcolor=backcolor;
+    this->x=x;
+    this->y=y;
+    this->times=-1;
+}
+
+void SleepObject::run()
+{
+    message("在床上睡了一觉","red");
+    Player::HP=Player::HPMax;
+    message("体力恢复了!","red");
+    printMap();
+    printSmallMap();
+    printPlayerState();
+}

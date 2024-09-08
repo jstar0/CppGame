@@ -132,5 +132,12 @@ public:
     void run() override;
 };
 
+class SleepObject:public Object{
+public:
+    SleepObject();
+    SleepObject(std::string name,int x,int y,std::string forecolor="white",std::string backcolor="black");
+    void run() override;
+};
+
 #endif
 

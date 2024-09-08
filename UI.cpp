@@ -56,6 +56,6 @@ void message(std::string s,std::string fore/* ="white" */,std::string back/* ="b
     for (int i=0; i<messagebox.size(); i++)
     {
         setcolor(messagebox[i].fore,messagebox[i].back);
-        print(messagebox[i].s,messagePrintX,messagePrintY+i);
+        if (messagebox[i].s!="") print(messagebox[i].s,messagePrintX,messagePrintY+i);
     }
 }

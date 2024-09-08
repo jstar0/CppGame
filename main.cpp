@@ -12,9 +12,10 @@
 #include"UI.h"
 #include"loaddata.h"
 #include"save.h"
+#include"startscene.h"
 
 int FPS=30,
-    playerCurrentX=24,playerCurrentY=7,playerCurrentRoom=0,playerSpeedX=2,playerSpeedY=1,
+    playerCurrentX=24,playerCurrentY=20,playerCurrentRoom=14,playerSpeedX=2,playerSpeedY=1,
     roomPrintX=5,roomPrintY=4,roomWidth=50,roomHeight=23,
     cardSelectPrintX=1,cardSelectPrintY=31,cardSelectPrintX2=29,cardSelectPrintY2=39,
     descriptionPrintX=38,descriptionPrintY=32,descriptionPrintX2=51,descriptionPrintY2=39,
@@ -30,7 +31,7 @@ std::vector<Enemy> enemys(100);
 std::vector<Prop*> props(100);
 std::vector<EnemyIntention*> enemyintentions(100);
 std::vector<Card*> have,hand,used;
-std::vector<std::string> story(10);
+std::vector<std::string> story(100);
 Enemy *currentenemy=nullptr;
 std::vector<Goods*> *currentgoodss=nullptr;
 int currentselectcard,currentselectgoods;
@@ -38,35 +39,22 @@ int currentselectcard,currentselectgoods;
 int main()
 {
     initUI();
+    startSceneMainLoop();
     printUI();
     getCardList();
     getEnemyIntentionList();
     getEnemyList();
-    /* Enemy tenemy=Enemy("敌人",100);
-    tenemy.addintention(new EnemyIntentionAttack({"攻击20点"},20,1));
-    tenemy.addintention(new EnemyIntentionAttack({"攻击10X3点"},10,3));
-    tenemy.addintention(new EnemyIntentionAttack({"攻击10X3点"},10,3));
-    tenemy.addintention(new EnemyIntentionAttack({"攻击10X3点"},10,3));
-    tenemy.addintention(new EnemyIntentionAttack({"攻击8X2点"},8,2));
-    tenemy.addintention(new EnemyIntentionAttack({"攻击8X2点"},8,2));
-    tenemy.addintention(new EnemyIntentionDefend({"防御100点"},100));
-    tenemy.addintention(new EnemyIntentionDefend({"防御100点"},100));
-    tenemy.addintention(new EnemyIntentionStrengthen({"力量30点"},30));
-    tenemy.addintention(new EnemyIntentionStrengthen({"力量30点"},30));
-    EnemyObject *enemyobject=new EnemyObject("敌人",5,5,0);
-    enemyobject->enemy=tenemy;
-    rooms[0].addobject(enemyobject); */
-     for (int i=0; i<=29; i++) 
-    {
-        Player::addcard(cards[i]);
-    } 
-    getMapList();
-    //rooms[0].addobject(new StoreObject("黑市",4,0,{new CardGoods(66,50,10)}));  
+    for (int i=1; i<=4; i++) Player::addcard(cards[0]);
+    for (int i=1; i<=4; i++) Player::addcard(cards[3]);
+    for (int i=1; i<=2; i++) Player::addcard(cards[1]);
+    for (int i=1; i<=1; i++) Player::addcard(cards[2]);
+    getMapList(); 
     getStoryList();
-    printmap();
-    printsmallmap();
+    getStoreList();
+    printMap();
+    printSmallMap();
     printPlayerState();
-    while(playermove());
+    while(playerMove());
     return 0;
 }
 

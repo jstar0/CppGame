@@ -48,7 +48,7 @@ void moveme(int deltax,int deltay)
     print("我",roomPrintX+playerCurrentX,roomPrintY+playerCurrentY);
 }
 
-void printmap()
+void printMap()
 {
     clear(roomPrintX,roomPrintY,roomPrintX+roomWidth-1,roomPrintY+roomHeight-1);
     print(rooms[playerCurrentRoom]);
@@ -64,7 +64,7 @@ void printmap()
     else for (int i=3; i<=27; i++) print("空",55,i); 
 }
 
-void printsmallmap()
+void printSmallMap()
 {
     extern int smallmapX,smallmapY,smallmapWidth,smallmapHeight;
     int smallmapCenterX=smallmapX+(smallmapWidth-1)/2,smallmapCenterY=smallmapY+(smallmapHeight-1)/2;
@@ -113,12 +113,14 @@ void printPlayerState()
     setcolor("red");
     print("按Q保存游戏",playerStatePrintX,playerStatePrintY+3);
     print("按L读取存档",playerStatePrintX+21,playerStatePrintY+3);
+    setcolor("white");
+    print("注:人物和地图存档不互通，可以反复刷级",playerStatePrintX,playerStatePrintY+4);
 }
 
-bool playermove()
+bool playerMove()
 {
-    //printmap();
-    //printsmallmap();
+    //printMap();
+    //printSmallMap();
     char r=getch();
     //clear(roomPrintX,roomPrintY,roomPrintX+roomWidth-1,roomPrintY+roomHeight-1);
     if (r=='Q' || r=='q') 
@@ -139,8 +141,8 @@ bool playermove()
                 message("进入房间"+rooms[rooms[playerCurrentRoom].UP_ID].name,"red");
                 playerCurrentRoom=rooms[playerCurrentRoom].UP_ID;
                 playerCurrentY=roomHeight-1;
-                printmap();
-                printsmallmap();
+                printMap();
+                printSmallMap();
             }
         }
     }
@@ -154,8 +156,8 @@ bool playermove()
                 message("进入房间"+rooms[rooms[playerCurrentRoom].DOWN_ID].name,"red");
                 playerCurrentRoom=rooms[playerCurrentRoom].DOWN_ID;
                 playerCurrentY=0;
-                printmap();
-                printsmallmap();
+                printMap();
+                printSmallMap();
             }
         }
     }
@@ -169,8 +171,8 @@ bool playermove()
                 message("进入房间"+rooms[rooms[playerCurrentRoom].LEFT_ID].name,"red");
                 playerCurrentRoom=rooms[playerCurrentRoom].LEFT_ID;
                 playerCurrentX=roomWidth-2;
-                printmap();
-                printsmallmap();
+                printMap();
+                printSmallMap();
             }
         }
     }
@@ -184,8 +186,8 @@ bool playermove()
                 message("进入房间"+rooms[rooms[playerCurrentRoom].RIGHT_ID].name,"red");
                 playerCurrentRoom=rooms[playerCurrentRoom].RIGHT_ID;
                 playerCurrentX=0;
-                printmap();
-                printsmallmap();
+                printMap();
+                printSmallMap();
             }
         }
     }

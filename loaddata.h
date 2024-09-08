@@ -4,6 +4,7 @@
 void getMapList();
 void getCardList();
 void getStoryList();
+void getStoreList();    
 void getEnemyIntentionList();
 void getEnemyList();
 

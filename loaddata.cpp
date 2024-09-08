@@ -274,7 +274,6 @@ void getEnemyList()
         getline(ss,type,',');
         if (type=="new")
         {
-            message("new");
             string name;
             int HP,ID;
             getline(ss,name,',');
@@ -282,7 +281,6 @@ void getEnemyList()
             ss.ignore(1);
             ss>>HP;
             enemys[ID]=Enemy(name,HP);
-            message(name+" "+to_string(HP));  
         }
         if (type=="add")
         {
@@ -328,6 +326,12 @@ void getEnemyList()
     fin.close();
 }
 
+void getStoreList()
+{
+    rooms[3].addobject(new StoreObject("商店",4,4,{new CardGoods(26,300,4),new CardGoods(27,375,4),new CardGoods(18,400,3),new CardGoods(24,350,2),new CardGoods(23,400,3)},"yellow","black"));
+    rooms[3].addobject(new SleepObject("旅店",4,6));
+}
+
 void getStoryList()
 {
     // 从文件./story/StoryList.data中读取剧情列表
@@ -369,7 +373,6 @@ void loadMap(int mapIndex)
 
     //std::string testPath="./maps/1/00-KeTing.mapdata";
     //ifstream fin(testPath);
-    if (rooms[mapIndex].isload) return;
     ifstream fin("./maps"+rooms[mapIndex].filePath);
     if (!fin)
     {
@@ -604,3 +607,4 @@ void loadMap(int mapIndex)
     }
     fin.close();
 }
+

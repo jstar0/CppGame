@@ -67,6 +67,104 @@ std::mutex screenMtx;
 // 场景主循环终止信号
 bool startSceneMainLoopEnd = false;
 
+void UserLogin()
+{
+
+}
+
+void UserRegister()
+{
+
+}
+
+void loginOrRegister()
+{
+    screenMtx.lock();
+    clear(4, 26, 22, 30);
+    screenMtx.unlock();
+    int userLoginChoice = 0;
+
+    screenMtx.lock();
+    setcolor("white", "yellow");
+    print(">登入服务器 ", 8, 27);
+    setcolor("white", "black");
+    print("注册账号  ", 8, 28);
+    print("返回上级菜单  ", 8, 30);
+    screenMtx.unlock();
+
+    while(!startSceneMainLoopEnd)
+    {
+        if (_kbhit())
+        {
+            char ch = _getch();
+            if (ch == 87 || ch == 119)
+            {
+                userLoginChoice = (userLoginChoice - 1 + 3) % 3;
+            }
+            else if (ch == 83 || ch == 115)
+            {
+                userLoginChoice = (userLoginChoice + 1) % 3;
+            }
+            else if (ch == 13)
+            {
+                if (userLoginChoice == 0)
+                {
+                    UserLogin();
+                }
+                else if (userLoginChoice == 1)
+                {
+                    UserRegister();
+                }
+                else if (userLoginChoice == 2)
+                {
+                    screenMtx.lock();
+                    clear(4, 26, 22, 30);
+                    screenMtx.unlock();
+                    return;
+                }
+            }
+            else if (ch == 27)
+            {
+                startSceneMainLoopEnd = true;
+                return;
+            }
+        }
+        if (userLoginChoice == 0)
+        {
+            screenMtx.lock();
+            setcolor("white", "yellow");
+            print(">登入服务器 ", 8, 27);
+            setcolor("white", "black");
+            print("注册账号    ", 8, 28);
+            print("返回上级菜单    ", 8, 30);
+            screenMtx.unlock();
+        }
+        else if (userLoginChoice == 1)
+        {
+            screenMtx.lock();
+            setcolor("white", "black");
+            print("登入服务器    ", 8, 27);
+            setcolor("white", "yellow");
+            print(">注册账号 ", 8, 28);
+            setcolor("white", "black");
+            print("返回上级菜单    ", 8, 30);
+            screenMtx.unlock();
+        }
+        else if (userLoginChoice == 2)
+        {
+            screenMtx.lock();
+            setcolor("white", "black");
+            print("登入服务器    ", 8, 27);
+            print("注册账号    ", 8, 28);
+            setcolor("white", "yellow");
+            print(">返回上级菜单 ", 8, 30);
+            setcolor("white", "black");
+            screenMtx.unlock();
+        }
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+    }
+}
+
 void startSceneMainLoop()
 {
     // 两个LOGO显示线程，互不干扰，但加互斥锁
@@ -196,12 +294,11 @@ void startSceneMainLoop()
         end:;
     });
 
-    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
     screenMtx.lock();
     setcolor("lightyellow", "black");
     print("九州仙途", 8, 24);
     setcolor("white", "yellow");
-    print(">新游戏", 8, 27);
+    print(">新游戏 ", 8, 27);
     setcolor("white", "black");
     print("加载游戏", 8, 28);
     print("在线游戏", 8, 29);
@@ -219,15 +316,15 @@ void startSceneMainLoop()
             {
                 startSceneMainLoopEnd = true;
             }
-            if (ch == 87 || ch == 119)
+            else if (ch == 87 || ch == 119)
             {
                 userChoice = (userChoice - 1 + 4) % 4;
             }
-            if (ch == 83 || ch == 115)
+            else if (ch == 83 || ch == 115)
             {
                 userChoice = (userChoice + 1) % 4;
             }
-            if (ch == 13)
+            else if (ch == 13)
             {
                 if (userChoice == 0)
                 {
@@ -239,7 +336,7 @@ void startSceneMainLoop()
                 }
                 else if (userChoice == 2)
                 {
-                    startSceneMainLoopEnd = true;
+                    loginOrRegister();
                 }
                 else if (userChoice == 3)
                 {
@@ -251,7 +348,7 @@ void startSceneMainLoop()
         {
             screenMtx.lock();
             setcolor("white", "yellow");
-            print(">新游戏    ", 8, 27);
+            print(">新游戏 ", 8, 27);
             setcolor("white", "black");
             print("加载游戏   ", 8, 28);
             print("在线游戏   ", 8, 29);
@@ -264,7 +361,7 @@ void startSceneMainLoop()
             setcolor("white", "black");
             print("新游戏     ", 8, 27);
             setcolor("white", "yellow");
-            print(">加载游戏  ", 8, 28);
+            print(">加载游戏 ", 8, 28);
             setcolor("white", "black");
             print("在线游戏   ", 8, 29);
             print("退出游戏   ", 8, 30);
@@ -277,7 +374,7 @@ void startSceneMainLoop()
             print("新游戏     ", 8, 27);
             print("加载游戏   ", 8, 28);
             setcolor("white", "yellow");
-            print(">在线游戏  ", 8, 29);
+            print(">在线游戏 ", 8, 29);
             setcolor("white", "black");
             print("退出游戏   ", 8, 30);
             screenMtx.unlock();
@@ -290,7 +387,8 @@ void startSceneMainLoop()
             print("加载游戏   ", 8, 28);
             print("在线游戏   ", 8, 29);
             setcolor("white", "yellow");
-            print(">退出游戏  ", 8, 30);
+            print(">退出游戏 ", 8, 30);
+            setcolor("white", "black");
             screenMtx.unlock();
         }
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
@@ -306,4 +404,5 @@ void startSceneMainLoop()
 
     // 清屏
     clear();
+
 }

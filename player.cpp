@@ -5,7 +5,7 @@
 #include<vector>
 int Player::HPMax=100,
     Player::HP=Player::HPMax,
-    Player::MPMax=5,
+    Player::MPMax=3,
     Player::MP=Player::MPMax,
     Player::money=0,
     Player::handMax=10,

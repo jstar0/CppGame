@@ -4,10 +4,10 @@
 #include"enemy.h"
 #include"gamemap.h"
 void moveme(int deltax,int deltay); 
-void printmap();
-void printsmallmap();
+void printMap();
+void printSmallMap();
 void printPlayerState();
-bool playermove();
+bool playerMove();
 void drawcard(int n);
 bool fightend();
 void printcard();   
