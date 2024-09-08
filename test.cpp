@@ -5,6 +5,7 @@
 #include<string>
 #include"console.h"
 #include"gamemap.h"
+#include"startscene.h"
 #include"run.h"
 #include"player.h"
 #include"card.h"
@@ -36,6 +37,8 @@ int currentselectcard,currentselectgoods;
 int main()
 {
     initUI();
+    startSceneMainLoop();
+
     printUI();
     Player::money=1000;
     playerCurrentX=24;
