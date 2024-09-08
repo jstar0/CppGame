@@ -6,6 +6,7 @@
 #include"Player.h"
 #include"run.h"
 #include"UI.h"
+#include"save.h"
 extern int roomPrintX,roomPrintY;
 
 std::string whichObject(Object *object)
@@ -46,13 +47,21 @@ Object::Object(const Object &object)
 
 void Object::run()
 {
-    
+    if (times>0) 
+    {
+        times--;
+        if (times==0) 
+        {
+            x=-1;
+            y=-1;
+        }
+    }
 }
 
 void print(Object *object)
 {
     setcolor(object->forecolor,object->backcolor);
-    print(object->name,roomPrintX+object->x,roomPrintY+object->y);
+    if (object->times!=0) print(object->name,roomPrintX+object->x,roomPrintY+object->y);
 }
 
 Object* Object::clone()
@@ -70,6 +79,7 @@ Room::Room()
     LEFT_ID=-1;
     RIGHT_ID=-1;
     filePath="";
+    isload=false;
     object.clear();
 }
 
@@ -82,6 +92,7 @@ Room::Room(std::string name,int ID,int UP_ID,int DOWN_ID,int LEFT_ID,int RIGHT_I
     this->LEFT_ID=LEFT_ID;
     this->RIGHT_ID=RIGHT_ID;
     this->filePath=filePath;
+    isload=false;
     object.clear();
 }
 
@@ -205,22 +216,25 @@ EnemyObject::EnemyObject()
     backcolor="black";
     x=0;
     y=0;
+    times=-1;
     enemy=Enemy("未知",{"未知"},0);
     enemy.intention.clear();
 }
 
-EnemyObject::EnemyObject(std::string name,int x,int y,Enemy enemy,std::string forecolor/* ="white" */,std::string backcolor/* ="black" */)
+EnemyObject::EnemyObject(std::string name,int x,int y,Enemy enemy,int times/* =-1 */,std::string forecolor/* ="white" */,std::string backcolor/* ="black" */)
 {
     this->name=name;
     this->forecolor=forecolor;
     this->backcolor=backcolor;
     this->x=x;
     this->y=y;
+    this->times=times;
     this->enemy=enemy;
 }
 
 void EnemyObject::run()
 {
+    Object::run();
     extern int descriptionPrintX,descriptionPrintY,descriptionPrintX2,descriptionPrintY2;
     extern std::vector<Card*> have,hand,used;
     extern Enemy *currentenemy;
@@ -298,6 +312,7 @@ StoreObject::StoreObject()
     backcolor="black";
     x=0;
     y=0;
+    times=-1;
     goodss.clear();
 }
 
@@ -308,6 +323,7 @@ StoreObject::StoreObject(std::string name,int x,int y,std::vector<Goods*> goodss
     this->backcolor=backcolor;
     this->x=x;
     this->y=y;
+    times=-1;
     this->goodss=goodss;
 }
 
@@ -335,6 +351,7 @@ moveObject::moveObject()
     moveX=0;
     moveY=0;
     moveID=0;
+    times=-1;
     forecolor="white";
     backcolor="black";
 }
@@ -346,6 +363,7 @@ moveObject::moveObject(std::string name,int x,int y,int moveID,int moveX,int mov
     this->backcolor=backcolor;
     this->x=x;
     this->y=y;
+    this->times=-1;
     this->moveID=moveID;
     this->moveX=moveX;
     this->moveY=moveY;
@@ -358,6 +376,7 @@ moveObject::moveObject(const moveObject &other)
     backcolor=other.backcolor;
     x=other.x;
     y=other.y;
+    times=other.times;
     moveID=other.moveID;
     moveX=other.moveX;
     moveY=other.moveY;
@@ -379,3 +398,39 @@ moveObject* moveObject::clone()
 {
     return new moveObject(*this);
 }
+
+//NPC事件----------------------------------------------------------------------------------------------------------
+NPCObject::NPCObject()
+{
+    name="NPC";
+    forecolor="white";
+    backcolor="black";
+    x=0;
+    y=0;
+    storyID=0;
+    times=-1;
+}
+
+NPCObject::NPCObject(std::string name,int x,int y,int storyID,int times/* =-1 */,std::string forecolor/* ="white" */,std::string backcolor/* ="black" */)
+{
+    this->name=name;
+    this->forecolor=forecolor;
+    this->backcolor=backcolor;
+    this->x=x;
+    this->y=y;
+    this->storyID=storyID;
+    this->times=times;
+}
+
+void NPCObject::run()
+{
+    Object::run();
+    extern int roomPrintX,roomPrintY,roomWidth,roomHeight;  
+    extern std::vector<std::string> story;
+    printStory(storyID);
+    clear(roomPrintX,roomPrintY,roomPrintX+roomWidth-1,roomPrintY+roomHeight-1);
+    printmap();
+    printsmallmap();
+    printPlayerState();
+}
+

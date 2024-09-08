@@ -14,6 +14,7 @@
 #include"player.h"
 #include"UI.h"
 #include"loaddata.h"
+#include"save.h"
 extern int FPS,
            playerCurrentX,playerCurrentY,playerCurrentRoom,playerSpeedX,playerSpeedY,
            roomPrintX,roomPrintY,roomWidth,roomHeight;
@@ -110,6 +111,9 @@ void printPlayerState()
     setcolor("gray");
     print("牌库:"+std::to_string(Player::card.size())+"张牌",playerStatePrintX,playerStatePrintY+2);
     print("手牌上限:"+std::to_string(Player::handMax),playerStatePrintX+21,playerStatePrintY+2);
+    setcolor("red");
+    print("按Q保存游戏",playerStatePrintX,playerStatePrintY+3);
+    print("按L读取存档",playerStatePrintX+21,playerStatePrintY+3);
 }
 
 bool playermove()
@@ -118,6 +122,14 @@ bool playermove()
     //printsmallmap();
     char r=getch();
     //clear(roomPrintX,roomPrintY,roomPrintX+roomWidth-1,roomPrintY+roomHeight-1);
+    if (r=='Q' || r=='q') 
+    {
+        save();
+    }
+    if (r=='L' || r=='l')
+    {
+        load();
+    }
     if (r=='W' || r=='w') 
     {
         if (playerCurrentY>0) moveme(0,-playerSpeedY);

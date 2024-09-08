@@ -11,6 +11,7 @@
 #include"enemy.h"
 #include"UI.h"
 #include"loaddata.h"
+#include"save.h"
 
 int FPS=30,
     playerCurrentX=0,playerCurrentY=0,playerCurrentRoom=0,playerSpeedX=2,playerSpeedY=1,
@@ -67,7 +68,9 @@ int main()
     std::vector<Goods*> goodss={new CardGoods(&juedou,50,10),new CardGoods(new StrengthenCard("酒",{"酒"},0,1,4,10),100,5),new CardGoods(new DrawCard("无中生有",{"无中生有","摸2张牌"},4,0,4,2),100,5),new PropGoods(new Prop("灵石",{"似乎蕴含着一些神奇的力量"},"red"),100,1)};
     */
     rooms[0].addobject(new StoreObject("黑市",4,0,{new CardGoods(66,50,10)}));  
-    getStoryList(); 
+    rooms[0].addobject(new NPCObject("NPC",24,20,0,1));
+    getStoryList();
+    getch();
     //printStory(0);
     printmap();
     printsmallmap();

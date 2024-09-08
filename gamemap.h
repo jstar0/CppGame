@@ -18,6 +18,7 @@ public:
     Object(const Object &object);
     std::string name,forecolor,backcolor;
     int x,y;
+    int times=-1;
     virtual void run();
     friend void print(Object object);
     virtual ~Object()=default;
@@ -32,6 +33,7 @@ public:
     Room(std::string name,int ID,int UP_ID,int DOWN_ID,int LEFT_ID,int RIGHT_ID,std::string filePath="");  
     //Room(const Room &other);  
     int ID,UP_ID,DOWN_ID,LEFT_ID,RIGHT_ID,initX,initY;
+    bool isload;
     std::string name;
     std::string filePath;
     std::vector<Object*> object;
@@ -60,7 +62,7 @@ public:
 class EnemyObject:public Object{
 public:
     EnemyObject();
-    EnemyObject(std::string name,int x,int y,Enemy enemy,std::string forecolor="white",std::string backcolor="black");
+    EnemyObject(std::string name,int x,int y,Enemy enemy,int times=-1,std::string forecolor="white",std::string backcolor="black");
     Enemy enemy;
     void run() override;
 };
@@ -104,6 +106,14 @@ public:
     int moveX,moveY,moveID;
     void run() override;
     moveObject* clone() override;
+};
+
+class NPCObject:public Object{
+public:
+    NPCObject();
+    NPCObject(std::string name,int x,int y,int storyID,int times=-1,std::string forecolor="white",std::string backcolor="black");
+    int storyID;
+    void run() override;
 };
 
 #endif
