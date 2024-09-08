@@ -53,14 +53,28 @@ void Player::getdamage(int gd)
 
 void Player::getEXP(int e)
 {
+    message("获得经验"+std::to_string(e),"green");
     EXP+=e;
-    while(EXP>=calculatelevel(Player::level)) level+=1;
+    while(EXP>=calculatelevel(Player::level)) 
+    {
+        EXP-=calculatelevel(Player::level);
+        level+=1;
+        HPMax+=5;
+        message("升级了!"+std::to_string(level)+"级","red");
+        message("体力上限增加了5点！","red");
+        if (level%10==0) 
+        {
+            MPMax+=1;
+            message("灵力上限增加了1点！","green");
+        }
+    }
 }
 
 int Player::calculatelevel(int level)
 {
     if (level<=10) return 10*level;
-    else return 1000;
+    else if (level<=40) return 10*level+level*level/5;
+    else return 100*level+level*level;
 }
 
 void Player::turnset()

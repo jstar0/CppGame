@@ -54,6 +54,7 @@ void getMapList()
         getline(ss,filePath);
         newRoom=Room(name,ID,UP_ID,DOWN_ID,LEFT_ID,RIGHT_ID,filePath);
         rooms.push_back(newRoom);
+        loadMap(ID);
     }
     fin.close();
 }
@@ -214,7 +215,6 @@ void loadMap(int mapIndex)
     ifstream fin("./maps"+rooms[mapIndex].filePath);
     if (!fin)
     {
-        //getchar();
         message("无法打开地图文件");
     }
     string line;
@@ -223,7 +223,52 @@ void loadMap(int mapIndex)
         stringstream ss(line);
         string type;
         getline(ss,type,',');
-        if (type=="S")
+        if (type=="add")
+        {   
+            Object *object=rooms[mapIndex].object[rooms[mapIndex].object.size()-1];
+            getline(ss,type,',');
+            if (type=="story")
+            {
+                int storyID;
+                ss>>storyID;
+                object->setstory(storyID);
+            }
+            if (type=="card")
+            {
+                int cardID;
+                ss>>cardID;
+                object->setgivecard(cardID);
+            }
+            if (type=="prop")
+            {
+                int propID;
+                ss>>propID;
+                object->setgiveprop(propID);
+            }
+            if (type=="money")
+            {
+                int money;
+                ss>>money;
+                object->setgivemoney(money);
+            }
+            if (type=="EXP")
+            {
+                int EXP;
+                ss>>EXP;
+                object->setgiveEXP(EXP);
+            }
+            if (type=="move")
+            {
+                int moveID,moveX,moveY;
+                ss>>moveID;
+                ss.ignore(1);
+                ss>>moveX;
+                ss.ignore(1);
+                ss>>moveY;
+                object->setmove(moveID,moveX,moveY);
+            }
+        }
+        else if (type=="S")
         {
             string storeName, filePath, forecolor, backcolor;
             int x, y;
@@ -294,16 +339,18 @@ void loadMap(int mapIndex)
         else if (type=="O")
         {
             string objectName,forecolor,backcolor;
-            int x, y;
+            int x,y,times;
             getline(ss,objectName,',');
             ss>>x;
             ss.ignore(1);
             ss>>y;
             ss.ignore(1);
+            ss>>times;
+            ss.ignore(1);
             // 颜色可缺省
             if (!getline(ss,forecolor,',')) forecolor="white";
             if (!(ss>>backcolor)) backcolor="black";
-            rooms[mapIndex].addobject(new Object(objectName,x,y,forecolor,backcolor));
+            rooms[mapIndex].addobject(new Object(objectName,x,y,times,forecolor,backcolor));
         }
         else if (type=="N")
         {
@@ -343,7 +390,7 @@ void loadMap(int mapIndex)
             // 颜色可缺省
             if (!getline(ss,forecolor,',')) forecolor="white";
             if (!(ss>>backcolor)) backcolor="black";
-            rooms[mapIndex].addobject(new Object(objectName,0,0,forecolor,backcolor),xy);
+            rooms[mapIndex].addobject(new Object(objectName,0,0,-1,forecolor,backcolor),xy);
         }
         else if (type=="M")
         {
@@ -363,7 +410,7 @@ void loadMap(int mapIndex)
             // 颜色可缺省
             if (!getline(ss, forecolor, ',')) forecolor="white";
             if (!(ss>>backcolor)) backcolor="black";
-            rooms[mapIndex].addobject(new moveObject(objectName,x,y,moveID,moveX,moveY,forecolor,backcolor));
+            rooms[mapIndex].addobject(new MoveObject(objectName,x,y,moveID,moveX,moveY,forecolor,backcolor));
         }
         else if (type=="ML")
         {   
@@ -391,7 +438,7 @@ void loadMap(int mapIndex)
             // 颜色可缺省
             if (!getline(ss, forecolor, ',')) forecolor="white";
             if (!(ss>>backcolor)) backcolor="black";
-            rooms[mapIndex].addobject(new moveObject(objectName,0,0,moveID,moveX,moveY,forecolor,backcolor),xy);
+            rooms[mapIndex].addobject(new MoveObject(objectName,0,0,moveID,moveX,moveY,forecolor,backcolor),xy);
         }
     }
     fin.close();

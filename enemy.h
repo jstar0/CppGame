@@ -62,6 +62,7 @@ public:
     std::string name;
     std::vector<std::string> description;
     int HP,HPMax;
+    int giveEXP=-1,giveMoney=-1,giveProp=-1,giveCard=-1;
     EnemyState state;
     std::vector<EnemyIntention*> intention;
     EnemyIntention currentintention;
