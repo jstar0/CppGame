@@ -7,6 +7,8 @@
 #include <mutex>
 #include <map>
 #include "startScene.h"
+#include "save.h"
+#include "UI.h"
 #include "console.h"
 
 std::map<int, std::vector<std::tuple<std::string, int, int>>> groupedLOGO = {
@@ -67,14 +69,17 @@ std::mutex screenMtx;
 // 场景主循环终止信号
 bool startSceneMainLoopEnd = false;
 
+// 直接退出游戏的标识
+bool exitGame = false;
+
 void UserLogin()
 {
-
+    // WIP
 }
 
 void UserRegister()
 {
-
+    // WIP
 }
 
 void loginOrRegister()
@@ -125,6 +130,7 @@ void loginOrRegister()
             }
             else if (ch == 27)
             {
+                exitGame = true;
                 startSceneMainLoopEnd = true;
                 return;
             }
@@ -314,6 +320,7 @@ void startSceneMainLoop()
             char ch = _getch();
             if (ch == 27)
             {
+                exitGame = true;
                 startSceneMainLoopEnd = true;
             }
             else if (ch == 87 || ch == 119)
@@ -340,6 +347,7 @@ void startSceneMainLoop()
                 }
                 else if (userChoice == 3)
                 {
+                    exitGame = true;
                     startSceneMainLoopEnd = true;
                 }
             }

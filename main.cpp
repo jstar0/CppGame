@@ -36,10 +36,14 @@ Enemy *currentenemy=nullptr;
 std::vector<Goods*> *currentgoodss=nullptr;
 int currentselectcard,currentselectgoods;
 
+extern bool exitGame;
+
 int main()
 {
     initUI();
     startSceneMainLoop();
+    if(exitGame)
+        return 0;
     printUI();
     getCardList();
     getEnemyIntentionList();
