@@ -51,7 +51,7 @@ int getDigits(int number)
  */
 void movePlayer(int deltax, int deltay)
 {
-    Object *deltaobject = GameConfig::rooms[PlayerConfig::currentRoom].getobject(PlayerConfig::currentX + deltax, PlayerConfig::currentY + deltay);
+    Object *deltaobject = GameConfig::rooms[PlayerConfig::currentRoom].getObject(PlayerConfig::currentX + deltax, PlayerConfig::currentY + deltay);
     if (deltaobject != nullptr)
     {
         if (whichObject(deltaobject) == "Wall")
@@ -80,7 +80,7 @@ void movePlayer(int deltax, int deltay)
  * @brief 打印地图
  * 
  */
-void printMap()
+bool printMap()
 {
     clear(RoomConfig::printX, RoomConfig::printY, RoomConfig::printX + RoomConfig::width - 1, RoomConfig::printY + RoomConfig::height - 1);
     print(GameConfig::rooms[PlayerConfig::currentRoom]);
@@ -110,13 +110,15 @@ void printMap()
     else
         for (int i = 3; i <= 27; i++)
             print("空", 55, i);
+    
+    return true;
 }
 
 /**
  * @brief 打印小地图
  * 
  */
-void printSmallMap()
+bool printSmallMap()
 {
     int smallmapCenterX = SmallMapConfig::x + (SmallMapConfig::width - 1) / 2, smallmapCenterY = SmallMapConfig::y + (SmallMapConfig::height - 1) / 2;
     clear(SmallMapConfig::x, SmallMapConfig::y, SmallMapConfig::x + SmallMapConfig::width - 1, SmallMapConfig::y + SmallMapConfig::height - 1);
@@ -143,13 +145,14 @@ void printSmallMap()
         print("→", smallmapCenterX + GameConfig::rooms[PlayerConfig::currentRoom].name.size() / 2 + 1, smallmapCenterY);
         print(GameConfig::rooms[GameConfig::rooms[PlayerConfig::currentRoom].RIGHT_ID].name, smallmapCenterX + GameConfig::rooms[PlayerConfig::currentRoom].name.size() / 2 + 3, smallmapCenterY);
     }
+    return true;
 }
 
 /**
  * @brief 打印玩家状态
  * 
  */
-void printPlayerState()
+bool printPlayerState()
 {
     clear(PlayerConfig::statePrintX, PlayerConfig::statePrintY, PlayerConfig::statePrintX2, PlayerConfig::statePrintY2);
     setPrintColor("white", "black");
@@ -169,6 +172,7 @@ void printPlayerState()
     print("按L读取存档", PlayerConfig::statePrintX + 21, PlayerConfig::statePrintY + 3);
     setPrintColor("white");
     print("注:人物和地图存档不互通，可以反复刷级", PlayerConfig::statePrintX, PlayerConfig::statePrintY + 4);
+    return true;
 }
 
 /**

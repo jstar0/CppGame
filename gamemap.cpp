@@ -258,12 +258,12 @@ void print(Room room)
     }
 }
 
-void Room::addobject(Object *object)
+void Room::addObject(Object *object)
 {
     this->object.push_back(object);
 }
 
-void Room::addobject(Object *object, std::vector<xy> xy)
+void Room::addObject(Object *object, std::vector<__xy> xy)
 {
     for (int i = 0; i < xy.size(); i++)
     {
@@ -274,7 +274,7 @@ void Room::addobject(Object *object, std::vector<xy> xy)
     }
 }
 
-Object *Room::getobject(int x, int y)
+Object *Room::getObject(int x, int y)
 {
     for (int i = 0; i < object.size(); i++)
     {

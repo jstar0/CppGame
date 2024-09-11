@@ -5,7 +5,7 @@
 #include "UI.h"
 #include "config.h"
 
-void initUI()
+bool initUI()
 {
     setCursor(false);
     setScreenSize(101, 42);
@@ -14,8 +14,10 @@ void initUI()
     style &= ~(WS_MAXIMIZEBOX | WS_SIZEBOX);              // 禁用最大化按钮和调整窗口大小
     SetWindowLong(consoleWindow, GWL_STYLE, style);       // 设置新的窗口样式
     system("color 0C");
+
+    return true;
 }
-void printUI()
+bool printUI()
 {
     setPrintColor("white", "black");
     for (int i = 0; i < 100; i++)
@@ -57,6 +59,8 @@ void printUI()
         print("空", 55, i);
     for (int i = 3; i <= 55; i++)
         print("空", i, 27);
+
+    return true;
 }
 
 std::vector<Message> messagebox;

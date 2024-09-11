@@ -1,12 +1,12 @@
 #ifndef LOADDATA_H
 #define LOADDATA_H
 
-void getMapList();
-void getCardList();
-void getStoryList();
-void getStoreList();    
-void getEnemyIntentionList();
-void getEnemyList();
+bool getMapList();
+bool getCardList();
+bool getStoryList();
+bool getStoreList();    
+bool getEnemyIntentionList();
+bool getEnemyList();
 
 // 加载地图
 void loadMap(int mapIndex);

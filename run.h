@@ -5,9 +5,9 @@
 
 int getDigits(int number);
 void movePlayer(int deltax, int deltay);
-void printMap();
-void printSmallMap();
-void printPlayerState();
+bool printMap();
+bool printSmallMap();
+bool printPlayerState();
 bool playerMoveMainLoop();
 void drawCard(int n);
 bool endFight();

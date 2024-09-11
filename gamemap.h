@@ -6,10 +6,14 @@
 #include "UI.h"
 class Prop;
 
-struct xy
+/**
+ * @brief 坐标结构体
+ * 
+ */
+struct __xy
 {
     int x, y;
-    xy(int x, int y) : x(x), y(y) {}
+    __xy(int x, int y) : x(x), y(y) {}
 };
 
 class ObjectKind
@@ -58,9 +62,9 @@ public:
     std::string name;
     std::string filePath;
     std::vector<Object *> object;
-    void addobject(Object *object);
-    void addobject(Object *object, std::vector<xy> xy);
-    Object *getobject(int x, int y);
+    void addObject(Object *object);
+    void addObject(Object *object, std::vector<__xy> xy);
+    Object *getObject(int x, int y);
     friend void print(Room room);
     // Room& operator=(const Room& other);
 };

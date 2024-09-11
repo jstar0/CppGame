@@ -1,3 +1,14 @@
+/**
+ * @file loaddata.cpp
+ * @author 《2024年夏·程序设计基础实践》21组
+ * @brief 从文件读取数据相关函数
+ * @version 1.0
+ * @date 2024-09-11
+ * 
+ * @copyright Copyright (c) 2024
+ * 
+ */
+
 #include <vector>
 #include <string>
 #include <fstream>
@@ -16,9 +27,12 @@ using namespace std;
 // $厕所$3,-1,-1,-1,0,$/2/03-CeSuo.mapdata$
 // $卧室$4,-1,-1,0,-1,$/2/04-WoShi.mapdata$
 
-void getMapList()
+/**
+ * @brief 从文件./assets/maps/MapList.data中读取地图列表
+ * 
+ */
+bool getMapList()
 {
-    // 从文件./assets/maps/MapList.data中读取地图列表
     // 读取成功后将地图列表存入全局变量room中
     // 读取失败则抛出异常
     // 每一行一个房间，格式如上所示
@@ -54,11 +68,15 @@ void getMapList()
         loadMap(ID);
     }
     fin.close();
+    return true;
 }
 
-void getCardList()
+/**
+ * @brief 从文件./assets/cards/CardList.data中读取卡牌列表
+ * 
+ */
+bool getCardList()
 {
-    // 从文件./assets/cards/CardList.data中读取卡牌列表
     // 读取成功后将卡牌列表存入全局变量cards中
     // 读取失败则抛出异常
     // 每一行一个卡牌，格式如下
@@ -162,9 +180,14 @@ void getCardList()
         }
     }
     fin.close();
+    return true;
 }
 
-void getEnemyIntentionList()
+/**
+ * @brief 从文件./assets/enemies/EnemyIntentionList.data中读取敌人意图列表
+ * 
+ */
+bool getEnemyIntentionList()
 {
     ifstream fin("./assets/enemies/EnemyIntentionList.data");
     string line;
@@ -257,10 +280,14 @@ void getEnemyIntentionList()
         }
     }
     fin.close();
+    return true;
 }
 
-
-void getEnemyList()
+/**
+ * @brief 从文件./assets/enemies/EnemyList.data中读取敌人列表
+ * 
+ */
+bool getEnemyList()
 {
     ifstream fin("./assets/enemies/EnemyList.data");
     string line;
@@ -321,15 +348,21 @@ void getEnemyList()
         }
     }
     fin.close();
+    return true;
 }
 
-void getStoreList()
+/**
+ * @brief 从文件./assets/maps/MapList.data中读取商店列表
+ * 
+ */
+bool getStoreList()
 {
-    GameConfig::rooms[3].addobject(new StoreObject("商店", 4, 4, {new CardGoods(26, 300, 4), new CardGoods(27, 375, 4), new CardGoods(18, 400, 3), new CardGoods(24, 350, 2), new CardGoods(23, 400, 3)}, "yellow", "black"));
-    GameConfig::rooms[3].addobject(new SleepObject("旅店", 4, 6));
+    GameConfig::rooms[3].addObject(new StoreObject("商店", 4, 4, {new CardGoods(26, 300, 4), new CardGoods(27, 375, 4), new CardGoods(18, 400, 3), new CardGoods(24, 350, 2), new CardGoods(23, 400, 3)}, "yellow", "black"));
+    GameConfig::rooms[3].addObject(new SleepObject("旅店", 4, 6));
+    return true;
 }
 
-void getStoryList()
+bool getStoryList()
 {
     // 从文件./assets/story/StoryList.data中读取剧情列表
     // 读取成功后将剧情列表存入全局变量story中
@@ -350,6 +383,7 @@ void getStoryList()
         i++;
     }
     fin.close();
+    return true;
 }
 
 // 一行一个Object，格式如下
@@ -438,7 +472,7 @@ void loadMap(int mapIndex)
             ss >> forecolor;
             ss.ignore(1);
             ss >> backcolor;
-            // rooms[mapIndex].addobject(new StoreObject(storeName, x, y, filePath, forecolor, backcolor));
+            // rooms[mapIndex].addObject(new StoreObject(storeName, x, y, filePath, forecolor, backcolor));
         }
         else if (type == "W")
         {
@@ -455,13 +489,13 @@ void loadMap(int mapIndex)
                 forecolor = "white";
             if (!(ss >> backcolor))
                 backcolor = "black";
-            GameConfig::rooms[mapIndex].addobject(new WallObject(wallName, warning, x, y, forecolor, backcolor));
+            GameConfig::rooms[mapIndex].addObject(new WallObject(wallName, warning, x, y, forecolor, backcolor));
         }
         else if (type == "WL")
         {
             string wallName, forecolor, backcolor, warning;
             int number, x, y;
-            vector<xy> xy;
+            vector<__xy> xy;
             getline(ss, wallName, ',');
             getline(ss, warning, ',');
             ss >> number;
@@ -480,7 +514,7 @@ void loadMap(int mapIndex)
                 forecolor = "white";
             if (!(ss >> backcolor))
                 backcolor = "black";
-            GameConfig::rooms[mapIndex].addobject(new WallObject(wallName, warning, 0, 0, forecolor, backcolor), xy);
+            GameConfig::rooms[mapIndex].addObject(new WallObject(wallName, warning, 0, 0, forecolor, backcolor), xy);
         }
         else if (type == "E")
         {
@@ -500,7 +534,7 @@ void loadMap(int mapIndex)
                 forecolor = "white";
             if (!(ss >> backcolor))
                 backcolor = "black";
-            GameConfig::rooms[mapIndex].addobject(new EnemyObject(enemyName, x, y, enemyID, times, forecolor, backcolor));
+            GameConfig::rooms[mapIndex].addObject(new EnemyObject(enemyName, x, y, enemyID, times, forecolor, backcolor));
         }
         else if (type == "O")
         {
@@ -518,7 +552,7 @@ void loadMap(int mapIndex)
                 forecolor = "white";
             if (!(ss >> backcolor))
                 backcolor = "black";
-            GameConfig::rooms[mapIndex].addobject(new Object(objectName, x, y, times, forecolor, backcolor));
+            GameConfig::rooms[mapIndex].addObject(new Object(objectName, x, y, times, forecolor, backcolor));
         }
         else if (type == "N")
         {
@@ -538,13 +572,13 @@ void loadMap(int mapIndex)
                 forecolor = "white";
             if (!(ss >> backcolor))
                 backcolor = "black";
-            GameConfig::rooms[mapIndex].addobject(new NPCObject(NPCName, x, y, storyID, times, forecolor, backcolor));
+            GameConfig::rooms[mapIndex].addObject(new NPCObject(NPCName, x, y, storyID, times, forecolor, backcolor));
         }
         else if (type == "OL")
         {
             string objectName, forecolor, backcolor, warning;
             int number, x, y;
-            vector<xy> xy;
+            vector<__xy> xy;
             getline(ss, objectName, ',');
             ss >> number;
             for (int i = 0; i < number; i++)
@@ -562,7 +596,7 @@ void loadMap(int mapIndex)
                 forecolor = "white";
             if (!(ss >> backcolor))
                 backcolor = "black";
-            GameConfig::rooms[mapIndex].addobject(new Object(objectName, 0, 0, -1, forecolor, backcolor), xy);
+            GameConfig::rooms[mapIndex].addObject(new Object(objectName, 0, 0, -1, forecolor, backcolor), xy);
         }
         else if (type == "M")
         {
@@ -584,13 +618,13 @@ void loadMap(int mapIndex)
                 forecolor = "white";
             if (!(ss >> backcolor))
                 backcolor = "black";
-            GameConfig::rooms[mapIndex].addobject(new MoveObject(objectName, x, y, moveID, moveX, moveY, forecolor, backcolor));
+            GameConfig::rooms[mapIndex].addObject(new MoveObject(objectName, x, y, moveID, moveX, moveY, forecolor, backcolor));
         }
         else if (type == "ML")
         {
             string objectName, forecolor, backcolor;
             int x, y, moveID, moveX, moveY, number;
-            vector<xy> xy;
+            vector<__xy> xy;
             getline(ss, objectName, ',');
             ss >> moveID;
             ss.ignore(1);
@@ -614,7 +648,7 @@ void loadMap(int mapIndex)
                 forecolor = "white";
             if (!(ss >> backcolor))
                 backcolor = "black";
-            GameConfig::rooms[mapIndex].addobject(new MoveObject(objectName, 0, 0, moveID, moveX, moveY, forecolor, backcolor), xy);
+            GameConfig::rooms[mapIndex].addObject(new MoveObject(objectName, 0, 0, moveID, moveX, moveY, forecolor, backcolor), xy);
         }
     }
     fin.close();
