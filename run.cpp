@@ -367,7 +367,7 @@ bool fightMainLoop()
 {
     srand(time(0));
     Player::turnSet();
-    GameConfig::currentEnemy->turnset();
+    GameConfig::currentEnemy->turnSet();
     GameConfig::currentEnemy->currentintention = *GameConfig::currentEnemy->intention[rand() % GameConfig::currentEnemy->intention.size()];
     clear(RoomConfig::printX, RoomConfig::printY, RoomConfig::printX + RoomConfig::width - 1, RoomConfig::printY + RoomConfig::height - 1);
     printPlayer();

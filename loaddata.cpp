@@ -312,7 +312,7 @@ bool getEnemyList()
             ss >> ID;
             ss.ignore(1);
             ss >> intentionID;
-            GameConfig::enemies[ID].addintention(GameConfig::enemyIntentions[intentionID]);
+            GameConfig::enemies[ID].addIntention(GameConfig::enemyIntentions[intentionID]);
         }
         if (type == "EXP")
         {

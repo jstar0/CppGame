@@ -149,7 +149,7 @@ void Card::effect()
         message("对"+GameConfig::currentEnemy->getName()+"使用"+name);
         for (int i=1; i<=Player::HP/10; i++)
         {
-            GameConfig::currentEnemy->getdamage(Player::damage(kind.damage));
+            GameConfig::currentEnemy->getDamage(Player::damage(kind.damage));
         }
     }
     else if (name=="阳炎")
@@ -160,21 +160,21 @@ void Card::effect()
     else if (name=="铁牛功")
     {
         message("对"+GameConfig::currentEnemy->getName()+"使用"+name);
-        GameConfig::currentEnemy->getdamage(Player::damage(kind.damage*Player::HP/100));
+        GameConfig::currentEnemy->getDamage(Player::damage(kind.damage*Player::HP/100));
     }
     else if (name=="裂地崩")
     {
         message("对"+GameConfig::currentEnemy->getName()+"使用"+name);
         if (Player::HP==Player::HPMax)
-            GameConfig::currentEnemy->getdamage(2*Player::damage(kind.damage));
-        else GameConfig::currentEnemy->getdamage(Player::damage(kind.damage));
+            GameConfig::currentEnemy->getDamage(2*Player::damage(kind.damage));
+        else GameConfig::currentEnemy->getDamage(Player::damage(kind.damage));
     }
     else if (name=="极阴剑诀")
     {
         message("对"+GameConfig::currentEnemy->getName()+"使用"+name);
         for (int i=0; i<=(Player::HPMax-Player::HP)/8; i++)
         {
-            GameConfig::currentEnemy->getdamage(Player::damage(kind.damage));
+            GameConfig::currentEnemy->getDamage(Player::damage(kind.damage));
         }
     }
     else if (name=="阴雷")
@@ -191,7 +191,7 @@ void Card::effect()
     else if (name=="走火入魔")
     {
         message("彻底疯狂","red");
-        GameConfig::currentEnemy->getdamage(Player::damage(kind.damage*(Player::HPMax-Player::HP)/2));
+        GameConfig::currentEnemy->getDamage(Player::damage(kind.damage*(Player::HPMax-Player::HP)/2));
         Player::HP=1;
     }
     else if (name=="妙手")
@@ -219,7 +219,7 @@ void Card::effect()
             message("对"+GameConfig::currentEnemy->getName()+"使用"+name);
             for (int i=1; i<=kind.damagetimes; i++)
             {
-                GameConfig::currentEnemy->getdamage(Player::damage(kind.damage));
+                GameConfig::currentEnemy->getDamage(Player::damage(kind.damage));
             }   
         }
         if (kind.isdefend) 

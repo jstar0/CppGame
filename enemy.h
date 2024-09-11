@@ -81,11 +81,11 @@ public:
     
 
     int damage(int d);
-    void getdamage(int gd);
+    void getDamage(int gd);
     void init();
-    void turnset();
-    void addintention(int EnemyIntention);
-    void addintention(EnemyIntention *intention);
+    void turnSet();
+    void addIntention(int EnemyIntention);
+    void addIntention(EnemyIntention *intention);
     friend void print(Enemy *enemy);
 
     std::string getName() { return name; }

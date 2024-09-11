@@ -22,11 +22,11 @@ Enemy::Enemy(std::string name,int HPMax)
     this->name=name;
     this->HPMax=HPMax;
 }
-void Enemy::addintention(int intentionID)
+void Enemy::addIntention(int intentionID)
 {
     intention.push_back(GameConfig::enemyIntentions[intentionID]);
 }
-void Enemy::addintention(EnemyIntention *intention)
+void Enemy::addIntention(EnemyIntention *intention)
 {
     this->intention.push_back(intention);
 }
@@ -36,7 +36,7 @@ int Enemy::damage(int d)
     return d+state.getStrength();
 }
 
-void Enemy::getdamage(int gd)
+void Enemy::getDamage(int gd)
 {
     int gde=gd-state.getDefense()>0?gd-state.getDefense():0;
     if (gde>0) message(name+"受到"+std::to_string(gd-state.getDefense())+"点伤害!","purple");
@@ -71,7 +71,7 @@ void Enemy::init()
     state.EnemyStateSet();
 }
 
-void Enemy::turnset()
+void Enemy::turnSet()
 {
     state.setDefense(0);
 }
