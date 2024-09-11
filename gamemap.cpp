@@ -8,8 +8,8 @@
 #include"run.h"
 #include"UI.h"
 #include"save.h"
-extern int roomPrintX,roomPrintY,roomWidth,roomHeight,
-           playerCurrentRoom,playerCurrentX,playerCurrentY;
+#include"config.h"
+
 
 std::string whichObject(Object *object)
 {
@@ -167,23 +167,21 @@ void Object::run()
         if (kind.isstory) 
         {
             printStory(kind.storyID);
-            clear(roomPrintX,roomPrintY,roomPrintX+roomWidth-1,roomPrintY+roomHeight-1);
+            clear(RoomConfig::printX,RoomConfig::printY,RoomConfig::printX+RoomConfig::width-1,RoomConfig::printY+RoomConfig::height-1);
             printMap();
             printSmallMap();
             printPlayerState();
         }
         if (kind.isgivecard) 
         {
-            extern std::vector<Card*> cards;
-            Player::addcard(cards[kind.cardID]);
-            message("获得卡牌"+cards[kind.cardID]->name);
+            Player::addcard(CardConfig::cards[kind.cardID]);
+            message("获得卡牌"+CardConfig::cards[kind.cardID]->name);
             printPlayerState();
         }
         if (kind.isgiveprop) 
         {
-            extern std::vector<Prop*> props;
-            Player::addprop(props[kind.propID]);
-            message("获得道具"+props[kind.propID]->name);
+            Player::addprop(GameConfig::props[kind.propID]);
+            message("获得道具"+GameConfig::props[kind.propID]->name);
         }
         if (kind.isgivemoney)
         {
@@ -198,11 +196,10 @@ void Object::run()
         }
         if (kind.ismove)
         {
-            extern std::vector<Room> rooms;
-            playerCurrentRoom=kind.moveID;
-            playerCurrentX=kind.moveX;
-            playerCurrentY=kind.moveY;
-            clear(roomPrintX,roomPrintY,roomPrintX+roomWidth-1,roomPrintY+roomHeight-1);
+            PlayerConfig::currentRoom=kind.moveID;
+            PlayerConfig::currentX=kind.moveX;
+            PlayerConfig::currentY=kind.moveY;
+            clear(RoomConfig::printX,RoomConfig::printY,RoomConfig::printX+RoomConfig::width-1,RoomConfig::printY+RoomConfig::height-1);
             printMap();
             printSmallMap();
             printPlayerState();
@@ -213,7 +210,7 @@ void Object::run()
 void print(Object *object)
 {
     setcolor(object->forecolor,object->backcolor);
-    if (object->times!=0) print(object->name,roomPrintX+object->x,roomPrintY+object->y);
+    if (object->times!=0) print(object->name,RoomConfig::printX+object->x,RoomConfig::printY+object->y);
 }
 
 Object* Object::clone()
@@ -283,10 +280,9 @@ Object* Room::getobject(int x,int y)
 
 void addroom(Room room)
 {
-    extern std::vector<Room> rooms;
-    if (room.ID>rooms.size()-1) rooms.resize(room.ID+1);
+    if (room.ID>GameConfig::rooms.size()-1) GameConfig::rooms.resize(room.ID+1);
     message("resize");
-    rooms[room.ID]=room;
+    GameConfig::rooms[room.ID]=room;
 }
 
 //墙----------------------------------------------------------------------------------------------------------
@@ -375,29 +371,25 @@ EnemyObject::EnemyObject()
 
 EnemyObject::EnemyObject(std::string name,int x,int y,int enemyID,int times/* =-1 */,std::string forecolor/* ="white" */,std::string backcolor/* ="black" */)
 {
-    extern std::vector<Enemy> enemys;   
     this->name=name;
     this->forecolor=forecolor;
     this->backcolor=backcolor;
     this->x=x;
     this->y=y;
     this->times=times;
-    this->enemy=enemys[enemyID];
+    this->enemy=GameConfig::enemies[enemyID];
 }
 
 void EnemyObject::run()
 {
-    extern int descriptionPrintX,descriptionPrintY,descriptionPrintX2,descriptionPrintY2;
-    extern std::vector<Card*> have,hand,used;
-    extern Enemy *currentenemy;
-    currentenemy=&this->enemy;
-    have=Player::card;
-    currentenemy->init();
+    GameConfig::currentEnemy=&this->enemy;
+    CardConfig::have=Player::card;
+    GameConfig::currentEnemy->init();
     Player::init();
-    message("开始战斗:"+currentenemy->name);
+    message("开始战斗:"+GameConfig::currentEnemy->name);
     while(fight());
     if (Player::HP>0) Object::run();
-    clear(descriptionPrintX,descriptionPrintY,descriptionPrintX2,descriptionPrintY2);
+    clear(DescriptionConfig::printX,DescriptionConfig::printY,DescriptionConfig::printX2,DescriptionConfig::printY2);
     printMap();
     printSmallMap();
     printPlayerState();
@@ -422,8 +414,7 @@ void Goods::buy()
 //卡牌商品----------------------------------------------------------------------------------------------------------
 CardGoods::CardGoods(int cardID,int price,int number/* =1 */)
 {
-    extern std::vector<Card*> cards;    
-    this->card=cards[cardID];
+    this->card=CardConfig::cards[cardID];
     this->price=price;
     this->number=number;
     this->color=card->getcolor();
@@ -441,8 +432,7 @@ void CardGoods::buy()
 //道具商品----------------------------------------------------------------------------------------------------------
 PropGoods::PropGoods(int propID,int price,int number/* =1 */)
 {
-    extern std::vector<Prop*> props;
-    this->prop=props[propID];
+    this->prop=GameConfig::props[propID];
     this->price=price;
     this->number=number;
     this->color=prop->forecolor;
@@ -483,10 +473,8 @@ StoreObject::StoreObject(std::string name,int x,int y,std::vector<Goods*> goodss
 void StoreObject::run()
 {
     message("进入了"+name);
-    extern int currentselectgoods;
-    extern std::vector<Goods*> *currentgoodss;
-    currentselectgoods=0;
-    currentgoodss=&goodss;
+    StoreConfig::currentSelectGoods=0;
+    StoreConfig::currentGoods=&goodss;
     printgoods();
     while(shopping());
     message("成功退出商店");
@@ -537,12 +525,10 @@ MoveObject::MoveObject(const MoveObject &other)
 
 void MoveObject::run()
 {
-    extern int playerCurrentX,playerCurrentY,playerCurrentRoom;
-    extern std::vector<Room> rooms;
-    message("传送到了"+rooms[moveID].name);
-    playerCurrentX=moveX;
-    playerCurrentY=moveY;
-    playerCurrentRoom=moveID;
+    message("传送到了"+GameConfig::rooms[moveID].name);
+    PlayerConfig::currentX=moveX;
+    PlayerConfig::currentY=moveY;
+    PlayerConfig::currentRoom=moveID;
     printMap();
     printSmallMap();
 }
@@ -578,10 +564,8 @@ NPCObject::NPCObject(std::string name,int x,int y,int storyID,int times/* =-1 */
 void NPCObject::run()
 {
     Object::run();
-    extern int roomPrintX,roomPrintY,roomWidth,roomHeight;  
-    extern std::vector<std::string> story;
     printStory(storyID);
-    clear(roomPrintX,roomPrintY,roomPrintX+roomWidth-1,roomPrintY+roomHeight-1);
+    clear(RoomConfig::printX,RoomConfig::printY,RoomConfig::printX+RoomConfig::width-1,RoomConfig::printY+RoomConfig::height-1);
     printMap();
     printSmallMap();
     printPlayerState();

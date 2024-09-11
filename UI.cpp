@@ -3,6 +3,7 @@
 #include<string>
 #include"console.h"
 #include"UI.h"
+#include"config.h"
 
 void initUI()
 {
@@ -47,15 +48,14 @@ void printUI()
 }
 
 std::vector<Message> messagebox;
-extern int messagePrintX,messagePrintY,messagePrintX2,messagePrintY2,messageMax;
 void message(std::string s,std::string fore/* ="white" */,std::string back/* ="black" */)
 {
-    if (messagebox.size()>=messageMax) messagebox.erase(messagebox.begin());
+    if (messagebox.size()>=MessageConfig::max) messagebox.erase(messagebox.begin());
     messagebox.push_back(Message(s,fore,back));
-    clear(messagePrintX,messagePrintY,messagePrintX2,messagePrintY2);
+    clear(MessageConfig::printX,MessageConfig::printY,MessageConfig::printX2,MessageConfig::printY2);
     for (int i=0; i<messagebox.size(); i++)
     {
         setcolor(messagebox[i].fore,messagebox[i].back);
-        if (messagebox[i].s!="") print(messagebox[i].s,messagePrintX,messagePrintY+i);
+        if (messagebox[i].s!="") print(messagebox[i].s,MessageConfig::printX,MessageConfig::printY+i);
     }
 }

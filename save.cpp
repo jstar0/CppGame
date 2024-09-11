@@ -8,6 +8,7 @@
 #include"player.h"
 #include"run.h"
 #include"console.h" 
+#include"config.h"
 
 std::vector<int> getMapID()
 {
@@ -30,14 +31,12 @@ std::vector<int> getMapID()
 void save()
 {
     //std::vector<int> mapID=getMapID();
-    extern std::vector<Room> rooms;
-    extern int playerCurrentX,playerCurrentY,playerCurrentRoom;
     //将rooms中的每个Room对象整体写入文件
     std::ofstream fout("./save/save.data");  
     /* fout.write(reinterpret_cast<const char*>(&mapID),sizeof(mapID));
     for (int i=0; i<mapID.size(); i++) 
     {
-        fout.write(reinterpret_cast<const char*>(&rooms[i]),sizeof(rooms[i]));
+        fout.write(reinterpret_cast<const char*>(&rooms[i]),sizeof(GameConfig::rooms[i]));
     } */
     fout.write(reinterpret_cast<const char*>(&Player::HP),sizeof(int));
     fout.write(reinterpret_cast<const char*>(&Player::HPMax),sizeof(int));
@@ -53,9 +52,9 @@ void save()
         int cardID=Player::card[i]->ID;
         fout.write(reinterpret_cast<const char*>(&cardID),sizeof(int));
     }
-    fout.write(reinterpret_cast<const char*>(&playerCurrentX),sizeof(int));
-    fout.write(reinterpret_cast<const char*>(&playerCurrentY),sizeof(int));
-    fout.write(reinterpret_cast<const char*>(&playerCurrentRoom),sizeof(int));
+    fout.write(reinterpret_cast<const char*>(&PlayerConfig::currentX),sizeof(int));
+    fout.write(reinterpret_cast<const char*>(&PlayerConfig::currentY),sizeof(int));
+    fout.write(reinterpret_cast<const char*>(&PlayerConfig::currentRoom),sizeof(int));
     fout.close();
     message("保存成功","green");
 }
@@ -63,9 +62,6 @@ void save()
 void load()
 {
     //std::vector<int> mapID=getMapID();
-    extern std::vector<Room> rooms;
-    extern std::vector<Card*> cards;
-    extern int playerCurrentX,playerCurrentY,playerCurrentRoom;
     //从文件中读取Room对象并存入rooms
     std::ifstream fin("./save/save.data");
     /* for (int i=0; i<mapID.size(); i++)  
@@ -93,15 +89,14 @@ void load()
     {
         int cardID;
         fin.read(reinterpret_cast<char*>(&cardID),sizeof(int));
-        Player::card.push_back(cards[cardID]);
+        Player::card.push_back(CardConfig::cards[cardID]);
     }
-    fin.read(reinterpret_cast<char*>(&playerCurrentX),sizeof(int));
-    fin.read(reinterpret_cast<char*>(&playerCurrentY),sizeof(int));
-    fin.read(reinterpret_cast<char*>(&playerCurrentRoom),sizeof(int));
+    fin.read(reinterpret_cast<char*>(&PlayerConfig::currentX),sizeof(int));
+    fin.read(reinterpret_cast<char*>(&PlayerConfig::currentY),sizeof(int));
+    fin.read(reinterpret_cast<char*>(&PlayerConfig::currentRoom),sizeof(int));
     fin.close();
     message("读取成功","green");
-    extern int roomPrintX,roomPrintY,roomWidth,roomHeight;
-    clear(roomPrintX,roomPrintY,roomPrintX+roomWidth-1,roomPrintY+roomHeight-1);
+    clear(RoomConfig::printX,RoomConfig::printY,RoomConfig::printX+RoomConfig::width-1,RoomConfig::printY+RoomConfig::height-1);
     printMap();
     printSmallMap();
     printPlayerState();

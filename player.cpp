@@ -1,8 +1,9 @@
+#include<vector>
 #include"player.h"
 #include"card.h"
 #include"console.h"
 #include"UI.h"
-#include<vector>
+#include"config.h"
 int Player::HPMax=100,
     Player::HP=Player::HPMax,
     Player::MPMax=3,
@@ -85,8 +86,7 @@ void Player::turnset()
 
 void printPlayer()
 {
-    extern int attackPlayerPrintX,attackPlayerPrintY;
-    int x=attackPlayerPrintX,y=attackPlayerPrintY;
+    int x=AttackConfig::playerPrintX,y=AttackConfig::playerPrintY;
     setcolor("white");
     print("我",x,y++);
     print("体力:"+std::to_string(Player::HP)+"/"+std::to_string(Player::HPMax),x,y++);

@@ -11,8 +11,7 @@
 #include"player.h"
 #include"UI.h"
 #include"run.h"
-
-extern int descriptionPrintX,descriptionPrintY;
+#include"config.h"
 
 Card::Card()
 {
@@ -134,25 +133,23 @@ std::string Card::getcolor()
 void print(Card *card)
 {
     setcolor(card->getcolor());
-    print(card->description,descriptionPrintX,descriptionPrintY);
+    print(card->description,DescriptionConfig::printX,DescriptionConfig::printY);
 }
 
-extern Enemy *currentenemy;
 void Card::effect()
 {
     if (name=="坚守")
     {
-        extern std::vector<Card*> hand;
         message("使用"+name);
-        Player::state.defense+=kind.defense*hand.size();    
-        drawcard(-hand.size());
+        Player::state.defense+=kind.defense*CardConfig::hand.size();    
+        drawcard(-CardConfig::hand.size());
     }
     else if (name=="盛阳剑法")
     {
-        message("对"+currentenemy->name+"使用"+name);
+        message("对"+GameConfig::currentEnemy->name+"使用"+name);
         for (int i=1; i<=Player::HP/10; i++)
         {
-            currentenemy->getdamage(Player::damage(kind.damage));
+            GameConfig::currentEnemy->getdamage(Player::damage(kind.damage));
         }
     }
     else if (name=="阳炎")
@@ -162,22 +159,22 @@ void Card::effect()
     }
     else if (name=="铁牛功")
     {
-        message("对"+currentenemy->name+"使用"+name);
-        currentenemy->getdamage(Player::damage(kind.damage*Player::HP/100));
+        message("对"+GameConfig::currentEnemy->name+"使用"+name);
+        GameConfig::currentEnemy->getdamage(Player::damage(kind.damage*Player::HP/100));
     }
     else if (name=="裂地崩")
     {
-        message("对"+currentenemy->name+"使用"+name);
+        message("对"+GameConfig::currentEnemy->name+"使用"+name);
         if (Player::HP==Player::HPMax)
-            currentenemy->getdamage(2*Player::damage(kind.damage));
-        else currentenemy->getdamage(Player::damage(kind.damage));
+            GameConfig::currentEnemy->getdamage(2*Player::damage(kind.damage));
+        else GameConfig::currentEnemy->getdamage(Player::damage(kind.damage));
     }
     else if (name=="极阴剑诀")
     {
-        message("对"+currentenemy->name+"使用"+name);
+        message("对"+GameConfig::currentEnemy->name+"使用"+name);
         for (int i=0; i<=(Player::HPMax-Player::HP)/8; i++)
         {
-            currentenemy->getdamage(Player::damage(kind.damage));
+            GameConfig::currentEnemy->getdamage(Player::damage(kind.damage));
         }
     }
     else if (name=="阴雷")
@@ -194,13 +191,12 @@ void Card::effect()
     else if (name=="走火入魔")
     {
         message("彻底疯狂","red");
-        currentenemy->getdamage(Player::damage(kind.damage*(Player::HPMax-Player::HP)/2));
+        GameConfig::currentEnemy->getdamage(Player::damage(kind.damage*(Player::HPMax-Player::HP)/2));
         Player::HP=1;
     }
     else if (name=="妙手")
     {
-        extern std::vector<Card*> hand;
-        if (hand.size()<3) 
+        if (CardConfig::hand.size()<3) 
         {
             message("妙手回春","green");    
             message("抽取"+std::to_string(kind.drawtimes)+"张卡牌");
@@ -220,10 +216,10 @@ void Card::effect()
         }
         if (kind.isattack) 
         {
-            message("对"+currentenemy->name+"使用"+name);
+            message("对"+GameConfig::currentEnemy->name+"使用"+name);
             for (int i=1; i<=kind.damagetimes; i++)
             {
-                currentenemy->getdamage(Player::damage(kind.damage));
+                GameConfig::currentEnemy->getdamage(Player::damage(kind.damage));
             }   
         }
         if (kind.isdefend) 
@@ -349,12 +345,11 @@ ChangeHaveCard::ChangeHaveCard(std::string name,std::vector<std::string> descrip
 
 void ChangeHaveCard::effect()
 {
-    extern std::vector<Card*> have;
     Card::effect();
     message("放入牌堆","red");
     for (int i=0; i<changehavecard.size(); i++)
     {
-        have.push_back(changehavecard[i]);
+        CardConfig::have.push_back(changehavecard[i]);
         message("放入牌堆","red");
     }
 }

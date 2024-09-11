@@ -6,11 +6,8 @@
 #include "gamemap.h"
 #include "card.h"
 #include "console.h"
-#include "conio.h"
+#include "config.h"
 using namespace std;
-
-extern vector<Room> rooms;
-extern vector<Card*> cards;
 
 // mapList文件结构示例
 // $客厅(1F)$0,1,2,3,4,$/1/00-KeTing.mapdata$
@@ -53,7 +50,7 @@ void getMapList()
         ss.ignore(1);
         getline(ss,filePath);
         newRoom=Room(name,ID,UP_ID,DOWN_ID,LEFT_ID,RIGHT_ID,filePath);
-        rooms.push_back(newRoom);
+        GameConfig::rooms.push_back(newRoom);
         loadMap(ID);
     }
     fin.close();
@@ -89,28 +86,28 @@ void getCardList()
                 ss>>damage;
                 ss.ignore(1);
                 ss>>times;
-                cards[ID]->setattack(damage,times);
+                CardConfig::cards[ID]->setattack(damage,times);
             }
             else if (type=="D")
             {
                 int defense;
                 ss>>defense;
                 ss.ignore(1);
-                cards[ID]->setdefend(defense);
+                CardConfig::cards[ID]->setdefend(defense);
             }
             else if (type=="S")
             {
                 int strength;
                 ss>>strength;
                 ss.ignore(1);
-                cards[ID]->setstrengthen(strength);
+                CardConfig::cards[ID]->setstrengthen(strength);
             }
             else if (type=="R")
             {
                 int times;
                 ss>>times;
                 ss.ignore(1);
-                cards[ID]->setdraw(times);
+                CardConfig::cards[ID]->setdraw(times);
             }
         }
         else
@@ -126,7 +123,7 @@ void getCardList()
             description.push_back(s);
             ss.ignore(1);
             ss>>ID;
-            if (ID>cards.size()-1) cards.resize(ID+1);
+            if (ID>CardConfig::cards.size()-1) CardConfig::cards.resize(ID+1);
             ss.ignore(1);
             ss>>cost;
             ss.ignore(1);
@@ -138,28 +135,28 @@ void getCardList()
                 ss>>damage;
                 ss.ignore(1);
                 ss>>times;
-                cards[ID]=new AttackCard(name,description,ID,cost,rarity,damage,times);
+                CardConfig::cards[ID]=new AttackCard(name,description,ID,cost,rarity,damage,times);
             }
             else if (type=="D")
             {
                 int defense;
                 ss>>defense;
                 ss.ignore(1);
-                cards[ID]=new DefendCard(name,description,ID,cost,rarity,defense);
+                CardConfig::cards[ID]=new DefendCard(name,description,ID,cost,rarity,defense);
             }
             else if (type=="S")
             {
                 int strength;
                 ss>>strength;
                 ss.ignore(1);
-                cards[ID]=(new StrengthenCard(name,description,ID,cost,rarity,strength));
+                CardConfig::cards[ID]=(new StrengthenCard(name,description,ID,cost,rarity,strength));
             }
             else if (type=="R")
             {
                 int times;
                 ss>>times;
                 ss.ignore(1);
-                cards[ID]=(new DrawCard(name,description,ID,cost,rarity,times));
+                CardConfig::cards[ID]=(new DrawCard(name,description,ID,cost,rarity,times));
             }
         }
     }
@@ -168,7 +165,6 @@ void getCardList()
 
 void getEnemyIntentionList()
 {
-    extern vector<EnemyIntention*> enemyintentions;
     ifstream fin("./enemys/EnemyIntentionList.data");
     string line;
     while (getline(fin,line))
@@ -188,7 +184,7 @@ void getEnemyIntentionList()
                 ss>>damage;
                 ss.ignore(1);
                 ss>>times;
-                enemyintentions[ID]->setattack(damage,times);
+                GameConfig::enemyIntentions[ID]->setattack(damage,times);
             }
             if (type=="D")
             {
@@ -196,7 +192,7 @@ void getEnemyIntentionList()
                 ss>>ID;
                 ss.ignore(1);
                 ss>>defense;
-                enemyintentions[ID]->setdefend(defense);
+                GameConfig::enemyIntentions[ID]->setdefend(defense);
             }
             if (type=="S")
             {
@@ -204,7 +200,7 @@ void getEnemyIntentionList()
                 ss>>ID;
                 ss.ignore(1);
                 ss>>strength;
-                enemyintentions[ID]->setstrengthen(strength);
+                GameConfig::enemyIntentions[ID]->setstrengthen(strength);
             }
             if (type=="G")
             {   
@@ -213,13 +209,12 @@ void getEnemyIntentionList()
                 string cardID;
                 ss>>ID;
                 ss.ignore(1);
-                while (getline(ss,cardID,',')) givecard.push_back(cards[stoi(cardID)]);
-                enemyintentions[ID]->setgivecard(givecard);
+                while (getline(ss,cardID,',')) givecard.push_back(CardConfig::cards[stoi(cardID)]);
+                GameConfig::enemyIntentions[ID]->setgivecard(givecard);
             }
         }
         else
         {
-            extern vector<EnemyIntention*> enemyintentions;
             string description,cardID;
             getline(ss,description,',');
             if (type=="A")
@@ -230,7 +225,7 @@ void getEnemyIntentionList()
                 ss>>damage;
                 ss.ignore(1);
                 ss>>times;
-                enemyintentions[ID]=new EnemyIntentionAttack(description,damage,times);
+                GameConfig::enemyIntentions[ID]=new EnemyIntentionAttack(description,damage,times);
             }
             if (type=="D")
             {
@@ -238,7 +233,7 @@ void getEnemyIntentionList()
                 ss>>ID;
                 ss.ignore(1);
                 ss>>defense;
-                enemyintentions[ID]=new EnemyIntentionDefend(description,defense);
+                GameConfig::enemyIntentions[ID]=new EnemyIntentionDefend(description,defense);
             }
             if (type=="S")
             {
@@ -246,15 +241,15 @@ void getEnemyIntentionList()
                 ss>>ID;
                 ss.ignore(1);
                 ss>>strength;
-                enemyintentions[ID]=new EnemyIntentionStrengthen(description,strength);
+                GameConfig::enemyIntentions[ID]=new EnemyIntentionStrengthen(description,strength);
             }
             if (type=="G")
             {
                 vector<Card*> givecard;
                 ss>>ID;
                 ss.ignore(1);
-                while (getline(ss,cardID,',')) givecard.push_back(cards[stoi(cardID)]);
-               enemyintentions[ID]=new EnemyIntentionGiveCard(description,givecard);
+                while (getline(ss,cardID,',')) givecard.push_back(CardConfig::cards[stoi(cardID)]);
+               GameConfig::enemyIntentions[ID]=new EnemyIntentionGiveCard(description,givecard);
             }
         }
     }
@@ -263,8 +258,6 @@ void getEnemyIntentionList()
 
 void getEnemyList()
 {
-    extern vector<Enemy> enemys;    
-    extern vector<EnemyIntention*> enemyintentions;
     ifstream fin("./enemys/EnemyList.data");
     string line;
     while (getline(fin,line))
@@ -280,7 +273,7 @@ void getEnemyList()
             ss>>ID;
             ss.ignore(1);
             ss>>HP;
-            enemys[ID]=Enemy(name,HP);
+            GameConfig::enemies[ID]=Enemy(name,HP);
         }
         if (type=="add")
         {
@@ -288,7 +281,7 @@ void getEnemyList()
             ss>>ID;
             ss.ignore(1);
             ss>>intentionID;
-            enemys[ID].addintention(enemyintentions[intentionID]);
+            GameConfig::enemies[ID].addintention(GameConfig::enemyIntentions[intentionID]);
         }
         if (type=="EXP")
         {
@@ -296,7 +289,7 @@ void getEnemyList()
             ss>>ID;
             ss.ignore(1);
             ss>>EXP;
-            enemys[ID].giveEXP=EXP;
+            GameConfig::enemies[ID].giveEXP=EXP;
         }
         if (type=="money")
         {
@@ -304,7 +297,7 @@ void getEnemyList()
             ss>>ID;
             ss.ignore(1);
             ss>>money;
-            enemys[ID].giveMoney=money;
+            GameConfig::enemies[ID].giveMoney=money;
         }
         if (type=="card")
         {
@@ -312,7 +305,7 @@ void getEnemyList()
             ss>>ID; 
             ss.ignore(1);
             ss>>cardID;
-            enemys[ID].giveCard=cardID;
+            GameConfig::enemies[ID].giveCard=cardID;
         }
         if (type=="prop")
         {
@@ -320,7 +313,7 @@ void getEnemyList()
             ss>>ID;
             ss.ignore(1);
             ss>>propID;
-            enemys[ID].giveProp=propID;
+            GameConfig::enemies[ID].giveProp=propID;
         }
     }
     fin.close();
@@ -328,8 +321,8 @@ void getEnemyList()
 
 void getStoreList()
 {
-    rooms[3].addobject(new StoreObject("商店",4,4,{new CardGoods(26,300,4),new CardGoods(27,375,4),new CardGoods(18,400,3),new CardGoods(24,350,2),new CardGoods(23,400,3)},"yellow","black"));
-    rooms[3].addobject(new SleepObject("旅店",4,6));
+    GameConfig::rooms[3].addobject(new StoreObject("商店",4,4,{new CardGoods(26,300,4),new CardGoods(27,375,4),new CardGoods(18,400,3),new CardGoods(24,350,2),new CardGoods(23,400,3)},"yellow","black"));
+    GameConfig::rooms[3].addobject(new SleepObject("旅店",4,6));
 }
 
 void getStoryList()
@@ -341,7 +334,6 @@ void getStoryList()
     // 剧情内容
     // 编码为GBK
     int i=0;
-    extern vector<string> story;
     ifstream fin("./story/StoryList.data");
     if (!fin)
     {
@@ -350,7 +342,7 @@ void getStoryList()
     string line;
     while (getline(fin,line))
     {
-        story[i]=line;
+        GameConfig::story[i]=line;
         i++;
     }
     fin.close();
@@ -373,7 +365,7 @@ void loadMap(int mapIndex)
 
     //std::string testPath="./maps/1/00-KeTing.mapdata";
     //ifstream fin(testPath);
-    ifstream fin("./maps"+rooms[mapIndex].filePath);
+    ifstream fin("./maps"+GameConfig::rooms[mapIndex].filePath);
     if (!fin)
     {
         message("无法打开地图文件");
@@ -386,7 +378,7 @@ void loadMap(int mapIndex)
         getline(ss,type,',');
         if (type=="add")
         {   
-            Object *object=rooms[mapIndex].object[rooms[mapIndex].object.size()-1];
+            Object *object=GameConfig::rooms[mapIndex].object[GameConfig::rooms[mapIndex].object.size()-1];
             getline(ss,type,',');
             if (type=="story")
             {
@@ -457,7 +449,7 @@ void loadMap(int mapIndex)
             // 颜色可缺省
             if (!getline(ss, forecolor, ',')) forecolor="white";
             if (!(ss>>backcolor)) backcolor="black";
-            rooms[mapIndex].addobject(new WallObject(wallName,warning,x,y,forecolor,backcolor));
+            GameConfig::rooms[mapIndex].addobject(new WallObject(wallName,warning,x,y,forecolor,backcolor));
         }
         else if (type=="WL")
         {
@@ -480,7 +472,7 @@ void loadMap(int mapIndex)
             // 颜色可缺省
             if (!getline(ss,forecolor,',')) forecolor="white";
             if (!(ss>>backcolor)) backcolor="black";
-            rooms[mapIndex].addobject(new WallObject(wallName,warning,0,0,forecolor,backcolor),xy);
+            GameConfig::rooms[mapIndex].addobject(new WallObject(wallName,warning,0,0,forecolor,backcolor),xy);
         }
         else if (type=="E")
         {
@@ -498,7 +490,7 @@ void loadMap(int mapIndex)
             // 颜色可缺省
             if (!getline(ss, forecolor,',')) forecolor="white";
             if (!(ss>>backcolor)) backcolor="black";
-            rooms[mapIndex].addobject(new EnemyObject(enemyName,x,y,enemyID,times,forecolor,backcolor));
+            GameConfig::rooms[mapIndex].addobject(new EnemyObject(enemyName,x,y,enemyID,times,forecolor,backcolor));
         }
         else if (type=="O")
         {
@@ -514,7 +506,7 @@ void loadMap(int mapIndex)
             // 颜色可缺省
             if (!getline(ss,forecolor,',')) forecolor="white";
             if (!(ss>>backcolor)) backcolor="black";
-            rooms[mapIndex].addobject(new Object(objectName,x,y,times,forecolor,backcolor));
+            GameConfig::rooms[mapIndex].addobject(new Object(objectName,x,y,times,forecolor,backcolor));
         }
         else if (type=="N")
         {
@@ -532,7 +524,7 @@ void loadMap(int mapIndex)
             // 颜色可缺省
             if (!getline(ss,forecolor,',')) forecolor="white";
             if (!(ss>>backcolor)) backcolor="black";
-            rooms[mapIndex].addobject(new NPCObject(NPCName,x,y,storyID,times,forecolor,backcolor));
+            GameConfig::rooms[mapIndex].addobject(new NPCObject(NPCName,x,y,storyID,times,forecolor,backcolor));
         }
         else if (type=="OL")
         {
@@ -554,7 +546,7 @@ void loadMap(int mapIndex)
             // 颜色可缺省
             if (!getline(ss,forecolor,',')) forecolor="white";
             if (!(ss>>backcolor)) backcolor="black";
-            rooms[mapIndex].addobject(new Object(objectName,0,0,-1,forecolor,backcolor),xy);
+            GameConfig::rooms[mapIndex].addobject(new Object(objectName,0,0,-1,forecolor,backcolor),xy);
         }
         else if (type=="M")
         {
@@ -574,7 +566,7 @@ void loadMap(int mapIndex)
             // 颜色可缺省
             if (!getline(ss, forecolor, ',')) forecolor="white";
             if (!(ss>>backcolor)) backcolor="black";
-            rooms[mapIndex].addobject(new MoveObject(objectName,x,y,moveID,moveX,moveY,forecolor,backcolor));
+            GameConfig::rooms[mapIndex].addobject(new MoveObject(objectName,x,y,moveID,moveX,moveY,forecolor,backcolor));
         }
         else if (type=="ML")
         {   
@@ -602,7 +594,7 @@ void loadMap(int mapIndex)
             // 颜色可缺省
             if (!getline(ss, forecolor, ',')) forecolor="white";
             if (!(ss>>backcolor)) backcolor="black";
-            rooms[mapIndex].addobject(new MoveObject(objectName,0,0,moveID,moveX,moveY,forecolor,backcolor),xy);
+            GameConfig::rooms[mapIndex].addobject(new MoveObject(objectName,0,0,moveID,moveX,moveY,forecolor,backcolor),xy);
         }
     }
     fin.close();
