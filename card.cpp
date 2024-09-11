@@ -132,7 +132,7 @@ std::string Card::getcolor()
 
 void print(Card *card)
 {
-    setcolor(card->getcolor());
+    setPrintColor(card->getcolor());
     print(card->description,DescriptionConfig::printX,DescriptionConfig::printY);
 }
 

@@ -53,10 +53,10 @@ void Enemy::getdamage(int gd)
 void print(Enemy *enemy)
 {
     int x=AttackConfig::enemyPrintX,y=AttackConfig::enemyPrintY;
-    setcolor("deepgreen");
+    setPrintColor("deepgreen");
     print(enemy->currentintention.description,x,--y);
     y++;
-    setcolor("white");
+    setPrintColor("white");
     print(enemy->name,x,y++);
     print("HP:"+std::to_string(enemy->HP)+"/"+std::to_string(enemy->HPMax),x,y++);
     if (enemy->state.strength>0) print("力量:"+std::to_string(enemy->state.strength),x,y++);

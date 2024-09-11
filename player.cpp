@@ -87,7 +87,7 @@ void Player::turnset()
 void printPlayer()
 {
     int x=AttackConfig::playerPrintX,y=AttackConfig::playerPrintY;
-    setcolor("white");
+    setPrintColor("white");
     print("我",x,y++);
     print("体力:"+std::to_string(Player::HP)+"/"+std::to_string(Player::HPMax),x,y++);
     print("灵力:"+std::to_string(Player::MP)+"/"+std::to_string(Player::MPMax),x,y++);

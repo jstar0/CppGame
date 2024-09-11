@@ -90,9 +90,9 @@ void loginOrRegister()
     int userLoginChoice = 0;
 
     screenMtx.lock();
-    setcolor("white", "yellow");
+    setPrintColor("white", "yellow");
     print(">登入服务器 ", 8, 27);
-    setcolor("white", "black");
+    setPrintColor("white", "black");
     print("注册账号  ", 8, 28);
     print("返回上级菜单  ", 8, 30);
     screenMtx.unlock();
@@ -138,9 +138,9 @@ void loginOrRegister()
         if (userLoginChoice == 0)
         {
             screenMtx.lock();
-            setcolor("white", "yellow");
+            setPrintColor("white", "yellow");
             print(">登入服务器 ", 8, 27);
-            setcolor("white", "black");
+            setPrintColor("white", "black");
             print("注册账号    ", 8, 28);
             print("返回上级菜单    ", 8, 30);
             screenMtx.unlock();
@@ -148,23 +148,23 @@ void loginOrRegister()
         else if (userLoginChoice == 1)
         {
             screenMtx.lock();
-            setcolor("white", "black");
+            setPrintColor("white", "black");
             print("登入服务器    ", 8, 27);
-            setcolor("white", "yellow");
+            setPrintColor("white", "yellow");
             print(">注册账号 ", 8, 28);
-            setcolor("white", "black");
+            setPrintColor("white", "black");
             print("返回上级菜单    ", 8, 30);
             screenMtx.unlock();
         }
         else if (userLoginChoice == 2)
         {
             screenMtx.lock();
-            setcolor("white", "black");
+            setPrintColor("white", "black");
             print("登入服务器    ", 8, 27);
             print("注册账号    ", 8, 28);
-            setcolor("white", "yellow");
+            setPrintColor("white", "yellow");
             print(">返回上级菜单 ", 8, 30);
-            setcolor("white", "black");
+            setPrintColor("white", "black");
             screenMtx.unlock();
         }
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
@@ -180,7 +180,7 @@ void startSceneMainLoop()
             for (const auto& [key, group] : groupedLOGO) {
                 for (const auto& [str, x, y] : group) {
                     screenMtx.lock();
-                    setcolor("lightyellow", "lightyellow");
+                    setPrintColor("lightyellow", "lightyellow");
                     print(str, x, y);
                     screenMtx.unlock();
                     if (startSceneMainLoopEnd)
@@ -201,7 +201,7 @@ void startSceneMainLoop()
             for (const auto& [key, group] : groupedLOGO) {
                 for (const auto& [str, x, y] : group) {
                     screenMtx.lock();
-                    setcolor("white", "white");
+                    setPrintColor("white", "white");
                     print(str, x, y);
                     screenMtx.unlock();
                     if (startSceneMainLoopEnd)
@@ -222,7 +222,7 @@ void startSceneMainLoop()
             for (const auto& [key, group] : groupedText_1) {
                 for (const auto& [str, x, y] : group) {
                     screenMtx.lock();
-                    setcolor("lightgray", "lightgray");
+                    setPrintColor("lightgray", "lightgray");
                     print(str, x, y);
                     screenMtx.unlock();
                     if (startSceneMainLoopEnd)
@@ -243,7 +243,7 @@ void startSceneMainLoop()
             for (const auto& [key, group] : groupedText_1) {
                 for (const auto& [str, x, y] : group) {
                     screenMtx.lock();
-                    setcolor("white", "white");
+                    setPrintColor("white", "white");
                     print(str, x, y);
                     screenMtx.unlock();
                     if (startSceneMainLoopEnd)
@@ -266,7 +266,7 @@ void startSceneMainLoop()
             for (const auto& [key, group] : groupedText_2) {
                 for (const auto& [str, x, y] : group) {
                     screenMtx.lock();
-                    setcolor("lightgray", "lightgray");
+                    setPrintColor("lightgray", "lightgray");
                     print(str, x, y);
                     screenMtx.unlock();
                     if (startSceneMainLoopEnd)
@@ -287,7 +287,7 @@ void startSceneMainLoop()
             for (const auto& [key, group] : groupedText_2) {
                 for (const auto& [str, x, y] : group) {
                     screenMtx.lock();
-                    setcolor("white", "white");
+                    setPrintColor("white", "white");
                     print(str, x, y);
                     screenMtx.unlock();
                     if (startSceneMainLoopEnd)
@@ -301,11 +301,11 @@ void startSceneMainLoop()
     });
 
     screenMtx.lock();
-    setcolor("lightyellow", "black");
+    setPrintColor("lightyellow", "black");
     print("九州仙途", 8, 24);
-    setcolor("white", "yellow");
+    setPrintColor("white", "yellow");
     print(">新游戏 ", 8, 27);
-    setcolor("white", "black");
+    setPrintColor("white", "black");
     print("加载游戏", 8, 28);
     print("在线游戏", 8, 29);
     print("退出游戏", 8, 30);
@@ -355,9 +355,9 @@ void startSceneMainLoop()
         if (userChoice == 0)
         {
             screenMtx.lock();
-            setcolor("white", "yellow");
+            setPrintColor("white", "yellow");
             print(">新游戏 ", 8, 27);
-            setcolor("white", "black");
+            setPrintColor("white", "black");
             print("加载游戏   ", 8, 28);
             print("在线游戏   ", 8, 29);
             print("退出游戏   ", 8, 30);
@@ -366,11 +366,11 @@ void startSceneMainLoop()
         else if (userChoice == 1)
         {
             screenMtx.lock();
-            setcolor("white", "black");
+            setPrintColor("white", "black");
             print("新游戏     ", 8, 27);
-            setcolor("white", "yellow");
+            setPrintColor("white", "yellow");
             print(">加载游戏 ", 8, 28);
-            setcolor("white", "black");
+            setPrintColor("white", "black");
             print("在线游戏   ", 8, 29);
             print("退出游戏   ", 8, 30);
             screenMtx.unlock();
@@ -378,25 +378,25 @@ void startSceneMainLoop()
         else if (userChoice == 2)
         {
             screenMtx.lock();
-            setcolor("white", "black");
+            setPrintColor("white", "black");
             print("新游戏     ", 8, 27);
             print("加载游戏   ", 8, 28);
-            setcolor("white", "yellow");
+            setPrintColor("white", "yellow");
             print(">在线游戏 ", 8, 29);
-            setcolor("white", "black");
+            setPrintColor("white", "black");
             print("退出游戏   ", 8, 30);
             screenMtx.unlock();
         }
         else if (userChoice == 3)
         {
             screenMtx.lock();
-            setcolor("white", "black");
+            setPrintColor("white", "black");
             print("新游戏     ", 8, 27);
             print("加载游戏   ", 8, 28);
             print("在线游戏   ", 8, 29);
-            setcolor("white", "yellow");
+            setPrintColor("white", "yellow");
             print(">退出游戏 ", 8, 30);
-            setcolor("white", "black");
+            setPrintColor("white", "black");
             screenMtx.unlock();
         }
         std::this_thread::sleep_for(std::chrono::milliseconds(100));

@@ -1,6 +1,6 @@
 #ifndef SAVE_H
 #define SAVE_H
-#include<vector>
+#include <vector>
 
 std::vector<int> getMapID();
 void save();

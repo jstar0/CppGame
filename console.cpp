@@ -5,17 +5,17 @@
 #include<vector>
 #include"console.h"
 #include"card.h"
-void setscreensize(int cols,int lines)
+void setScreenSize(int cols,int lines)
 {
     char cmd[64];
 	sprintf(cmd, "mode con cols=%d lines=%d",cols,lines);
 	system(cmd);
 }
-void setcolor(int fore/* =7 */,int back/* =0 */)
+void setPrintColor(int fore/* =7 */,int back/* =0 */)
 {
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),(back<<4)+fore);
 }
-void setcolor(std::string fore_s,std::string back_s/* ="black" */)
+void setPrintColor(std::string fore_s,std::string back_s/* ="black" */)
 {
     int fore=-1,back=-1;
     if (back_s=="black") back=0;
@@ -50,7 +50,7 @@ void setcolor(std::string fore_s,std::string back_s/* ="black" */)
     if (fore_s=="purple") fore=13;
     if (fore_s=="lightyellow") fore=14;
     if (fore_s=="white") fore=15;
-    setcolor(fore,back);
+    setPrintColor(fore,back);
 }
 void setposition(int x/* =1 */,int y/* =1 */)
 {
@@ -59,7 +59,7 @@ void setposition(int x/* =1 */,int y/* =1 */)
     cursorposition.Y=y;
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE),cursorposition); 
 }
-void setcursor(bool show/* =true */)
+void setCursor(bool show/* =true */)
 {
     if (!show) 
     {
@@ -97,13 +97,13 @@ void print(std::vector<std::string> s,int x/* =0 */,int y/* =0 */,int l/* =-1 */
 }
 void clear()
 {
-    setcolor("black","black");
+    setPrintColor("black","black");
     setposition(0,0);
     for (int i=0; i<=100; i++) std::cout<<std::endl;
 }
 void clear(int X1,int Y1,int X2,int Y2)
 {
-    setcolor("black","black");
+    setPrintColor("black","black");
     for (int i=Y1; i<=Y2; i++)
     {
         setposition(X1,i);
