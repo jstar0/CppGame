@@ -28,12 +28,12 @@ void Player::init()
     Player::state.strength=0;
 }
 
-void Player::addcard(Card* card)
+void Player::addCard(Card* card)
 {
     Player::card.push_back(card);
 }
 
-void Player::addprop(Prop* prop)
+void Player::addProp(Prop* prop)
 {
     Player::prop.push_back(prop);
 }
@@ -43,7 +43,7 @@ int Player::damage(int d)
     return d+Player::state.strength;
 }
 
-void Player::getdamage(int gd)
+void Player::getDamage(int gd)
 {
     int gde=gd-Player::state.defense>0?gd-Player::state.defense:0;
     if (gde>0) message("受到"+std::to_string(gd-Player::state.defense)+"点伤害!","red");
@@ -78,7 +78,7 @@ int Player::calculatelevel(int level)
     else return 100*level+level*level;
 }
 
-void Player::turnset()
+void Player::turnSet()
 {
     MP=MPMax;
     state.defense=0;

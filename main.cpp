@@ -64,13 +64,13 @@ int main()
             return 1;
         }
         for (int i = 1; i <= 4; i++)
-            Player::addcard(CardConfig::cards[0]);
+            Player::addCard(CardConfig::cards[0]);
         for (int i = 1; i <= 4; i++)
-            Player::addcard(CardConfig::cards[3]);
+            Player::addCard(CardConfig::cards[3]);
         for (int i = 1; i <= 2; i++)
-            Player::addcard(CardConfig::cards[1]);
+            Player::addCard(CardConfig::cards[1]);
         for (int i = 1; i <= 1; i++)
-            Player::addcard(CardConfig::cards[2]);
+            Player::addCard(CardConfig::cards[2]);
         if (!getMapList())
         {
             message("获取地图列表失败。", "red");

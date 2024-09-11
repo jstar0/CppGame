@@ -115,7 +115,7 @@ void EnemyIntention::effect()
         message(GameConfig::currentEnemy->getName()+"对你发动攻击");
         for (int i=1; i<=damagetimes; i++)
         {
-            Player::getdamage(GameConfig::currentEnemy->damage(damage));
+            Player::getDamage(GameConfig::currentEnemy->damage(damage));
         }
     }
     if (isdefend) 

@@ -178,13 +178,13 @@ void Object::run()
         }
         if (kind.isgivecard)
         {
-            Player::addcard(CardConfig::cards[kind.cardID]);
+            Player::addCard(CardConfig::cards[kind.cardID]);
             message("获得卡牌" + CardConfig::cards[kind.cardID]->getName());
             printPlayerState();
         }
         if (kind.isgiveprop)
         {
-            Player::addprop(GameConfig::props[kind.propID]);
+            Player::addProp(GameConfig::props[kind.propID]);
             message("获得道具" + GameConfig::props[kind.propID]->getName());
         }
         if (kind.isgivemoney)
@@ -432,7 +432,7 @@ CardGoods::CardGoods(int cardID, int price, int number /* =1 */)
 
 void CardGoods::buy()
 {
-    Player::addcard(card);
+    Player::addCard(card);
     message("购买了" + name);
     number--;
 }
@@ -450,7 +450,7 @@ PropGoods::PropGoods(int propID, int price, int number /* =1 */)
 
 void PropGoods::buy()
 {
-    Player::addprop(prop);
+    Player::addProp(prop);
     message("购买了" + name);
     number--;
 }

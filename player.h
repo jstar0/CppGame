@@ -26,13 +26,13 @@ public:
     static PlayerState state;
     Player();
     static void init();
-    static void addcard(Card *card);
-    static void addprop(Prop *prop);
+    static void addCard(Card *card);
+    static void addProp(Prop *prop);
     static int damage(int d);
-    static void getdamage(int gd);
+    static void getDamage(int gd);
     static void getEXP(int e);
     static int calculatelevel(int level);
-    static void turnset();
+    static void turnSet();
     friend void printPlayer();
 };
 

@@ -366,7 +366,7 @@ void printCard()
 bool fightMainLoop()
 {
     srand(time(0));
-    Player::turnset();
+    Player::turnSet();
     GameConfig::currentEnemy->turnset();
     GameConfig::currentEnemy->currentintention = *GameConfig::currentEnemy->intention[rand() % GameConfig::currentEnemy->intention.size()];
     clear(RoomConfig::printX, RoomConfig::printY, RoomConfig::printX + RoomConfig::width - 1, RoomConfig::printY + RoomConfig::height - 1);
@@ -398,12 +398,12 @@ bool selectCardEnd()
         message("你打败了" + GameConfig::currentEnemy->getName(), "red");
         if (GameConfig::currentEnemy->getCard() >= 0)
         {
-            Player::addcard(CardConfig::cards[GameConfig::currentEnemy->getCard()]);
+            Player::addCard(CardConfig::cards[GameConfig::currentEnemy->getCard()]);
             message("获得卡牌" + CardConfig::cards[GameConfig::currentEnemy->getCard()]->getName());
         }
         if (GameConfig::currentEnemy->getProp() >= 0)
         {
-            Player::addprop(GameConfig::props[GameConfig::currentEnemy->getProp()]);
+            Player::addProp(GameConfig::props[GameConfig::currentEnemy->getProp()]);
             message("获得道具" + GameConfig::props[GameConfig::currentEnemy->getProp()]->getName());
         }
         if (GameConfig::currentEnemy->getMoney() > 0)
