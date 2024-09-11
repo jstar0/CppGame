@@ -104,28 +104,28 @@ bool getCardList()
                 ss >> damage;
                 ss.ignore(1);
                 ss >> times;
-                CardConfig::cards[ID]->setattack(damage, times);
+                CardConfig::cards[ID]->setAttack(damage, times);
             }
             else if (type == "D")
             {
                 int defense;
                 ss >> defense;
                 ss.ignore(1);
-                CardConfig::cards[ID]->setdefend(defense);
+                CardConfig::cards[ID]->setDefend(defense);
             }
             else if (type == "S")
             {
                 int strength;
                 ss >> strength;
                 ss.ignore(1);
-                CardConfig::cards[ID]->setstrengthen(strength);
+                CardConfig::cards[ID]->setStrengthen(strength);
             }
             else if (type == "R")
             {
                 int times;
                 ss >> times;
                 ss.ignore(1);
-                CardConfig::cards[ID]->setdraw(times);
+                CardConfig::cards[ID]->setDraw(times);
             }
         }
         else
@@ -208,7 +208,7 @@ bool getEnemyIntentionList()
                 ss >> damage;
                 ss.ignore(1);
                 ss >> times;
-                GameConfig::enemyIntentions[ID]->setattack(damage, times);
+                GameConfig::enemyIntentions[ID]->setAttack(damage, times);
             }
             if (type == "D")
             {
@@ -216,7 +216,7 @@ bool getEnemyIntentionList()
                 ss >> ID;
                 ss.ignore(1);
                 ss >> defense;
-                GameConfig::enemyIntentions[ID]->setdefend(defense);
+                GameConfig::enemyIntentions[ID]->setDefend(defense);
             }
             if (type == "S")
             {
@@ -224,7 +224,7 @@ bool getEnemyIntentionList()
                 ss >> ID;
                 ss.ignore(1);
                 ss >> strength;
-                GameConfig::enemyIntentions[ID]->setstrengthen(strength);
+                GameConfig::enemyIntentions[ID]->setStrengthen(strength);
             }
             if (type == "G")
             {
@@ -235,7 +235,7 @@ bool getEnemyIntentionList()
                 ss.ignore(1);
                 while (getline(ss, cardID, ','))
                     givecard.push_back(CardConfig::cards[stoi(cardID)]);
-                GameConfig::enemyIntentions[ID]->setgivecard(givecard);
+                GameConfig::enemyIntentions[ID]->setGiveCard(givecard);
             }
         }
         else
@@ -320,7 +320,7 @@ bool getEnemyList()
             ss >> ID;
             ss.ignore(1);
             ss >> EXP;
-            GameConfig::enemies[ID].giveEXP = EXP;
+            GameConfig::enemies[ID].setEXP(EXP);
         }
         if (type == "money")
         {
@@ -328,7 +328,7 @@ bool getEnemyList()
             ss >> ID;
             ss.ignore(1);
             ss >> money;
-            GameConfig::enemies[ID].giveMoney = money;
+            GameConfig::enemies[ID].setMoney(money);
         }
         if (type == "card")
         {
@@ -336,7 +336,7 @@ bool getEnemyList()
             ss >> ID;
             ss.ignore(1);
             ss >> cardID;
-            GameConfig::enemies[ID].giveCard = cardID;
+            GameConfig::enemies[ID].setCard(cardID);
         }
         if (type == "prop")
         {
@@ -344,7 +344,7 @@ bool getEnemyList()
             ss >> ID;
             ss.ignore(1);
             ss >> propID;
-            GameConfig::enemies[ID].giveProp = propID;
+            GameConfig::enemies[ID].setProp(propID);
         }
     }
     fin.close();
@@ -403,7 +403,7 @@ void loadMap(int mapIndex)
 
     // std::string testPath="./assets/maps/1/00-KeTing.mapdata";
     // ifstream fin(testPath);
-    ifstream fin("./assets/maps" + GameConfig::rooms[mapIndex].filePath);
+    ifstream fin("./assets/maps" + GameConfig::rooms[mapIndex].getFilePath());
     if (!fin)
     {
         message("无法打开地图文件");

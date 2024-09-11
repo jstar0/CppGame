@@ -13,8 +13,10 @@ public:
     int defense;
     int drawtimes;
     int strength;
+
     CardKind();
     CardKind(const CardKind &other);
+
     // 重载=运算符
     CardKind &operator=(const CardKind &other);
 };
@@ -22,22 +24,31 @@ public:
 class Card
 {
 public:
-    std::string name;
-    std::vector<std::string> description;
-    int ID, cost, rarity;
-    CardKind kind;
     Card();
     Card(std::string name, std::vector<std::string> description, int ID, int cost, int rarity);
     Card(const Card &other);
+
     // 重载=运算符
     Card &operator=(const Card &other);
-    void setattack(int damage, int times);
-    void setdefend(int defense);
-    void setdraw(int times);
-    void setstrengthen(int strength);
+    void setAttack(int damage, int times);
+    void setDefend(int defense);
+    void setDraw(int times);
+    void setStrengthen(int strength);
     virtual void effect();
-    std::string getcolor();
+    std::string getColor();
     friend void print(Card *card);
+
+    int getID() { return ID; }
+    int getCost() { return cost; }
+    int getRarity() { return rarity; }
+    std::string getName() { return name; }
+    std::vector<std::string> getDescription() { return description; }
+
+protected:
+    CardKind kind;
+    std::string name;
+    std::vector<std::string> description;
+    int ID, cost, rarity;
 };
 
 class AttackCard : public Card
@@ -68,12 +79,4 @@ public:
     StrengthenCard(std::string name, std::vector<std::string> description, int ID, int cost, int rarity, int strength);
 };
 
-class ChangeHaveCard : public Card
-{
-public:
-    ChangeHaveCard();
-    ChangeHaveCard(std::string name, std::vector<std::string> description, int ID, int cost, int rarity, std::vector<Card *> changehavecard = {});
-    std::vector<Card *> changehavecard;
-    void effect() override;
-};
 #endif

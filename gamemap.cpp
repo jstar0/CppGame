@@ -179,13 +179,13 @@ void Object::run()
         if (kind.isgivecard)
         {
             Player::addcard(CardConfig::cards[kind.cardID]);
-            message("获得卡牌" + CardConfig::cards[kind.cardID]->name);
+            message("获得卡牌" + CardConfig::cards[kind.cardID]->getName());
             printPlayerState();
         }
         if (kind.isgiveprop)
         {
             Player::addprop(GameConfig::props[kind.propID]);
-            message("获得道具" + GameConfig::props[kind.propID]->name);
+            message("获得道具" + GameConfig::props[kind.propID]->getName());
         }
         if (kind.isgivemoney)
         {
@@ -268,8 +268,7 @@ void Room::addObject(Object *object, std::vector<__xy> xy)
     for (int i = 0; i < xy.size(); i++)
     {
         Object *tobject = object->clone();
-        tobject->x = xy[i].x;
-        tobject->y = xy[i].y;
+        tobject->setxy(xy[i].x, xy[i].y);
         this->object.push_back(tobject);
     }
 }
@@ -278,7 +277,7 @@ Object *Room::getObject(int x, int y)
 {
     for (int i = 0; i < object.size(); i++)
     {
-        if (object[i]->x == x && object[i]->y == y)
+        if (object[i]->getxy()==__xy(x, y))
             return object[i];
     }
     return nullptr;
@@ -286,10 +285,10 @@ Object *Room::getObject(int x, int y)
 
 void addroom(Room room)
 {
-    if (room.ID > GameConfig::rooms.size() - 1)
-        GameConfig::rooms.resize(room.ID + 1);
+    if (room.getID() > GameConfig::rooms.size() - 1)
+        GameConfig::rooms.resize(room.getID() + 1);
     message("resize");
-    GameConfig::rooms[room.ID] = room;
+    GameConfig::rooms[room.getID()] = room;
 }
 
 // 墙----------------------------------------------------------------------------------------------------------
@@ -393,7 +392,7 @@ void EnemyObject::run()
     CardConfig::have = Player::card;
     GameConfig::currentEnemy->init();
     Player::init();
-    message("开始战斗:" + GameConfig::currentEnemy->name);
+    message("开始战斗:" + GameConfig::currentEnemy->getName());
     while (fightMainLoop())
         ;
     if (Player::HP > 0)
@@ -426,9 +425,9 @@ CardGoods::CardGoods(int cardID, int price, int number /* =1 */)
     this->card = CardConfig::cards[cardID];
     this->price = price;
     this->number = number;
-    this->color = card->getcolor();
-    this->name = "卡牌  " + card->name;
-    this->description = card->description;
+    this->color = card->getColor();
+    this->name = "卡牌  " + card->getName();
+    this->description = card->getDescription();
 }
 
 void CardGoods::buy()
@@ -444,9 +443,9 @@ PropGoods::PropGoods(int propID, int price, int number /* =1 */)
     this->prop = GameConfig::props[propID];
     this->price = price;
     this->number = number;
-    this->color = prop->forecolor;
-    this->name = "道具  " + prop->name;
-    this->description = prop->description;
+    this->color = prop->getForecolor();
+    this->name = "道具  " + prop->getName();
+    this->description = prop->getDescription();
 }
 
 void PropGoods::buy()
@@ -485,8 +484,7 @@ void StoreObject::run()
     StoreConfig::currentSelectGoods = 0;
     StoreConfig::currentGoods = &goodss;
     printGoods();
-    while (shoppingMainLoop())
-        ;
+    while (shoppingMainLoop());
     message("成功退出商店");
     printMap();
     printSmallMap();
@@ -535,7 +533,7 @@ MoveObject::MoveObject(const MoveObject &other)
 
 void MoveObject::run()
 {
-    message("传送到了" + GameConfig::rooms[moveID].name);
+    message("传送到了" + GameConfig::rooms[moveID].getName());
     PlayerConfig::currentX = moveX;
     PlayerConfig::currentY = moveY;
     PlayerConfig::currentRoom = moveID;

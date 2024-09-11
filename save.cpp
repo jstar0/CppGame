@@ -49,7 +49,7 @@ void save()
     fout.write(reinterpret_cast<const char *>(&cardSize), sizeof(int));
     for (int i = 0; i < cardSize; i++)
     {
-        int cardID = Player::card[i]->ID;
+        int cardID = Player::card[i]->getID();
         fout.write(reinterpret_cast<const char *>(&cardID), sizeof(int));
     }
     fout.write(reinterpret_cast<const char *>(&PlayerConfig::currentX), sizeof(int));

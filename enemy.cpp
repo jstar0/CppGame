@@ -1,6 +1,8 @@
 #include<iostream>
 #include<cstdlib>
 #include<ctime>
+#include<string>
+#include<vector>
 #include"enemy.h"
 #include"console.h"
 #include"UI.h"
@@ -31,13 +33,13 @@ void Enemy::addintention(EnemyIntention *intention)
 
 int Enemy::damage(int d)
 {
-    return d+state.strength;
+    return d+state.getStrength();
 }
 
 void Enemy::getdamage(int gd)
 {
-    int gde=gd-state.defense>0?gd-state.defense:0;
-    if (gde>0) message(name+"受到"+std::to_string(gd-state.defense)+"点伤害!","purple");
+    int gde=gd-state.getDefense()>0?gd-state.getDefense():0;
+    if (gde>0) message(name+"受到"+std::to_string(gd-state.getDefense())+"点伤害!","purple");
     else 
     {
         srand(time(0));
@@ -47,7 +49,7 @@ void Enemy::getdamage(int gd)
         if (x==2) message(name+"说你没吃饭","purple");
     }
     HP=HP-gde>0?HP-gde:0;
-    state.defense=(state.defense-gd>0)?state.defense-gd:0;
+    state.setDefense((state.getDefense()-gd>0)?state.getDefense()-gd:0);
 }
 
 void print(Enemy *enemy)
@@ -59,8 +61,8 @@ void print(Enemy *enemy)
     setPrintColor("white");
     print(enemy->name,x,y++);
     print("HP:"+std::to_string(enemy->HP)+"/"+std::to_string(enemy->HPMax),x,y++);
-    if (enemy->state.strength>0) print("力量:"+std::to_string(enemy->state.strength),x,y++);
-    if (enemy->state.defense>0) print("防御:"+std::to_string(enemy->state.defense),x,y++);
+    if (enemy->state.getStrength()>0) print("力量:"+std::to_string(enemy->state.getStrength()),x,y++);
+    if (enemy->state.getDefense()>0) print("防御:"+std::to_string(enemy->state.getDefense()),x,y++);
 }
 
 void Enemy::init()
@@ -71,7 +73,7 @@ void Enemy::init()
 
 void Enemy::turnset()
 {
-    state.defense=0;
+    state.setDefense(0);
 }
 
 EnemyState::EnemyState()
@@ -110,7 +112,7 @@ void EnemyIntention::effect()
 {
     if (isattack) 
     {
-        message(GameConfig::currentEnemy->name+"对你发动攻击");
+        message(GameConfig::currentEnemy->getName()+"对你发动攻击");
         for (int i=1; i<=damagetimes; i++)
         {
             Player::getdamage(GameConfig::currentEnemy->damage(damage));
@@ -118,46 +120,46 @@ void EnemyIntention::effect()
     }
     if (isdefend) 
     {
-        message(GameConfig::currentEnemy->name+"进行防御");
-        GameConfig::currentEnemy->state.defense+=defense;
+        message(GameConfig::currentEnemy->getName()+"进行防御");
+        GameConfig::currentEnemy->setDefense(GameConfig::currentEnemy->getDefense()+defense);
     }
     if (isstrengthen)
     {
-        message(GameConfig::currentEnemy->name+"获得"+std::to_string(strength)+"点攻势");
-        GameConfig::currentEnemy->state.strength+=strength;
+        message(GameConfig::currentEnemy->getName()+"获得"+std::to_string(strength)+"点攻势");
+        GameConfig::currentEnemy->setStrength(GameConfig::currentEnemy->getStrength()+strength);
     }
     if (isgivecard)
     {
         std::string givecardname="";
         for (int i=0; i<givecard.size(); i++)
         {
-            givecardname+=givecard[i]->name+" ";
+            givecardname+=givecard[i]->getName()+" ";
             CardConfig::have.push_back(givecard[i]);
         }
-        message(GameConfig::currentEnemy->name+"塞给你:"+givecardname);
+        message(GameConfig::currentEnemy->getName()+"塞给你:"+givecardname);
     }
 }
 
-void EnemyIntention::setattack(int damage,int times)
+void EnemyIntention::setAttack(int damage,int times)
 {
     isattack=true;
     this->damage=damage;
     this->damagetimes=times;
 }
 
-void EnemyIntention::setdefend(int defense)
+void EnemyIntention::setDefend(int defense)
 {
     isdefend=true;
     this->defense=defense;
 }
 
-void EnemyIntention::setstrengthen(int strength)
+void EnemyIntention::setStrengthen(int strength)
 {
     isstrengthen=true;
     this->strength=strength;
 }
 
-void EnemyIntention::setgivecard(std::vector<Card*> givecard)
+void EnemyIntention::setGiveCard(std::vector<Card*> givecard)
 {
     isgivecard=true;
     this->givecard=givecard;
@@ -166,48 +168,48 @@ void EnemyIntention::setgivecard(std::vector<Card*> givecard)
 EnemyIntentionAttack::EnemyIntentionAttack()
 {
     description={"攻击"};
-    setattack(0,0);
+    setAttack(0,0);
 }
 
 EnemyIntentionAttack::EnemyIntentionAttack(std::string description,int damage,int damagetimes)
 {
     this->description=description;
-    setattack(damage,damagetimes);
+    setAttack(damage,damagetimes);
 }
 
 EnemyIntentionDefend::EnemyIntentionDefend()
 {
     description={"防御"};
-    setdefend(0);
+    setDefend(0);
 }
 
 EnemyIntentionDefend::EnemyIntentionDefend(std::string description,int defense)
 {
     this->description=description;
-    setdefend(defense);
+    setDefend(defense);
 }
 
 EnemyIntentionStrengthen::EnemyIntentionStrengthen()
 {
     description={"强化"};
-    setstrengthen(0);
+    setStrengthen(0);
 }
 
 EnemyIntentionStrengthen::EnemyIntentionStrengthen(std::string description,int strength)
 {
     this->description=description;
-    setstrengthen(strength);
+    setStrengthen(strength);
 }
 
 EnemyIntentionGiveCard::EnemyIntentionGiveCard()
 {
     description={"给卡"};
-    setgivecard({});
+    setGiveCard({});
 }
 
 EnemyIntentionGiveCard::EnemyIntentionGiveCard(std::string description,std::vector<Card*> givecard)
 {
     this->description=description;
-    setgivecard(givecard);
+    setGiveCard(givecard);
 }
 

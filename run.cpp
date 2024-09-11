@@ -63,7 +63,7 @@ void movePlayer(int deltax, int deltay)
     clear(RoomConfig::printX + PlayerConfig::currentX, RoomConfig::printY + PlayerConfig::currentY, RoomConfig::printX + PlayerConfig::currentX + 1, RoomConfig::printY + PlayerConfig::currentY);
     for (int i = 0; i < GameConfig::rooms[PlayerConfig::currentRoom].object.size(); i++)
     {
-        if (PlayerConfig::currentX >= GameConfig::rooms[PlayerConfig::currentRoom].object[i]->x && PlayerConfig::currentX <= GameConfig::rooms[PlayerConfig::currentRoom].object[i]->x + GameConfig::rooms[PlayerConfig::currentRoom].object[i]->name.size() - 2 && PlayerConfig::currentY == GameConfig::rooms[PlayerConfig::currentRoom].object[i]->y)
+        if (PlayerConfig::currentX >= GameConfig::rooms[PlayerConfig::currentRoom].object[i]->getxy().x && PlayerConfig::currentX <= GameConfig::rooms[PlayerConfig::currentRoom].object[i]->getxy().x + GameConfig::rooms[PlayerConfig::currentRoom].object[i]->getName().size() - 2 && PlayerConfig::currentY == GameConfig::rooms[PlayerConfig::currentRoom].object[i]->getxy().y)
         {
             extern void print(Object * object);
             print(GameConfig::rooms[PlayerConfig::currentRoom].object[i]);
@@ -86,25 +86,25 @@ bool printMap()
     print(GameConfig::rooms[PlayerConfig::currentRoom]);
     movePlayer(0, 0);
     setPrintColor("white");
-    if (GameConfig::rooms[PlayerConfig::currentRoom].UP_ID < 0)
+    if (GameConfig::rooms[PlayerConfig::currentRoom].getUP_ID() < 0)
         for (int i = 3; i < 55; i++)
             print("墙", i, 3);
     else
         for (int i = 3; i < 55; i++)
             print("空", i, 3);
-    if (GameConfig::rooms[PlayerConfig::currentRoom].DOWN_ID < 0)
+    if (GameConfig::rooms[PlayerConfig::currentRoom].getDOWN_ID() < 0)
         for (int i = 3; i <= 55; i++)
             print("墙", i, 27);
     else
         for (int i = 3; i <= 55; i++)
             print("空", i, 27);
-    if (GameConfig::rooms[PlayerConfig::currentRoom].LEFT_ID < 0)
+    if (GameConfig::rooms[PlayerConfig::currentRoom].getLEFT_ID() < 0)
         for (int i = 3; i <= 27; i++)
             print("墙", 3, i);
     else
         for (int i = 3; i <= 27; i++)
             print("空", 3, i);
-    if (GameConfig::rooms[PlayerConfig::currentRoom].RIGHT_ID < 0)
+    if (GameConfig::rooms[PlayerConfig::currentRoom].getRIGHT_ID() < 0)
         for (int i = 3; i <= 27; i++)
             print("墙", 55, i);
     else
@@ -123,27 +123,27 @@ bool printSmallMap()
     int smallmapCenterX = SmallMapConfig::x + (SmallMapConfig::width - 1) / 2, smallmapCenterY = SmallMapConfig::y + (SmallMapConfig::height - 1) / 2;
     clear(SmallMapConfig::x, SmallMapConfig::y, SmallMapConfig::x + SmallMapConfig::width - 1, SmallMapConfig::y + SmallMapConfig::height - 1);
     setPrintColor("blue", "white");
-    print(GameConfig::rooms[PlayerConfig::currentRoom].name, smallmapCenterX - GameConfig::rooms[PlayerConfig::currentRoom].name.size() / 2 + 1, smallmapCenterY);
+    print(GameConfig::rooms[PlayerConfig::currentRoom].getName(), smallmapCenterX - GameConfig::rooms[PlayerConfig::currentRoom].getName().size() / 2 + 1, smallmapCenterY);
     setPrintColor("white");
-    if (GameConfig::rooms[PlayerConfig::currentRoom].UP_ID >= 0)
+    if (GameConfig::rooms[PlayerConfig::currentRoom].getUP_ID() >= 0)
     {
         print("↑", smallmapCenterX, smallmapCenterY - 1);
-        print(GameConfig::rooms[GameConfig::rooms[PlayerConfig::currentRoom].UP_ID].name, smallmapCenterX - GameConfig::rooms[GameConfig::rooms[PlayerConfig::currentRoom].UP_ID].name.size() / 2 + 1, smallmapCenterY - 2);
+        print(GameConfig::rooms[GameConfig::rooms[PlayerConfig::currentRoom].getUP_ID()].getName(), smallmapCenterX - GameConfig::rooms[GameConfig::rooms[PlayerConfig::currentRoom].getUP_ID()].getName().size() / 2 + 1, smallmapCenterY - 2);
     }
-    if (GameConfig::rooms[PlayerConfig::currentRoom].DOWN_ID >= 0)
+    if (GameConfig::rooms[PlayerConfig::currentRoom].getDOWN_ID() >= 0)
     {
         print("↓", smallmapCenterX, smallmapCenterY + 1);
-        print(GameConfig::rooms[GameConfig::rooms[PlayerConfig::currentRoom].DOWN_ID].name, smallmapCenterX - GameConfig::rooms[GameConfig::rooms[PlayerConfig::currentRoom].DOWN_ID].name.size() / 2 + 1, smallmapCenterY + 2);
+        print(GameConfig::rooms[GameConfig::rooms[PlayerConfig::currentRoom].getDOWN_ID()].getName(), smallmapCenterX - GameConfig::rooms[GameConfig::rooms[PlayerConfig::currentRoom].getDOWN_ID()].getName().size() / 2 + 1, smallmapCenterY + 2);
     }
-    if (GameConfig::rooms[PlayerConfig::currentRoom].LEFT_ID >= 0)
+    if (GameConfig::rooms[PlayerConfig::currentRoom].getLEFT_ID() >= 0)
     {
-        print("←", smallmapCenterX - GameConfig::rooms[PlayerConfig::currentRoom].name.size() / 2 - 1, smallmapCenterY);
-        print(GameConfig::rooms[GameConfig::rooms[PlayerConfig::currentRoom].LEFT_ID].name, smallmapCenterX - GameConfig::rooms[PlayerConfig::currentRoom].name.size() / 2 - 1 - GameConfig::rooms[GameConfig::rooms[PlayerConfig::currentRoom].LEFT_ID].name.size(), smallmapCenterY);
+        print("←", smallmapCenterX - GameConfig::rooms[PlayerConfig::currentRoom].getName().size() / 2 - 1, smallmapCenterY);
+        print(GameConfig::rooms[GameConfig::rooms[PlayerConfig::currentRoom].getLEFT_ID()].getName(), smallmapCenterX - GameConfig::rooms[PlayerConfig::currentRoom].getName().size() / 2 - 1 - GameConfig::rooms[GameConfig::rooms[PlayerConfig::currentRoom].getLEFT_ID()].getName().size(), smallmapCenterY);
     }
-    if (GameConfig::rooms[PlayerConfig::currentRoom].RIGHT_ID >= 0)
+    if (GameConfig::rooms[PlayerConfig::currentRoom].getRIGHT_ID() >= 0)
     {
-        print("→", smallmapCenterX + GameConfig::rooms[PlayerConfig::currentRoom].name.size() / 2 + 1, smallmapCenterY);
-        print(GameConfig::rooms[GameConfig::rooms[PlayerConfig::currentRoom].RIGHT_ID].name, smallmapCenterX + GameConfig::rooms[PlayerConfig::currentRoom].name.size() / 2 + 3, smallmapCenterY);
+        print("→", smallmapCenterX + GameConfig::rooms[PlayerConfig::currentRoom].getName().size() / 2 + 1, smallmapCenterY);
+        print(GameConfig::rooms[GameConfig::rooms[PlayerConfig::currentRoom].getRIGHT_ID()].getName(), smallmapCenterX + GameConfig::rooms[PlayerConfig::currentRoom].getName().size() / 2 + 3, smallmapCenterY);
     }
     return true;
 }
@@ -201,10 +201,10 @@ bool playerMoveMainLoop()
             movePlayer(0, -PlayerConfig::speedY);
         else
         {
-            if (GameConfig::rooms[PlayerConfig::currentRoom].UP_ID >= 0)
+            if (GameConfig::rooms[PlayerConfig::currentRoom].getUP_ID() >= 0)
             {
-                message("进入房间" + GameConfig::rooms[GameConfig::rooms[PlayerConfig::currentRoom].UP_ID].name, "red");
-                PlayerConfig::currentRoom = GameConfig::rooms[PlayerConfig::currentRoom].UP_ID;
+                message("进入房间" + GameConfig::rooms[GameConfig::rooms[PlayerConfig::currentRoom].getUP_ID()].getName(), "red");
+                PlayerConfig::currentRoom = GameConfig::rooms[PlayerConfig::currentRoom].getUP_ID();
                 PlayerConfig::currentY = RoomConfig::height - 1;
                 printMap();
                 printSmallMap();
@@ -217,10 +217,10 @@ bool playerMoveMainLoop()
             movePlayer(0, PlayerConfig::speedY);
         else
         {
-            if (GameConfig::rooms[PlayerConfig::currentRoom].DOWN_ID >= 0)
+            if (GameConfig::rooms[PlayerConfig::currentRoom].getDOWN_ID() >= 0)
             {
-                message("进入房间" + GameConfig::rooms[GameConfig::rooms[PlayerConfig::currentRoom].DOWN_ID].name, "red");
-                PlayerConfig::currentRoom = GameConfig::rooms[PlayerConfig::currentRoom].DOWN_ID;
+                message("进入房间" + GameConfig::rooms[GameConfig::rooms[PlayerConfig::currentRoom].getDOWN_ID()].getName(), "red");
+                PlayerConfig::currentRoom = GameConfig::rooms[PlayerConfig::currentRoom].getDOWN_ID();
                 PlayerConfig::currentY = 0;
                 printMap();
                 printSmallMap();
@@ -233,10 +233,10 @@ bool playerMoveMainLoop()
             movePlayer(-PlayerConfig::speedX, 0);
         else
         {
-            if (GameConfig::rooms[PlayerConfig::currentRoom].LEFT_ID >= 0)
+            if (GameConfig::rooms[PlayerConfig::currentRoom].getLEFT_ID() >= 0)
             {
-                message("进入房间" + GameConfig::rooms[GameConfig::rooms[PlayerConfig::currentRoom].LEFT_ID].name, "red");
-                PlayerConfig::currentRoom = GameConfig::rooms[PlayerConfig::currentRoom].LEFT_ID;
+                message("进入房间" + GameConfig::rooms[GameConfig::rooms[PlayerConfig::currentRoom].getLEFT_ID()].getName(), "red");
+                PlayerConfig::currentRoom = GameConfig::rooms[PlayerConfig::currentRoom].getLEFT_ID();
                 PlayerConfig::currentX = RoomConfig::width - 2;
                 printMap();
                 printSmallMap();
@@ -249,10 +249,10 @@ bool playerMoveMainLoop()
             movePlayer(PlayerConfig::speedX, 0);
         else
         {
-            if (GameConfig::rooms[PlayerConfig::currentRoom].RIGHT_ID >= 0)
+            if (GameConfig::rooms[PlayerConfig::currentRoom].getRIGHT_ID() >= 0)
             {
-                message("进入房间" + GameConfig::rooms[GameConfig::rooms[PlayerConfig::currentRoom].RIGHT_ID].name, "red");
-                PlayerConfig::currentRoom = GameConfig::rooms[PlayerConfig::currentRoom].RIGHT_ID;
+                message("进入房间" + GameConfig::rooms[GameConfig::rooms[PlayerConfig::currentRoom].getRIGHT_ID()].getName(), "red");
+                PlayerConfig::currentRoom = GameConfig::rooms[PlayerConfig::currentRoom].getRIGHT_ID();
                 PlayerConfig::currentX = 0;
                 printMap();
                 printSmallMap();
@@ -261,9 +261,9 @@ bool playerMoveMainLoop()
     }
     for (int i = 0; i < GameConfig::rooms[PlayerConfig::currentRoom].object.size(); i++)
     {
-        if (PlayerConfig::currentX == GameConfig::rooms[PlayerConfig::currentRoom].object[i]->x && PlayerConfig::currentY == GameConfig::rooms[PlayerConfig::currentRoom].object[i]->y)
+        if (__xy(PlayerConfig::currentX, PlayerConfig::currentY) == GameConfig::rooms[PlayerConfig::currentRoom].object[i]->getxy())
         {
-            if (GameConfig::rooms[PlayerConfig::currentRoom].object[i]->times != 0)
+            if (GameConfig::rooms[PlayerConfig::currentRoom].object[i]->getTimes() != 0)
                 GameConfig::rooms[PlayerConfig::currentRoom].object[i]->run();
         }
     }
@@ -323,7 +323,7 @@ void drawCard(int n = 1)
  */
 bool endFight()
 {
-    if (GameConfig::currentEnemy->HP == 0 || Player::HP == 0)
+    if (GameConfig::currentEnemy->getHP() == 0 || Player::HP == 0)
     {
         message("按任意键退出战斗", "red");
         getch();
@@ -347,14 +347,14 @@ void printCard()
     for (int i = 0; i < CardConfig::hand.size(); i++)
     {
         if (CardConfig::currentSelectCard == i)
-            setPrintColor(CardConfig::hand[i]->getcolor(), "white");
+            setPrintColor(CardConfig::hand[i]->getColor(), "white");
         else
-            setPrintColor(CardConfig::hand[i]->getcolor(), "black");
-        print(std::to_string(CardConfig::hand[i]->cost) + "费  " + CardConfig::hand[i]->name, CardConfig::selectPrintX, CardConfig::selectPrintY + i);
+            setPrintColor(CardConfig::hand[i]->getColor(), "black");
+        print(std::to_string(CardConfig::hand[i]->getCost()) + "费  " + CardConfig::hand[i]->getName(), CardConfig::selectPrintX, CardConfig::selectPrintY + i);
     }
     clear(DescriptionConfig::printX, DescriptionConfig::printY, DescriptionConfig::printX2, DescriptionConfig::printY2);
-    setPrintColor(CardConfig::hand[CardConfig::currentSelectCard]->getcolor(), "black");
-    print(CardConfig::hand[CardConfig::currentSelectCard]->description, DescriptionConfig::printX, DescriptionConfig::printY);
+    setPrintColor(CardConfig::hand[CardConfig::currentSelectCard]->getColor(), "black");
+    print(CardConfig::hand[CardConfig::currentSelectCard]->getDescription(), DescriptionConfig::printX, DescriptionConfig::printY);
 }
 
 /**
@@ -393,33 +393,33 @@ bool fightMainLoop()
  */
 bool selectCardEnd()
 {
-    if (GameConfig::currentEnemy->HP == 0)
+    if (GameConfig::currentEnemy->getHP() == 0)
     {
-        message("你打败了" + GameConfig::currentEnemy->name, "red");
-        if (GameConfig::currentEnemy->giveCard >= 0)
+        message("你打败了" + GameConfig::currentEnemy->getName(), "red");
+        if (GameConfig::currentEnemy->getCard() >= 0)
         {
-            Player::addcard(CardConfig::cards[GameConfig::currentEnemy->giveCard]);
-            message("获得卡牌" + CardConfig::cards[GameConfig::currentEnemy->giveCard]->name);
+            Player::addcard(CardConfig::cards[GameConfig::currentEnemy->getCard()]);
+            message("获得卡牌" + CardConfig::cards[GameConfig::currentEnemy->getCard()]->getName());
         }
-        if (GameConfig::currentEnemy->giveProp >= 0)
+        if (GameConfig::currentEnemy->getProp() >= 0)
         {
-            Player::addprop(GameConfig::props[GameConfig::currentEnemy->giveProp]);
-            message("获得道具" + GameConfig::props[GameConfig::currentEnemy->giveProp]->name);
+            Player::addprop(GameConfig::props[GameConfig::currentEnemy->getProp()]);
+            message("获得道具" + GameConfig::props[GameConfig::currentEnemy->getProp()]->getName());
         }
-        if (GameConfig::currentEnemy->giveMoney > 0)
+        if (GameConfig::currentEnemy->getMoney() > 0)
         {
-            Player::money += GameConfig::currentEnemy->giveMoney;
-            message("获得金币" + std::to_string(GameConfig::currentEnemy->giveMoney), "yellow");
+            Player::money += GameConfig::currentEnemy->getMoney();
+            message("获得金币" + std::to_string(GameConfig::currentEnemy->getMoney()), "yellow");
         }
-        if (GameConfig::currentEnemy->giveEXP > 0)
+        if (GameConfig::currentEnemy->getEXP() > 0)
         {
-            Player::getEXP(GameConfig::currentEnemy->giveEXP);
+            Player::getEXP(GameConfig::currentEnemy->getEXP());
         }
         return true;
     }
     if (Player::HP == 0)
     {
-        message("你被" + GameConfig::currentEnemy->name + "打败了", "red");
+        message("你被" + GameConfig::currentEnemy->getName() + "打败了", "red");
         return true;
     }
     return false;
@@ -446,10 +446,10 @@ bool selectCard()
         {
             if (selectCardEnd())
                 return false;
-            if (Player::MP >= CardConfig::hand[CardConfig::currentSelectCard]->cost)
+            if (Player::MP >= CardConfig::hand[CardConfig::currentSelectCard]->getCost())
             {
-                Player::MP -= CardConfig::hand[CardConfig::currentSelectCard]->cost;
-                message("打出卡牌" + CardConfig::hand[CardConfig::currentSelectCard]->name);
+                Player::MP -= CardConfig::hand[CardConfig::currentSelectCard]->getCost();
+                message("打出卡牌" + CardConfig::hand[CardConfig::currentSelectCard]->getName());
                 CardConfig::hand[CardConfig::currentSelectCard]->effect();
                 CardConfig::used.push_back(CardConfig::hand[CardConfig::currentSelectCard]);
                 CardConfig::hand.erase(CardConfig::hand.begin() + CardConfig::currentSelectCard);
@@ -507,20 +507,20 @@ void printGoods()
     for (int i = 0; i < StoreConfig::currentGoods->size(); i++)
     {
         if (StoreConfig::currentSelectGoods == i)
-            setPrintColor((*StoreConfig::currentGoods)[i]->color, "white");
+            setPrintColor((*StoreConfig::currentGoods)[i]->getColor(), "white");
         else
-            setPrintColor((*StoreConfig::currentGoods)[i]->color, "black");
-        print((*StoreConfig::currentGoods)[i]->name, GoodsConfig::printX + getDigits(i) + 2, GoodsConfig::printY + i);
+            setPrintColor((*StoreConfig::currentGoods)[i]->getColor(), "black");
+        print((*StoreConfig::currentGoods)[i]->getName(), GoodsConfig::printX + getDigits(i) + 2, GoodsConfig::printY + i);
         setPrintColor("white", "black");
         print(std::to_string(i + 1) + ".", GoodsConfig::printX, GoodsConfig::printY + i);
-        print(std::to_string((*StoreConfig::currentGoods)[i]->price), GoodsConfig::pricePrintX, GoodsConfig::printY + i);
-        print(std::to_string((*StoreConfig::currentGoods)[i]->number), GoodsConfig::numberPrintX, GoodsConfig::printY + i);
+        print(std::to_string((*StoreConfig::currentGoods)[i]->getPrice()), GoodsConfig::pricePrintX, GoodsConfig::printY + i);
+        print(std::to_string((*StoreConfig::currentGoods)[i]->getNumber()), GoodsConfig::numberPrintX, GoodsConfig::printY + i);
     }
     clear(DescriptionConfig::printX, DescriptionConfig::printY, DescriptionConfig::printX2, DescriptionConfig::printY2);
     if (StoreConfig::currentSelectGoods != StoreConfig::currentGoods->size())
     {
-        setPrintColor((*StoreConfig::currentGoods)[StoreConfig::currentSelectGoods]->color, "black");
-        print((*StoreConfig::currentGoods)[StoreConfig::currentSelectGoods]->description, DescriptionConfig::printX, DescriptionConfig::printY);
+        setPrintColor((*StoreConfig::currentGoods)[StoreConfig::currentSelectGoods]->getColor(), "black");
+        print((*StoreConfig::currentGoods)[StoreConfig::currentSelectGoods]->getDescription(), DescriptionConfig::printX, DescriptionConfig::printY);
         setPrintColor("blue", "black");
     }
     else
@@ -547,11 +547,11 @@ bool shoppingMainLoop()
     {
         if (StoreConfig::currentSelectGoods < StoreConfig::currentGoods->size())
         {
-            if (Player::money >= (*StoreConfig::currentGoods)[StoreConfig::currentSelectGoods]->price)
+            if (Player::money >= (*StoreConfig::currentGoods)[StoreConfig::currentSelectGoods]->getPrice())
             {
-                Player::money -= (*StoreConfig::currentGoods)[StoreConfig::currentSelectGoods]->price;
+                Player::money -= (*StoreConfig::currentGoods)[StoreConfig::currentSelectGoods]->getPrice();
                 (*StoreConfig::currentGoods)[StoreConfig::currentSelectGoods]->buy();
-                if ((*StoreConfig::currentGoods)[StoreConfig::currentSelectGoods]->number == 0)
+                if ((*StoreConfig::currentGoods)[StoreConfig::currentSelectGoods]->getNumber() == 0)
                     (*StoreConfig::currentGoods).erase((*StoreConfig::currentGoods).begin() + StoreConfig::currentSelectGoods);
                 printGoods();
                 printPlayerState();

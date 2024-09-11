@@ -6,6 +6,11 @@ class Message
 {
 public:
     Message(std::string s, std::string fore = "white", std::string back = "black") : s(s), fore(fore), back(back) {}
+    std::string getS() { return s; }
+    std::string getForeColor() { return fore; }
+    std::string getBackColor() { return back; }
+
+private:
     std::string s;
     std::string fore, back;
 };

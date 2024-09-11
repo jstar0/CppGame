@@ -40,6 +40,13 @@ class Prop
 {
 public:
     Prop(std::string name, std::vector<std::string> description, std::string forecolor = "white", std::string backcolor = "black");
+
+    std::string getName() { return name; }
+    std::vector<std::string> getDescription() { return description; }
+    std::string getForecolor() { return forecolor; }
+    std::string getBackcolor() { return backcolor; }
+
+private:
     std::string name, forecolor, backcolor;
     std::vector<std::string> description;
 };

@@ -96,32 +96,32 @@ CardKind::CardKind(const CardKind &other)
     strength=other.strength;
 }
 
-void Card::setattack(int damage,int times)
+void Card::setAttack(int damage,int times)
 {
     kind.isattack=true;
     kind.damage=damage;
     kind.damagetimes=times;
 }
 
-void Card::setdefend(int defense)
+void Card::setDefend(int defense)
 {
     kind.isdefend=true;
     kind.defense=defense;
 }
 
-void Card::setdraw(int times)
+void Card::setDraw(int times)
 {
     kind.isdraw=true;
     kind.drawtimes=times;
 }
 
-void Card::setstrengthen(int strength)
+void Card::setStrengthen(int strength)
 {
     kind.isstrengthen=true;
     kind.strength=strength;
 }
 
-std::string Card::getcolor()
+std::string Card::getColor()
 {
     if (rarity==1) return "green";
     if (rarity==2) return "blue";
@@ -132,7 +132,7 @@ std::string Card::getcolor()
 
 void print(Card *card)
 {
-    setPrintColor(card->getcolor());
+    setPrintColor(card->getColor());
     print(card->description,DescriptionConfig::printX,DescriptionConfig::printY);
 }
 
@@ -146,7 +146,7 @@ void Card::effect()
     }
     else if (name=="盛阳剑法")
     {
-        message("对"+GameConfig::currentEnemy->name+"使用"+name);
+        message("对"+GameConfig::currentEnemy->getName()+"使用"+name);
         for (int i=1; i<=Player::HP/10; i++)
         {
             GameConfig::currentEnemy->getdamage(Player::damage(kind.damage));
@@ -159,19 +159,19 @@ void Card::effect()
     }
     else if (name=="铁牛功")
     {
-        message("对"+GameConfig::currentEnemy->name+"使用"+name);
+        message("对"+GameConfig::currentEnemy->getName()+"使用"+name);
         GameConfig::currentEnemy->getdamage(Player::damage(kind.damage*Player::HP/100));
     }
     else if (name=="裂地崩")
     {
-        message("对"+GameConfig::currentEnemy->name+"使用"+name);
+        message("对"+GameConfig::currentEnemy->getName()+"使用"+name);
         if (Player::HP==Player::HPMax)
             GameConfig::currentEnemy->getdamage(2*Player::damage(kind.damage));
         else GameConfig::currentEnemy->getdamage(Player::damage(kind.damage));
     }
     else if (name=="极阴剑诀")
     {
-        message("对"+GameConfig::currentEnemy->name+"使用"+name);
+        message("对"+GameConfig::currentEnemy->getName()+"使用"+name);
         for (int i=0; i<=(Player::HPMax-Player::HP)/8; i++)
         {
             GameConfig::currentEnemy->getdamage(Player::damage(kind.damage));
@@ -216,7 +216,7 @@ void Card::effect()
         }
         if (kind.isattack) 
         {
-            message("对"+GameConfig::currentEnemy->name+"使用"+name);
+            message("对"+GameConfig::currentEnemy->getName()+"使用"+name);
             for (int i=1; i<=kind.damagetimes; i++)
             {
                 GameConfig::currentEnemy->getdamage(Player::damage(kind.damage));
@@ -250,7 +250,7 @@ AttackCard::AttackCard()
     ID=0;
     cost=0;
     rarity=0;
-    setattack(0,0);
+    setAttack(0,0);
 }
 
 AttackCard::AttackCard(std::string name,std::vector<std::string> description,int ID,int cost,int rarity,int damage,int times)
@@ -260,7 +260,7 @@ AttackCard::AttackCard(std::string name,std::vector<std::string> description,int
     this->ID=ID;
     this->cost=cost;
     this->rarity=rarity;
-    setattack(damage,times);
+    setAttack(damage,times);
 }
 
 DefendCard::DefendCard()
@@ -270,7 +270,7 @@ DefendCard::DefendCard()
     ID=0;
     cost=0;
     rarity=0;
-    setdefend(0);
+    setDefend(0);
 }
 
 DefendCard::DefendCard(std::string name,std::vector<std::string> description,int ID,int cost,int rarity,int defense)
@@ -280,7 +280,7 @@ DefendCard::DefendCard(std::string name,std::vector<std::string> description,int
     this->ID=ID;
     this->cost=cost;
     this->rarity=rarity;
-    setdefend(defense);
+    setDefend(defense);
 }
 
 DrawCard::DrawCard()
@@ -290,7 +290,7 @@ DrawCard::DrawCard()
     ID=0;
     cost=0;
     rarity=0;
-    setdraw(0);
+    setDraw(0);
 }
 
 DrawCard::DrawCard(std::string name,std::vector<std::string> description,int ID,int cost,int rarity,int times)
@@ -300,7 +300,7 @@ DrawCard::DrawCard(std::string name,std::vector<std::string> description,int ID,
     this->ID=ID;
     this->cost=cost;
     this->rarity=rarity;
-    setdraw(times);
+    setDraw(times);
 }
 
 StrengthenCard::StrengthenCard()
@@ -310,7 +310,7 @@ StrengthenCard::StrengthenCard()
     ID=0;
     cost=0;
     rarity=0;
-    setstrengthen(0);
+    setStrengthen(0);
 }
 
 StrengthenCard::StrengthenCard(std::string name,std::vector<std::string> description,int ID,int cost,int rarity,int strength)
@@ -320,36 +320,5 @@ StrengthenCard::StrengthenCard(std::string name,std::vector<std::string> descrip
     this->ID=ID;
     this->cost=cost;
     this->rarity=rarity;
-    setstrengthen(strength);
-}
-
-ChangeHaveCard::ChangeHaveCard()
-{
-    name="改变牌库卡";
-    description={"改变牌库卡"};
-    ID=0;
-    cost=0;
-    rarity=0;
-    changehavecard.clear();
-}
-
-ChangeHaveCard::ChangeHaveCard(std::string name,std::vector<std::string> description,int ID,int cost,int rarity,std::vector<Card*> changehavecard)
-{
-    this->name=name;
-    this->description=description;
-    this->ID=ID;
-    this->cost=cost;
-    this->rarity=rarity;
-    this->changehavecard=changehavecard;
-}
-
-void ChangeHaveCard::effect()
-{
-    Card::effect();
-    message("放入牌堆","red");
-    for (int i=0; i<changehavecard.size(); i++)
-    {
-        CardConfig::have.push_back(changehavecard[i]);
-        message("放入牌堆","red");
-    }
+    setStrengthen(strength);
 }

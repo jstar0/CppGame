@@ -72,8 +72,8 @@ void message(std::string s, std::string fore /* ="white" */, std::string back /*
     clear(MessageConfig::printX, MessageConfig::printY, MessageConfig::printX2, MessageConfig::printY2);
     for (int i = 0; i < messagebox.size(); i++)
     {
-        setPrintColor(messagebox[i].fore, messagebox[i].back);
-        if (messagebox[i].s != "")
-            print(messagebox[i].s, MessageConfig::printX, MessageConfig::printY + i);
+        setPrintColor(messagebox[i].getForeColor(), messagebox[i].getBackColor());
+        if (messagebox[i].getS() != "")
+            print(messagebox[i].getS(), MessageConfig::printX, MessageConfig::printY + i);
     }
 }
