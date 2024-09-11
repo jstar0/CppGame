@@ -5,6 +5,7 @@
 #include"console.h"
 #include"UI.h"
 #include"card.h"
+#include"config.h"
 
 Enemy::Enemy()
 {
@@ -21,8 +22,7 @@ Enemy::Enemy(std::string name,int HPMax)
 }
 void Enemy::addintention(int intentionID)
 {
-    extern std::vector<EnemyIntention*> enemyintentions;
-    intention.push_back(enemyintentions[intentionID]);
+    intention.push_back(GameConfig::enemyIntentions[intentionID]);
 }
 void Enemy::addintention(EnemyIntention *intention)
 {
@@ -52,12 +52,11 @@ void Enemy::getdamage(int gd)
 
 void print(Enemy *enemy)
 {
-    extern int attackEnemyPrintX,attackEnemyPrintY;
-    int x=attackEnemyPrintX,y=attackEnemyPrintY;
-    setcolor("deepgreen");
+    int x=AttackConfig::enemyPrintX,y=AttackConfig::enemyPrintY;
+    setPrintColor("deepgreen");
     print(enemy->currentintention.description,x,--y);
     y++;
-    setcolor("white");
+    setPrintColor("white");
     print(enemy->name,x,y++);
     print("HP:"+std::to_string(enemy->HP)+"/"+std::to_string(enemy->HPMax),x,y++);
     if (enemy->state.strength>0) print("力量:"+std::to_string(enemy->state.strength),x,y++);
@@ -109,35 +108,33 @@ EnemyIntention::EnemyIntention()
 
 void EnemyIntention::effect()
 {
-    extern Enemy *currentenemy;
     if (isattack) 
     {
-        message(currentenemy->name+"对你发动攻击");
+        message(GameConfig::currentEnemy->name+"对你发动攻击");
         for (int i=1; i<=damagetimes; i++)
         {
-            Player::getdamage(currentenemy->damage(damage));
+            Player::getdamage(GameConfig::currentEnemy->damage(damage));
         }
     }
     if (isdefend) 
     {
-        message(currentenemy->name+"进行防御");
-        currentenemy->state.defense+=defense;
+        message(GameConfig::currentEnemy->name+"进行防御");
+        GameConfig::currentEnemy->state.defense+=defense;
     }
     if (isstrengthen)
     {
-        message(currentenemy->name+"获得"+std::to_string(strength)+"点攻势");
-        currentenemy->state.strength+=strength;
+        message(GameConfig::currentEnemy->name+"获得"+std::to_string(strength)+"点攻势");
+        GameConfig::currentEnemy->state.strength+=strength;
     }
     if (isgivecard)
     {
         std::string givecardname="";
-        extern std::vector<Card*> have;
         for (int i=0; i<givecard.size(); i++)
         {
             givecardname+=givecard[i]->name+" ";
-            have.push_back(givecard[i]);
+            CardConfig::have.push_back(givecard[i]);
         }
-        message(currentenemy->name+"塞给你:"+givecardname);
+        message(GameConfig::currentEnemy->name+"塞给你:"+givecardname);
     }
 }
 

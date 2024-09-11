@@ -1,35 +1,37 @@
 #ifndef CARD_H
 #define CARD_H
-#include<string>
-#include<vector>
-#include"enemy.h"
-#include"player.h"
+#include <string>
+#include <vector>
+#include "enemy.h"
+#include "player.h"
 
-class CardKind{
+class CardKind
+{
 public:
-    bool isattack,isdefend,isdraw,isstrengthen;
-    int damage,damagetimes;
+    bool isattack, isdefend, isdraw, isstrengthen;
+    int damage, damagetimes;
     int defense;
     int drawtimes;
     int strength;
     CardKind();
     CardKind(const CardKind &other);
-    //重载=运算符
-    CardKind& operator=(const CardKind &other);
+    // 重载=运算符
+    CardKind &operator=(const CardKind &other);
 };
 
-class Card{
+class Card
+{
 public:
     std::string name;
     std::vector<std::string> description;
-    int ID,cost,rarity;
+    int ID, cost, rarity;
     CardKind kind;
     Card();
-    Card(std::string name,std::vector<std::string> description,int ID,int cost,int rarity);
+    Card(std::string name, std::vector<std::string> description, int ID, int cost, int rarity);
     Card(const Card &other);
-    //重载=运算符
-    Card& operator=(const Card &other);
-    void setattack(int damage,int times);
+    // 重载=运算符
+    Card &operator=(const Card &other);
+    void setattack(int damage, int times);
     void setdefend(int defense);
     void setdraw(int times);
     void setstrengthen(int strength);
@@ -38,35 +40,40 @@ public:
     friend void print(Card *card);
 };
 
-class AttackCard:public Card{
+class AttackCard : public Card
+{
 public:
     AttackCard();
-    AttackCard(std::string name,std::vector<std::string> description,int ID,int cost,int rarity,int damage,int times);
+    AttackCard(std::string name, std::vector<std::string> description, int ID, int cost, int rarity, int damage, int times);
 };
 
-class DefendCard:public Card{
+class DefendCard : public Card
+{
 public:
     DefendCard();
-    DefendCard(std::string name,std::vector<std::string> description,int ID,int cost,int rarity,int defense);
+    DefendCard(std::string name, std::vector<std::string> description, int ID, int cost, int rarity, int defense);
 };
 
-class DrawCard:public Card{
+class DrawCard : public Card
+{
 public:
     DrawCard();
-    DrawCard(std::string name,std::vector<std::string> description,int ID,int cost,int rarity,int times);
+    DrawCard(std::string name, std::vector<std::string> description, int ID, int cost, int rarity, int times);
 };
 
-class StrengthenCard:public Card{
+class StrengthenCard : public Card
+{
 public:
     StrengthenCard();
-    StrengthenCard(std::string name,std::vector<std::string> description,int ID,int cost,int rarity,int strength);
+    StrengthenCard(std::string name, std::vector<std::string> description, int ID, int cost, int rarity, int strength);
 };
 
-class ChangeHaveCard:public Card{
+class ChangeHaveCard : public Card
+{
 public:
     ChangeHaveCard();
-    ChangeHaveCard(std::string name,std::vector<std::string> description,int ID,int cost,int rarity,std::vector<Card*> changehavecard={});
-    std::vector<Card*> changehavecard;
+    ChangeHaveCard(std::string name, std::vector<std::string> description, int ID, int cost, int rarity, std::vector<Card *> changehavecard = {});
+    std::vector<Card *> changehavecard;
     void effect() override;
 };
 #endif
