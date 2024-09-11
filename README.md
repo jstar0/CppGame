@@ -23,10 +23,22 @@
 ## 自行编译
 
 - Clone本项目到本地。
-- 在根目录，Windows环境中，使用下述命令编译项目：
+- 在调试时，可以在根目录，Windows环境中，使用下述命令编译项目：
 
 ```shell
 g++ -std=c++17 -fexec-charset=GBK -g "*.cpp" -o "Game.exe"
+```
+
+如果要考虑其他设备的兼容性，或出现兼容性问题，可以将指令改为
+
+```shell
+g++ -std=c++17 -fexec-charset=GBK -static-libstdc++ -static-libgcc -g "*.cpp" -o "Game.exe"
+```
+
+以链接必要库。或链接所有库
+
+```shell
+g++ -std=c++17 -fexec-charset=GBK -static -g "*.cpp" -o "Game.exe"
 ```
 
 - 静待大概10秒即可。编译完成后，运行`Game.exe`即可开始游戏。
