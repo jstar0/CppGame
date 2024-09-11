@@ -14,7 +14,7 @@ std::vector<int> getMapID()
 {
     std::vector<int> mapID;
     std::string line;
-    std::ifstream fin("./maps/MapList.data");
+    std::ifstream fin("./assets/maps/MapList.data");
     while (getline(fin, line))
     {
         std::string name;

@@ -103,23 +103,15 @@ void loginOrRegister()
         {
             char ch = _getch();
             if (ch == 87 || ch == 119)
-            {
                 userLoginChoice = (userLoginChoice - 1 + 3) % 3;
-            }
             else if (ch == 83 || ch == 115)
-            {
                 userLoginChoice = (userLoginChoice + 1) % 3;
-            }
             else if (ch == 13)
             {
                 if (userLoginChoice == 0)
-                {
                     UserLogin();
-                }
                 else if (userLoginChoice == 1)
-                {
                     UserRegister();
-                }
                 else if (userLoginChoice == 2)
                 {
                     screenMtx.lock();
@@ -324,13 +316,9 @@ void startSceneMainLoop()
                 startSceneMainLoopEnd = true;
             }
             else if (ch == 87 || ch == 119)
-            {
                 userChoice = (userChoice - 1 + 4) % 4;
-            }
             else if (ch == 83 || ch == 115)
-            {
                 userChoice = (userChoice + 1) % 4;
-            }
             else if (ch == 13)
             {
                 if (userChoice == 0)

@@ -1,3 +1,14 @@
+/**
+ * @file main.cpp
+ * @author 《2024年夏·程序设计基础实践》21组
+ * @brief 程序入口，包含主函数
+ * @version 1.0
+ * @date 2024-09-11
+ * 
+ * @copyright Copyright (c) 2024
+ * 
+ */
+
 #include <iostream>
 #include <conio.h>
 #include <windows.h>

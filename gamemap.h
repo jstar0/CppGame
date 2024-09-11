@@ -15,11 +15,12 @@ struct xy
 class ObjectKind
 {
 public:
-    bool isenemy, isstory, isgivecard, isgiveprop, isgiveEXP, isgivemoney, ismove;
-    int enemyID, storyID, cardID, propID, EXP, money, moveID, moveX, moveY;
     ObjectKind();
     ObjectKind(const ObjectKind &other);
     ObjectKind &operator=(const ObjectKind &other);
+
+    bool isenemy, isstory, isgivecard, isgiveprop, isgiveEXP, isgivemoney, ismove;
+    int enemyID, storyID, cardID, propID, EXP, money, moveID, moveX, moveY;
 };
 
 class Object

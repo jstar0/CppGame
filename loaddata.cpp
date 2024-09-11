@@ -18,13 +18,13 @@ using namespace std;
 
 void getMapList()
 {
-    // 从文件./maps/MapList.data中读取地图列表
+    // 从文件./assets/maps/MapList.data中读取地图列表
     // 读取成功后将地图列表存入全局变量room中
     // 读取失败则抛出异常
     // 每一行一个房间，格式如上所示
     // 编码为GBK
 
-    ifstream fin("./maps/MapList.data");
+    ifstream fin("./assets/maps/MapList.data");
     if (!fin)
     {
         throw "无法打开地图列表文件";
@@ -58,14 +58,14 @@ void getMapList()
 
 void getCardList()
 {
-    // 从文件./cards/CardList.data中读取卡牌列表
+    // 从文件./assets/cards/CardList.data中读取卡牌列表
     // 读取成功后将卡牌列表存入全局变量cards中
     // 读取失败则抛出异常
     // 每一行一个卡牌，格式如下
     // 卡牌类型，卡牌名，卡牌描述，卡牌编号，卡牌花费，卡牌稀有度，对应类型参数
     // 编码为GBK
     // 卡牌类型：A-攻击卡牌，D-防御卡牌，S-强化卡牌，R-摸牌卡牌，C-转换卡牌
-    ifstream fin("./cards/CardList.data");
+    ifstream fin("./assets/cards/CardList.data");
     string line;
     while (getline(fin, line))
     {
@@ -166,7 +166,7 @@ void getCardList()
 
 void getEnemyIntentionList()
 {
-    ifstream fin("./enemys/EnemyIntentionList.data");
+    ifstream fin("./assets/enemies/EnemyIntentionList.data");
     string line;
     while (getline(fin, line))
     {
@@ -259,9 +259,10 @@ void getEnemyIntentionList()
     fin.close();
 }
 
+
 void getEnemyList()
 {
-    ifstream fin("./enemys/EnemyList.data");
+    ifstream fin("./assets/enemies/EnemyList.data");
     string line;
     while (getline(fin, line))
     {
@@ -330,14 +331,14 @@ void getStoreList()
 
 void getStoryList()
 {
-    // 从文件./story/StoryList.data中读取剧情列表
+    // 从文件./assets/story/StoryList.data中读取剧情列表
     // 读取成功后将剧情列表存入全局变量story中
     // 读取失败则抛出异常
     // 每一行一个剧情，格式如下
     // 剧情内容
     // 编码为GBK
     int i = 0;
-    ifstream fin("./story/StoryList.data");
+    ifstream fin("./assets/story/StoryList.data");
     if (!fin)
     {
         throw "无法打开剧情列表文件";
@@ -366,7 +367,7 @@ void loadMap(int mapIndex)
 {
     // 从 rooms[mapIndex].filePath 中读取地图数据
 
-    // std::string testPath="./maps/1/00-KeTing.mapdata";
+    // std::string testPath="./assets/maps/1/00-KeTing.mapdata";
     // ifstream fin(testPath);
     ifstream fin("./maps" + GameConfig::rooms[mapIndex].filePath);
     if (!fin)
