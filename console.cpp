@@ -5,7 +5,6 @@
 #include<vector>
 #include"console.h"
 #include"card.h"
-using namespace std;
 void setscreensize(int cols,int lines)
 {
     char cmd[64];
@@ -16,7 +15,7 @@ void setcolor(int fore/* =7 */,int back/* =0 */)
 {
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),(back<<4)+fore);
 }
-void setcolor(string fore_s,string back_s/* ="black" */)
+void setcolor(std::string fore_s,std::string back_s/* ="black" */)
 {
     int fore=-1,back=-1;
     if (back_s=="black") back=0;
@@ -53,14 +52,6 @@ void setcolor(string fore_s,string back_s/* ="black" */)
     if (fore_s=="white") fore=15;
     setcolor(fore,back);
 }
-void setcolor(Card card)
-{
-    if (card.rarity==1) setcolor("white");
-    if (card.rarity==2) setcolor("green");
-    if (card.rarity==3) setcolor("blue");
-    if (card.rarity==4) setcolor("purple");
-    if (card.rarity==5) setcolor("red");
-}
 void setposition(int x/* =1 */,int y/* =1 */)
 {
     COORD cursorposition;
@@ -72,21 +63,30 @@ void setcursor(bool show/* =true */)
 {
     if (!show) 
     {
-        CONSOLE_CURSOR_INFO cursor_info = {1, 0};
+        CONSOLE_CURSOR_INFO cursor_info={1, 0};
 	    SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &cursor_info);
     }
     else
     {
-        CONSOLE_CURSOR_INFO cursor_info = {100, 1};
+        CONSOLE_CURSOR_INFO cursor_info={100, 1};
 	    SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &cursor_info);
     }
 }
-void print(string s,int x/* =0 */,int y/* =0 */)
+void print(std::string s,int x/* =0 */,int y/* =0 */)
 {
     setposition(x,y);
-    cout<<s;
+    std::cout<<s;
 }
-void print(vector<string> s,int x/* =0 */,int y/* =0 */,int l/* =-1 */,int r/* =-1 */)
+void print(int s,int x/* =0 */,int y/* =0 */)
+{
+    print(std::to_string(s),x,y);
+}
+void print(char s,int x/* =0 */,int y/* =0 */)
+{
+    setposition(x,y);
+    std::cout<<s;
+}
+void print(std::vector<std::string> s,int x/* =0 */,int y/* =0 */,int l/* =-1 */,int r/* =-1 */)
 {
     if (l==-1 && r==-1) 
     {
@@ -99,7 +99,7 @@ void clear()
 {
     setcolor("black","black");
     setposition(0,0);
-    for (int i=0; i<=100; i++) cout<<endl;
+    for (int i=0; i<=100; i++) std::cout<<std::endl;
 }
 void clear(int X1,int Y1,int X2,int Y2)
 {
@@ -107,6 +107,6 @@ void clear(int X1,int Y1,int X2,int Y2)
     for (int i=Y1; i<=Y2; i++)
     {
         setposition(X1,i);
-        for (int j=X1; j<=X2; j++) cout<<" ";
+        for (int j=X1; j<=X2; j++) std::cout<<" ";
     }
 }

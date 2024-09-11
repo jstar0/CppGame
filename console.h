@@ -10,6 +10,8 @@ void setcolor(Card card);
 void setposition(int x=1,int y=1);
 void setcursor(bool show=true);
 void print(std::string s,int x=0,int y=0);
+void print(int s,int x=0,int y=0);
+void print(char s,int x=0,int y=0);
 void print(std::vector<std::string> s,int x=0,int y=0,int l=-1,int r=-1);
 void clear();
 void clear(int X1,int Y1,int X2,int Y2);
