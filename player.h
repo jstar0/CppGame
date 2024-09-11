@@ -43,4 +43,7 @@ public:
     std::string name, forecolor, backcolor;
     std::vector<std::string> description;
 };
+
+void printPlayer();
+
 #endif

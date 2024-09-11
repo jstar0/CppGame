@@ -1,3 +1,14 @@
+/**
+ * @file startscene.cpp
+ * @author 《2024年夏·程序设计基础实践》21组
+ * @brief 包含开始屏幕相关函数
+ * @version 1.0
+ * @date 2024-09-11
+ * 
+ * @copyright Copyright (c) 2024
+ * 
+ */
+
 #include <string>
 #include <vector>
 #include <string>

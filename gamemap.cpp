@@ -394,7 +394,7 @@ void EnemyObject::run()
     GameConfig::currentEnemy->init();
     Player::init();
     message("开始战斗:" + GameConfig::currentEnemy->name);
-    while (fight())
+    while (fightMainLoop())
         ;
     if (Player::HP > 0)
         Object::run();
@@ -484,8 +484,8 @@ void StoreObject::run()
     message("进入了" + name);
     StoreConfig::currentSelectGoods = 0;
     StoreConfig::currentGoods = &goodss;
-    printgoods();
-    while (shopping())
+    printGoods();
+    while (shoppingMainLoop())
         ;
     message("成功退出商店");
     printMap();

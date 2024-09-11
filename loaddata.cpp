@@ -369,7 +369,7 @@ void loadMap(int mapIndex)
 
     // std::string testPath="./assets/maps/1/00-KeTing.mapdata";
     // ifstream fin(testPath);
-    ifstream fin("./maps" + GameConfig::rooms[mapIndex].filePath);
+    ifstream fin("./assets/maps" + GameConfig::rooms[mapIndex].filePath);
     if (!fin)
     {
         message("无法打开地图文件");

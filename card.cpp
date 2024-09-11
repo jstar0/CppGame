@@ -142,7 +142,7 @@ void Card::effect()
     {
         message("使用"+name);
         Player::state.defense+=kind.defense*CardConfig::hand.size();    
-        drawcard(-CardConfig::hand.size());
+        drawCard(-CardConfig::hand.size());
     }
     else if (name=="盛阳剑法")
     {
@@ -200,7 +200,7 @@ void Card::effect()
         {
             message("妙手回春","green");    
             message("抽取"+std::to_string(kind.drawtimes)+"张卡牌");
-            drawcard(kind.drawtimes);
+            drawCard(kind.drawtimes);
         }
         else
         {
@@ -232,12 +232,12 @@ void Card::effect()
             if (kind.drawtimes>0)
             {
                 message("抽取"+std::to_string(kind.drawtimes)+"张卡牌");
-                drawcard(kind.drawtimes);
+                drawCard(kind.drawtimes);
             }
             if (kind.drawtimes<0)
             {
                 message("弃置"+std::to_string(-kind.drawtimes)+"张卡牌");
-                drawcard(kind.drawtimes);
+                drawCard(kind.drawtimes);
             }
         }
     }

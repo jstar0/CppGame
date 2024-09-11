@@ -1,20 +1,21 @@
 #ifndef RUN_H
 #define RUN_H
-#include <vector>
 #include "enemy.h"
 #include "gamemap.h"
-void moveme(int deltax, int deltay);
+
+int getDigits(int number);
+void movePlayer(int deltax, int deltay);
 void printMap();
 void printSmallMap();
 void printPlayerState();
-bool playerMove();
-void drawcard(int n);
-bool fightend();
-void printcard();
-bool fight();
-bool selectcard();
-int getdigits(int number);
-void printgoods();
-bool shopping();
+bool playerMoveMainLoop();
+void drawCard(int n);
+bool endFight();
+void printCard();
+bool fightMainLoop();
+bool selectCard();
+void printGoods();
+bool shoppingMainLoop();
 void printStory(int ID);
+
 #endif

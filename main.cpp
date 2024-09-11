@@ -50,7 +50,6 @@ int main()
     printMap();
     printSmallMap();
     printPlayerState();
-    while (playerMove())
-        ;
+    while (playerMoveMainLoop());
     return 0;
 }

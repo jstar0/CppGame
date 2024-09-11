@@ -1,3 +1,14 @@
+/**
+ * @file run.cpp
+ * @author 《2024年夏·程序设计基础实践》21组
+ * @brief 包含游戏运行相关函数
+ * @version 1.0
+ * @date 2024-09-11
+ * 
+ * @copyright Copyright (c) 2024
+ * 
+ */
+
 #include <iostream>
 #include <string>
 #include <vector>
@@ -17,7 +28,28 @@
 #include "save.h"
 #include "config.h"
 
-void moveme(int deltax, int deltay)
+/**
+ * @brief 封装的获取数字位数函数
+ * 
+ * @param number 
+ * @return int 
+ */
+int getDigits(int number)
+{
+    if (number == 0)
+        return 1;
+    return std::log10(std::abs(number)) + 1;
+}
+
+// -------------- 玩家地图相关 --------------
+
+/**
+ * @brief 移动玩家
+ * 
+ * @param deltax 
+ * @param deltay 
+ */
+void movePlayer(int deltax, int deltay)
 {
     Object *deltaobject = GameConfig::rooms[PlayerConfig::currentRoom].getobject(PlayerConfig::currentX + deltax, PlayerConfig::currentY + deltay);
     if (deltaobject != nullptr)
@@ -44,11 +76,15 @@ void moveme(int deltax, int deltay)
     print("我", RoomConfig::printX + PlayerConfig::currentX, RoomConfig::printY + PlayerConfig::currentY);
 }
 
+/**
+ * @brief 打印地图
+ * 
+ */
 void printMap()
 {
     clear(RoomConfig::printX, RoomConfig::printY, RoomConfig::printX + RoomConfig::width - 1, RoomConfig::printY + RoomConfig::height - 1);
     print(GameConfig::rooms[PlayerConfig::currentRoom]);
-    moveme(0, 0);
+    movePlayer(0, 0);
     setPrintColor("white");
     if (GameConfig::rooms[PlayerConfig::currentRoom].UP_ID < 0)
         for (int i = 3; i < 55; i++)
@@ -76,6 +112,10 @@ void printMap()
             print("空", 55, i);
 }
 
+/**
+ * @brief 打印小地图
+ * 
+ */
 void printSmallMap()
 {
     int smallmapCenterX = SmallMapConfig::x + (SmallMapConfig::width - 1) / 2, smallmapCenterY = SmallMapConfig::y + (SmallMapConfig::height - 1) / 2;
@@ -105,6 +145,10 @@ void printSmallMap()
     }
 }
 
+/**
+ * @brief 打印玩家状态
+ * 
+ */
 void printPlayerState()
 {
     clear(PlayerConfig::statePrintX, PlayerConfig::statePrintY, PlayerConfig::statePrintX2, PlayerConfig::statePrintY2);
@@ -127,7 +171,13 @@ void printPlayerState()
     print("注:人物和地图存档不互通，可以反复刷级", PlayerConfig::statePrintX, PlayerConfig::statePrintY + 4);
 }
 
-bool playerMove()
+/**
+ * @brief 玩家移动循环
+ * 
+ * @return true 
+ * @return false 
+ */
+bool playerMoveMainLoop()
 {
     // printMap();
     // printSmallMap();
@@ -144,7 +194,7 @@ bool playerMove()
     if (r == 'W' || r == 'w')
     {
         if (PlayerConfig::currentY > 0)
-            moveme(0, -PlayerConfig::speedY);
+            movePlayer(0, -PlayerConfig::speedY);
         else
         {
             if (GameConfig::rooms[PlayerConfig::currentRoom].UP_ID >= 0)
@@ -160,7 +210,7 @@ bool playerMove()
     if (r == 'S' || r == 's')
     {
         if (PlayerConfig::currentY < RoomConfig::height - 1)
-            moveme(0, PlayerConfig::speedY);
+            movePlayer(0, PlayerConfig::speedY);
         else
         {
             if (GameConfig::rooms[PlayerConfig::currentRoom].DOWN_ID >= 0)
@@ -176,7 +226,7 @@ bool playerMove()
     if (r == 'A' || r == 'a')
     {
         if (PlayerConfig::currentX > 0)
-            moveme(-PlayerConfig::speedX, 0);
+            movePlayer(-PlayerConfig::speedX, 0);
         else
         {
             if (GameConfig::rooms[PlayerConfig::currentRoom].LEFT_ID >= 0)
@@ -192,7 +242,7 @@ bool playerMove()
     if (r == 'D' || r == 'd')
     {
         if (PlayerConfig::currentX < RoomConfig::width - 2)
-            moveme(PlayerConfig::speedX, 0);
+            movePlayer(PlayerConfig::speedX, 0);
         else
         {
             if (GameConfig::rooms[PlayerConfig::currentRoom].RIGHT_ID >= 0)
@@ -217,8 +267,14 @@ bool playerMove()
     return true;
 }
 
-void printPlayer();
-void drawcard(int n = 1)
+// ----------------- 战斗相关 -----------------
+
+/**
+ * @brief 抽取卡牌到手牌
+ * 
+ * @param n 
+ */
+void drawCard(int n = 1)
 {
     if (n > 0)
     {
@@ -255,7 +311,13 @@ void drawcard(int n = 1)
     }
 }
 
-bool fightend()
+/**
+ * @brief 战斗结束相关工作
+ * 
+ * @return true 
+ * @return false 
+ */
+bool endFight()
 {
     if (GameConfig::currentEnemy->HP == 0 || Player::HP == 0)
     {
@@ -271,7 +333,11 @@ bool fightend()
     return false;
 }
 
-void printcard()
+/**
+ * @brief 打印选择的卡牌
+ * 
+ */
+void printCard()
 {
     clear(CardConfig::selectPrintX, CardConfig::selectPrintY, CardConfig::selectPrintX2, CardConfig::selectPrintY2);
     for (int i = 0; i < CardConfig::hand.size(); i++)
@@ -287,7 +353,13 @@ void printcard()
     print(CardConfig::hand[CardConfig::currentSelectCard]->description, DescriptionConfig::printX, DescriptionConfig::printY);
 }
 
-bool fight()
+/**
+ * @brief 战斗主循环
+ * 
+ * @return true 
+ * @return false 
+ */
+bool fightMainLoop()
 {
     srand(time(0));
     Player::turnset();
@@ -296,12 +368,12 @@ bool fight()
     clear(RoomConfig::printX, RoomConfig::printY, RoomConfig::printX + RoomConfig::width - 1, RoomConfig::printY + RoomConfig::height - 1);
     printPlayer();
     print(GameConfig::currentEnemy);
-    drawcard(5);
+    drawCard(5);
     CardConfig::currentSelectCard = 0;
-    printcard();
-    while (selectcard())
+    printCard();
+    while (selectCard())
         ;
-    if (fightend())
+    if (endFight())
         return false;
     GameConfig::currentEnemy->currentintention.effect();
     printPlayerState();
@@ -309,7 +381,13 @@ bool fight()
     return true;
 }
 
-bool selectcardend()
+/**
+ * @brief 选择卡牌时的判断
+ * 
+ * @return true 
+ * @return false 
+ */
+bool selectCardEnd()
 {
     if (GameConfig::currentEnemy->HP == 0)
     {
@@ -343,7 +421,13 @@ bool selectcardend()
     return false;
 }
 
-bool selectcard()
+/**
+ * @brief 选择卡牌
+ * 
+ * @return true 
+ * @return false 
+ */
+bool selectCard()
 {
     char r = getch();
     if (CardConfig::hand.size() > 0)
@@ -353,10 +437,10 @@ bool selectcard()
         if (r == 'S' || r == 's')
             CardConfig::currentSelectCard += 1;
         CardConfig::currentSelectCard %= CardConfig::hand.size();
-        printcard();
+        printCard();
         if (r == '\r')
         {
-            if (selectcardend())
+            if (selectCardEnd())
                 return false;
             if (Player::MP >= CardConfig::hand[CardConfig::currentSelectCard]->cost)
             {
@@ -371,10 +455,10 @@ bool selectcard()
                 printPlayer();
                 print(GameConfig::currentEnemy);
                 if (CardConfig::hand.size() > 0)
-                    printcard();
+                    printCard();
                 else
                     clear(CardConfig::selectPrintX, CardConfig::selectPrintY, CardConfig::selectPrintX2, CardConfig::selectPrintY2);
-                if (selectcardend())
+                if (selectCardEnd())
                     return false;
             }
             else
@@ -395,20 +479,20 @@ bool selectcard()
             CardConfig::hand.erase(CardConfig::hand.begin());
         }
         CardConfig::hand.resize(0);
-        selectcardend();
+        selectCardEnd();
         return false;
     }
     Sleep(1000 / GameConfig::FPS);
     return true;
 }
 
-int getdigits(int number)
-{
-    if (number == 0)
-        return 1;
-    return std::log10(std::abs(number)) + 1;
-}
-void printgoods()
+// -------------- 商店相关 --------------
+
+/**
+ * @brief 打印商店列表
+ * 
+ */
+void printGoods()
 {
     clear(RoomConfig::printX, RoomConfig::printY, RoomConfig::printX + RoomConfig::width - 1, RoomConfig::printY + RoomConfig::height - 1);
     setPrintColor("white", "black");
@@ -422,7 +506,7 @@ void printgoods()
             setPrintColor((*StoreConfig::currentGoods)[i]->color, "white");
         else
             setPrintColor((*StoreConfig::currentGoods)[i]->color, "black");
-        print((*StoreConfig::currentGoods)[i]->name, GoodsConfig::printX + getdigits(i) + 2, GoodsConfig::printY + i);
+        print((*StoreConfig::currentGoods)[i]->name, GoodsConfig::printX + getDigits(i) + 2, GoodsConfig::printY + i);
         setPrintColor("white", "black");
         print(std::to_string(i + 1) + ".", GoodsConfig::printX, GoodsConfig::printY + i);
         print(std::to_string((*StoreConfig::currentGoods)[i]->price), GoodsConfig::pricePrintX, GoodsConfig::printY + i);
@@ -440,7 +524,13 @@ void printgoods()
     print("退出商店", GoodsConfig::printX, GoodsConfig::printY + (*StoreConfig::currentGoods).size());
 }
 
-bool shopping()
+/**
+ * @brief 商店主循环
+ * 
+ * @return true 
+ * @return false 
+ */
+bool shoppingMainLoop()
 {
     char r = getch();
     if (r == 'W' || r == 'w')
@@ -448,7 +538,7 @@ bool shopping()
     if (r == 'S' || r == 's')
         StoreConfig::currentSelectGoods += 1;
     StoreConfig::currentSelectGoods %= (*StoreConfig::currentGoods).size() + 1;
-    printgoods();
+    printGoods();
     if (r == '\r')
     {
         if (StoreConfig::currentSelectGoods < StoreConfig::currentGoods->size())
@@ -459,7 +549,7 @@ bool shopping()
                 (*StoreConfig::currentGoods)[StoreConfig::currentSelectGoods]->buy();
                 if ((*StoreConfig::currentGoods)[StoreConfig::currentSelectGoods]->number == 0)
                     (*StoreConfig::currentGoods).erase((*StoreConfig::currentGoods).begin() + StoreConfig::currentSelectGoods);
-                printgoods();
+                printGoods();
                 printPlayerState();
             }
             else
@@ -475,6 +565,13 @@ bool shopping()
     return true;
 }
 
+// -------------- 剧情相关 --------------
+
+/**
+ * @brief 打印剧情
+ * 
+ * @param ID 
+ */
 void printStory(int ID)
 {
     int x = RoomConfig::printX, y = RoomConfig::printY;
