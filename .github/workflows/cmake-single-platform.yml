@@ -1,0 +1,51 @@
+name: CMake on a single platform
+
+on:
+  push:
+    branches: [ "cmake" ]
+  pull_request:
+    branches: [ "cmake" ]
+
+env:
+  # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
+  BUILD_TYPE: Release
+
+jobs:
+  build:
+    # Runs on Windows platform
+    runs-on: windows-latest
+
+    steps:
+    # Step 1: Check out the code from the repository
+    - uses: actions/checkout@v4
+
+    # Step 2: Install necessary dependencies
+    - name: Install Dependencies
+      run: |
+        choco install cmake
+        choco install ninja  # If using Ninja generator, you can adjust based on your needs
+
+    # Step 3: Configure CMake (use the 'build' directory)
+    - name: Configure CMake
+      run: cmake -B ${{github.workspace}}/build -S ${{github.workspace}} -G "Ninja" -DCMAKE_BUILD_TYPE=${{env.BUILD_TYPE}}
+
+    # Step 4: Build your project using CMake
+    - name: Build
+      run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
+
+# Step 5: Run tests using CTest
+    - name: Test
+      working-directory: ${{github.workspace}}/build
+      run: ctest -C ${{env.BUILD_TYPE}} --output-on-failure
+
+    - name: Prepare Artifacts
+      run: |
+        mkdir "${{github.workspace}}/artifacts"
+        copy "${{github.workspace}}\\build\\Game.exe" "${{github.workspace}}\\artifacts\\Game.exe"
+        xcopy /E /I "${{github.workspace}}\\assets" "${{github.workspace}}\\artifacts\\assets"
+
+    - name: Upload Artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: game-build
+        path: ${{github.workspace}}/artifacts
