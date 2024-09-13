@@ -33,7 +33,7 @@ jobs:
     - name: Build
       run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
 
-    # Step 5: Run tests using CTest
+# Step 5: Run tests using CTest
     - name: Test
       working-directory: ${{github.workspace}}/build
       run: ctest -C ${{env.BUILD_TYPE}} --output-on-failure
@@ -41,8 +41,8 @@ jobs:
     - name: Prepare Artifacts
       run: |
         mkdir "${{github.workspace}}/artifacts"
-        copy "${{github.workspace}}/build/Game.exe" "${{github.workspace}}/artifacts/Game.exe"
-        xcopy /E /I "${{github.workspace}}/assets" "${{github.workspace}}/artifacts/assets"
+        copy "${{github.workspace}}\\build\\Game.exe" "${{github.workspace}}\\artifacts\\Game.exe"
+        xcopy /E /I "${{github.workspace}}\\assets" "${{github.workspace}}\\artifacts\\assets"
 
     - name: Upload Artifacts
       uses: actions/upload-artifact@v4
