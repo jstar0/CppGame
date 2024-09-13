@@ -18,32 +18,31 @@
 
 请从项目Release页面下载最新版本的游戏。解压后运行`Game.exe`即可开始游戏。
 
-注意，游戏需要**在Windows环境下运行**。**`Game.exe`需要使用管理员权限运行，否则会偶现界面Bug。**
+注意，游戏需要**在Windows环境下**运行。**`Game.exe`需要使用管理员权限运行，否则会偶现界面Bug。**
 
-## 自行编译
+## 编译游戏
+
+### 自行编译
 
 - Clone本项目到本地。
-- 在调试时，可以在根目录，Windows环境中，使用下述命令编译项目：
 
-```shell
-g++ -std=c++17 -fexec-charset=GBK -g "*.cpp" -o "Game.exe"
-```
+- 使用CMake编译项目。
 
-如果要考虑其他设备的兼容性，或出现兼容性问题，可以将指令改为
+- 编译完成后，记得将`assets`文件夹置于游戏程序同目录，运行`Game.exe`即可开始游戏。
 
-```shell
-g++ -std=c++17 -fexec-charset=GBK -static-libstdc++ -static-libgcc -g "*.cpp" -o "Game.exe"
-```
+*请确保您的编译环境是Windows，且支持C++17标准。*
 
-以链接必要库。或链接所有库
+### 下载CI构建
 
-```shell
-g++ -std=c++17 -fexec-charset=GBK -static -g "*.cpp" -o "Game.exe"
-```
+您也可以直接从*GitHub Actions中的CI构建*，下载最新版本的游戏。
 
-- 静待大概10秒即可。编译完成后，运行`Game.exe`即可开始游戏。
+ [![CMake on a single platform](https://github.com/jstar0/CppGame/actions/workflows/cmake-single-platform.yml/badge.svg)](https://github.com/jstar0/CppGame/actions/workflows/cmake-single-platform.yml)
 
-*请确保您的编译环境支持C++17标准。*
+从最新的CI构建中下载游戏，只需要找到`Artifacts`，然后下载`game-build`，解压即可游玩。
+
+### 非CMake编译
+
+请查看分支`non-cmake`，其中包含了非CMake编译的代码和说明。
 
 ## 贡献
 
