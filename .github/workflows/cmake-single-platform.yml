@@ -40,9 +40,9 @@ jobs:
 
     - name: Prepare Artifacts
       run: |
-        mkdir ${{github.workspace}}/artifacts
-        copy ${{github.workspace}}/build/Game.exe ${{github.workspace}}/artifacts/Game.exe
-        xcopy /E /I ${{github.workspace}}/assets ${{github.workspace}}/artifacts/assets
+        mkdir "${{github.workspace}}/artifacts"
+        copy "${{github.workspace}}/build/Game.exe" "${{github.workspace}}/artifacts/Game.exe"
+        xcopy /E /I "${{github.workspace}}/assets" "${{github.workspace}}/artifacts/assets"
 
     - name: Upload Artifacts
       uses: actions/upload-artifact@v4
