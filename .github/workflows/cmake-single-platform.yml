@@ -41,7 +41,7 @@ jobs:
     - name: Prepare Artifacts
       run: |
         mkdir ${{github.workspace}}/artifacts
-        copy ${{github.workspace}}/build/项目名.exe ${{github.workspace}}/artifacts/Game.exe
+        copy ${{github.workspace}}/build/Game.exe ${{github.workspace}}/artifacts/Game.exe
         xcopy /E /I ${{github.workspace}}/assets ${{github.workspace}}/artifacts/assets
 
     - name: Upload Artifacts
