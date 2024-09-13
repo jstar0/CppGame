@@ -38,8 +38,10 @@ jobs:
       working-directory: ${{github.workspace}}/build
       run: ctest -C ${{env.BUILD_TYPE}} --output-on-failure
 
-    - name: Upload Executable Files
+    - name: Upload Build Artifacts
       uses: actions/upload-artifact@v3
       with:
-        name: build-executables
-        path: ${{github.workspace}}/build/**/*.exe
+        name: game-build
+        path: |
+          ${{github.workspace}}/build/Game.exe
+          ${{github.workspace}}/assets
